@@ -1,0 +1,129 @@
+import csv
+from pathlib import Path
+from datetime import date, datetime
+from typing import List
+
+from bisect import bisect, bisect_left, insort_left
+
+from werkzeug.security import generate_password_hash
+
+from music.adapters.repository import AbstractRepository, RepositoryException
+from music.domainmodel.track import Track
+from music.domainmodel.genre import Genre
+from music.domainmodel.artist import Artist
+from music.domainmodel.review import Review
+from music.domainmodel.user import User
+
+class MemoryRepository(AbstractRepository):
+    def add_user(self, user: User):
+        raise NotImplementedError
+
+
+    def get_user(self, user_name) -> User:
+        raise NotImplementedError
+
+
+    def add_track(self, track: Track):
+        raise NotImplementedError
+
+
+    def get_track(self, id: int) -> Track:
+        """
+        If there is no Track with the given id, return None.
+        """
+        raise NotImplementedError
+
+
+    def get_track_by_date(self, target_date: date) -> List[Track]:
+        """
+        If there are no Tracks on the given date, return an empty list.
+        """
+        raise NotImplementedError
+
+
+    def get_number_of_tracks(self) -> int:
+        raise NotImplementedError
+
+
+    def get_first_track(self) -> Track:
+        """ Returns the first Track, ordered by date
+        Returns None if the repository is empty.
+        """
+        raise NotImplementedError
+
+
+    def get_last_track(self) -> Track:
+        """ Returns the last Article, ordered by date, from the repository.
+
+        Returns None if the repository is empty.
+        """
+        raise NotImplementedError
+
+
+    def get_tracks_by_id(self, id_list):
+        """ Returns a list of Track, whose ids match those in id_list
+        If there are no matches, this method returns an empty list.
+        """
+        raise NotImplementedError
+
+
+    def get_track_ids_for_genre(self, genre: Genre):
+        """ Returns a list of ids representing Tracks
+         that are tagged by genre.
+
+        If there are Tracks that are tagged by genre id, return an empty list.
+        """
+        raise NotImplementedError
+
+
+    def get_date_of_previous_Track(self, track: Track):
+        """ If article is the first Tracks in the repository,
+        return None because there are no Tracks
+        on a previous date.
+        """
+        raise NotImplementedError
+
+
+    def get_date_of_next_article(self, track: Track):
+        """ If article is the last Tracks in the repository,
+        this method returns None because there are no Tracks
+        on a later date.
+        """
+        raise NotImplementedError
+
+
+    def add_genre(self, genre: Genre):
+        raise NotImplementedError
+
+
+    def get_genres(self) -> List[Genre]:
+        raise NotImplementedError
+
+
+    def add_artist(self, artist: Artist):
+        raise NotImplementedError
+
+
+    def get_artist(self, id: int) -> Artist:
+        raise NotImplementedError
+
+
+    def get_track_by_artist(self, target_artist: Artist) -> List[Track]:
+        """ Returns a list of Tracks by artist
+        If there are no Tracks by given artist, return None.
+        """
+
+
+    def add_review(self, review: Review):
+        """ Adds a Review to the repository.
+
+        If Review doesn't have bidirectional links with a Track,
+        this method raises a RepositoryException and doesn't update the repository.
+        """
+
+        if review.track is None:
+            raise RepositoryException('Review not correctly attached to an Track')
+
+
+    def get_reviews(self):
+        raise NotImplementedError
