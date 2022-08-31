@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Simple Track</title>
+    <link rel="stylesheet" href="static/styles.css"/>
 </head>
 <body>
-    <table>
-        <tr>
+    <table class="center">
+        <tr class="table__header">
             {% for header in headings %}
-            <th>{{ header }}</th>
+            <th class="table__cell">{{ header }}</th>
             {% endfor %}
         </tr>
-        <tr>
+        <tr class="table__row">
         {% for row in data %}
-            {% for cell in row %}
-                <td>{{ cell }}</td>
-            {% endfor %}
+            <td class="table__cell">{{row.get_id}}</td>
+            <td class="table__cell">{{row.get_track_name}}</td>
+            <td class="table__cell">{{row.get_artist_name}}</td>
+            <td class="table__cell">{{row.get_track_length}}</td>
         </tr>
         {% endfor %}
     </table>
