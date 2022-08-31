@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template
 
 # Setting up our blueprint
-tracks_browse = Blueprint('tracks_browse', __name__, template_folder='templates')
+tracks_blueprint = Blueprint('tracks_browse', __name__, template_folder='templates')
 
 
-@tracks_browse.route("/browse")
+@tracks_blueprint.route("/browse")
 def table():
     header = ["Track Id", "Track Name", "Artist", "Length"]
 

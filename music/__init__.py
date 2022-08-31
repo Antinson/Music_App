@@ -24,7 +24,6 @@ def create_app(test_config=None):
 
 
     with app.app_context():
-        """
-        register blueprints here
-        """
+        from .tracks import tracks_browse
+        app.register_blueprint(tracks_browse.tracks_blueprint)
     return app

@@ -1,6 +1,5 @@
 """App entry point."""
 from music import create_app
-from music.tracks import tracks_browse
 
 app = create_app()
 
