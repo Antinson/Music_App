@@ -115,7 +115,7 @@ class MemoryRepository(AbstractRepository):
         return self.__albums
 
     def add_artist(self, artist: Artist):
-        self.__artist.append(artist)
+        self.__artists.append(artist)
 
     def get_artists(self) -> List[Artist]:
         return self.__artists
@@ -154,8 +154,8 @@ class MemoryRepository(AbstractRepository):
 
 
 def load_tracks_and_album(data_path: Path, repo: MemoryRepository):
-    albums_file_name = 'raw_albums_excerpt.csv'
-    tracks_file_name = 'raw_tracks_excerpt.csv'
+    albums_file_name = str(Path(data_path) / 'raw_albums_excerpt.csv')
+    tracks_file_name = str(Path(data_path) / 'raw_tracks_excerpt.csv')
     reader = TrackCSVReader(albums_file_name, tracks_file_name)
     reader.read_csv_files()
 
@@ -173,7 +173,7 @@ def load_tracks_and_album(data_path: Path, repo: MemoryRepository):
 
 
 def populate(data_path: Path, repo: MemoryRepository):
-    # Load articles and tags into the repository.
+    # Load csv data into the repository.
     load_tracks_and_album(data_path, repo)
 
     # TODO: load reviews and users

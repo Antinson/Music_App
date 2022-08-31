@@ -100,7 +100,7 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_album(self) -> List[Album]:
+    def get_albums(self) -> List[Album]:
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -119,14 +119,6 @@ class AbstractRepository(abc.ABC):
     def get_genres(self) -> List[Genre]:
         raise NotImplementedError
 
-
-    @abc.abstractmethod
-    def add_artist(self, artist: Artist):
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def get_artist(self, id: int) -> Artist:
-        raise NotImplementedError
 
     @abc.abstractmethod
     def get_track_by_artist(self, target_artist: Artist) -> List[Track]:
