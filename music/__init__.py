@@ -4,6 +4,7 @@ from flask import Flask
 from pathlib import Path
 
 
+
 import music.adapters.repository as repo
 from music.adapters.memory_repository import MemoryRepository, populate
 
@@ -20,6 +21,7 @@ def create_app(test_config=None):
 
     repo.repo_instance = MemoryRepository()
     populate(data_path, repo.repo_instance)
+
 
     with app.app_context():
         """
