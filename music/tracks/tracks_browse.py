@@ -9,4 +9,5 @@ def table():
     header = ["Track Id", "Track Name", "Artist", "Length"]
 
     # data should be in the form of a list of tracks
-    return render_template('browse_tracks.html', headings = header, data = data)
+    return "<p> working </p>"
+    #return render_template('browse_tracks.html', headings = header, data = data)
