@@ -4,6 +4,7 @@ from datetime import date
 
 from music.domainmodel.track import Track
 from music.domainmodel.genre import Genre
+from music.domainmodel.album import Album
 from music.domainmodel.artist import Artist
 from music.domainmodel.review import Review
 from music.domainmodel.user import User
@@ -95,12 +96,29 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def add_album(self, album: Album):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_album(self) -> List[Album]:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def add_artist(self, artist: Artist):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_artists(self) -> List[Artist]:
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def add_genre(self, genre: Genre):
         raise NotImplementedError
 
     @abc.abstractmethod
     def get_genres(self) -> List[Genre]:
         raise NotImplementedError
+
 
     @abc.abstractmethod
     def add_artist(self, artist: Artist):
