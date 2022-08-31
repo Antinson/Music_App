@@ -1,24 +1,30 @@
 """Initialize Flask app."""
 
-from flask import Flask, render_template
-
-# TODO: Access to the tracks should be implemented via the repository pattern and using blueprints, so this can not
-#  stay here!
-from music.domainmodel.track import Track
-from music.tracks.tracks_browse import tracks_browse
+from flask import Flask
+from pathlib import Path
 
 
-# TODO: Access to the tracks should be implemented via the repository pattern and using blueprints, so this can not
-#  stay here!
-def create_some_track():
-    some_track = Track(1, "Heat Waves")
-    some_track.track_duration = 250
-    some_track.track_url = 'https://spotify/track/1'
-    return some_track
+
+import music.adapters.repository as repo
+from music.adapters.memory_repository import MemoryRepository, populate
 
 
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__)
-    app.register_blueprint(tracks_browse)
 
+    app.config.from_object('config.Config')
+    data_path = Path('music') / 'adapters' / 'data'
+
+    if test_config is not None:
+        app.config.from_mapping(test_config)
+        data_path = app.config['TEST_DATA_PATH']
+
+    repo.repo_instance = MemoryRepository()
+    populate(data_path, repo.repo_instance)
+
+
+    with app.app_context():
+        """
+        register blueprints here
+        """
     return app
