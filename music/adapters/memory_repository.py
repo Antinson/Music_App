@@ -48,6 +48,9 @@ class MemoryRepository(AbstractRepository):
     def get_all_tracks(self):
         return self.__tracks
 
+    def get_number_of_tracks(self) -> int:
+        return len(self.__tracks)
+
     def get_track_by_date(self, target_date: date) -> List[Track]:
         # set the temporary track and album to have the target date
         target_track = Track(track_id=None, track_title=None)
@@ -69,9 +72,6 @@ class MemoryRepository(AbstractRepository):
 
         return matching_tracks
 
-    def get_number_of_tracks(self) -> int:
-        return len(self.__tracks)
-
     def get_first_track(self) -> Track:
         track = None
 
@@ -91,25 +91,70 @@ class MemoryRepository(AbstractRepository):
         tracks = [self.__tracks_index[id] for id in existing_ids]
         return tracks
 
-    def get_track_ids_for_genre(self, target_genre: Genre):
-        # TODO
-        raise NotImplementedError
+    def get_date_of_previous_track(self, track: Track):
+        previous_date = None
 
-    def get_date_of_previous_Track(self, track: Track):
-        # TODO
-        """ If article is the first Tracks in the repository,
-        return None because there are no Tracks
-        on a previous date.
-        """
-        raise NotImplementedError
+        try:
+            index = self.track_index(track)
+            for stored_track in reversed(self.__tracks[0:index]):
+                if stored_track.date < track.date:
+                    previous_date = stored_track.date
+                    break
+        except ValueError:
+            pass
 
-    def get_date_of_next_article(self, track: Track):
-        # TODO
-        """ If article is the last Tracks in the repository,
-        this method returns None because there are no Tracks
-        on a later date.
-        """
-        raise NotImplementedError
+    def get_date_of_next_track(self, track: Track):
+        next_date = None
+
+        try:
+            index = self.track_index(track)
+            for stored_track in self.__tracks[index + 1: len(self.__tracks)]:
+                if stored_track.date > track.date:
+                    next_date = stored_track.date
+                    break
+        except ValueError:
+            pass
+        return next_date
+
+    def get_track_ids_for_genre(self, target_genre: str) -> List[Track]:
+        genre = next((genre for genre in self.__genres if target_genre == genre.name))
+
+        if genre is not None:
+            track_ids = list()
+            for track in self.__tracks:
+                if genre in track.genres:
+                    track_ids.append(track.track_id)
+
+        else:
+            track_ids = list()
+        return track_ids
+
+    def get_track_ids_for_artist(self, target_artist: str) -> List[Track]:
+        artist = next((artist for artist in self.__artists if target_artist in artist.full_name))
+
+        if artist is not None:
+            track_ids = list()
+            for track in self.__tracks:
+                if track.artist == artist:
+                    track_ids.append(track.track_id)
+
+        else:
+            track_ids = list()
+        return track_ids
+
+    def get_track_ids_for_album(self, target_album: str) -> List[Track]:
+        album = next((album for album in self.__albums if target_album in album.title))
+
+        if album is not None:
+            track_ids = list()
+            for track in self.__tracks:
+                if track.artist == album:
+                    track_ids.append(track.track_id)
+
+        else:
+            track_ids = list()
+        return track_ids
+
 
     def add_album(self, album: Album):
         self.__albums.append(album)
@@ -129,11 +174,7 @@ class MemoryRepository(AbstractRepository):
     def get_genres(self) -> List[Genre]:
         return self.__genres
 
-    def get_track_by_artist(self, target_artist: Artist) -> List[Track]:
-        # TODO
-        """ Returns a list of Tracks by artist
-        If there are no Tracks by given artist, return None.
-        """
+
 
     def add_review(self, review: Review):
         # TODO

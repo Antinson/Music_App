@@ -42,15 +42,17 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def get_number_of_tracks(self) -> int:
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def get_track_by_date(self, target_date: date) -> List[Track]:
         """
         If there are no Tracks on the given date, return an empty list.
         """
         raise NotImplementedError
 
-    @abc.abstractmethod
-    def get_number_of_tracks(self) -> int:
-        raise NotImplementedError
+
 
     @abc.abstractmethod
     def get_first_track(self) -> Track:
@@ -74,17 +76,9 @@ class AbstractRepository(abc.ABC):
         """
         raise NotImplementedError
 
-    @abc.abstractmethod
-    def get_track_ids_for_genre(self, genre: Genre):
-        """ Returns a list of ids representing Tracks
-         that are tagged by genre.
-
-        If there are Tracks that are tagged by genre id, return an empty list.
-        """
-        raise NotImplementedError
 
     @abc.abstractmethod
-    def get_date_of_previous_Track(self, track: Track):
+    def get_date_of_previous_track(self, track: Track):
         """ If article is the first Tracks in the repository,
         return None because there are no Tracks
         on a previous date.
@@ -92,10 +86,35 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_date_of_next_article(self, track: Track):
+    def get_date_of_next_track(self, track: Track):
         """ If article is the last Tracks in the repository,
         this method returns None because there are no Tracks
         on a later date.
+        """
+        raise NotImplementedError
+    @abc.abstractmethod
+    def get_track_ids_for_genre(self, target_genre: str):
+        """ Returns a list of ids representing Tracks
+         that are tagged by genre.
+
+        If there are Tracks that are tagged by genre id, return an empty list.
+        """
+        raise NotImplementedError
+    @abc.abstractmethod
+    def get_track_ids_for_artist(self, target_artist: Artist) -> List[Track]:
+        """ Returns a list of ids representing Tracks
+         that are tagged by artist.
+
+        If there are Tracks that are tagged by artist id, return an empty list.
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_track_ids_for_album(self, target_album: Album) -> List[Track]:
+        """ Returns a list of ids representing Tracks
+         that are tagged by album.
+
+        If there are Tracks that are tagged by album id, return an empty list.
         """
         raise NotImplementedError
 
@@ -123,12 +142,6 @@ class AbstractRepository(abc.ABC):
     def get_genres(self) -> List[Genre]:
         raise NotImplementedError
 
-
-    @abc.abstractmethod
-    def get_track_by_artist(self, target_artist: Artist) -> List[Track]:
-        """ Returns a list of Tracks by artist
-        If there are no Tracks by given artist, return None.
-        """
 
     @abc.abstractmethod
     def add_review(self, review: Review):
