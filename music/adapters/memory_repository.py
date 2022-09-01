@@ -45,6 +45,9 @@ class MemoryRepository(AbstractRepository):
             pass
         return track
 
+    def get_all_tracks(self):
+        return self.__tracks
+
     def get_track_by_date(self, target_date: date) -> List[Track]:
         # set the temporary track and album to have the target date
         target_track = Track(track_id=None, track_title=None)
@@ -127,6 +130,7 @@ class MemoryRepository(AbstractRepository):
         return self.__genres
 
     def get_track_by_artist(self, target_artist: Artist) -> List[Track]:
+        # TODO
         """ Returns a list of Tracks by artist
         If there are no Tracks by given artist, return None.
         """

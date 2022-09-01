@@ -38,6 +38,10 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def get_all_tracks(self) -> List[Track]:
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def get_track_by_date(self, target_date: date) -> List[Track]:
         """
         If there are no Tracks on the given date, return an empty list.
