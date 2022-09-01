@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Track</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}"/>
+</head>
+
+<body>
+    <table class="individual_track">
+        <tr class="table__row">
+            <tr>
+                <td class="table__cell__individual">ID</td>
+                <td class="table__cell__individual">{{track.track_id}}</td>
+            </tr>
+            <tr>
+                <td class="table__cell__individual">Track Title</td>
+                <td class="table__cell__individual">{{track.title}}</td>
+            </tr>
+            <tr>
+                <td class="table__cell__individual">Artist</td>
+                <td class="table__cell__individual">{{track.artist.full_name}}</td>
+            </tr>
+            <tr>
+                <td class="table__cell__individual">Album</td>
+                <td class="table__cell__individual">{{track.album.title}}</td>
+            </tr>
+            <tr>
+                <td class="table__cell__individual">Genres</td>
+                <td class="table__cell__individual">{{track.genres}}</td>
+            </tr>
+            <tr>
+                <td class="table__cell__individual">Duration</td>
+                <td class="table__cell__individual">{{track.track_duration}}</td>
+            </tr>
+            <tr>
+                <td class="table__cell__individual">Url</td>
+                <td class="table__cell__individual"><a href="{{track.track_url}}">{{track.title}}</a></td>
+            </tr>
+        </tr>
+    </table>
+</body>
+
+</html>

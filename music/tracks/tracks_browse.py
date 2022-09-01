@@ -31,3 +31,11 @@ def get_tracks_table_view():
     return render_template('tracks/browse_tracks.html',
                            headings=header,
                            tracks=tracks)
+
+# Individual track pages
+@tracks_blueprint.route("/browse/<int:track_id>")
+def get_track_view(track_id):
+    header = ["Track Id", "Track Name", "Artist", "Length", "URL"]
+    # Grabbing data from our memory repo through our services layer
+    track = services.get_track(track_id, repo.repo_instance)
+    return render_template('tracks/track.html', track=track, headings=header)
