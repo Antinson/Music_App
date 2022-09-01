@@ -177,22 +177,11 @@ class MemoryRepository(AbstractRepository):
 
 
     def add_review(self, review: Review):
-        # TODO
-        """ Adds a Review to the repository.
-
-        If Review doesn't have bidirectional links with a Track,
-        this method raises a RepositoryException and doesn't update the repository.
-        """
-
-        if review.track is None:
-            raise RepositoryException('Review not correctly attached to an Track')
+        super().add_review(review)
+        self.__reviews.append(review)
 
     def get_reviews(self):
-        # TODO
-        """
-         return reviews stored in the repository
-        """
-        raise NotImplementedError
+        return self.__reviews
 
     def track_index(self, track: Track):
         index = bisect_left(self.__tracks, track)
