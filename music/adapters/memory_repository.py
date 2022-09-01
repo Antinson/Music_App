@@ -189,6 +189,9 @@ class MemoryRepository(AbstractRepository):
 
     def get_reviews(self):
         # TODO
+        """
+         return reviews stored in the repository
+        """
         raise NotImplementedError
 
     def track_index(self, track: Track):
