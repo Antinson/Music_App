@@ -7,6 +7,10 @@
 </head>
 
 <nav>
+    <form method = "post">
+        <input type="text" name="nm"/>
+        <input type="submit" value="Search"/>
+    </form>
     <div style="float:left">
         {% if first_track_url is not none %}
             <button onclick="location.href='{{first_track_url}}'">First</button>
