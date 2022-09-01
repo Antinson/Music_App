@@ -177,6 +177,7 @@ class MemoryRepository(AbstractRepository):
 
 
     def add_review(self, review: Review):
+        # call parent
         super().add_review(review)
         self.__reviews.append(review)
 
