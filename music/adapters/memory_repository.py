@@ -116,17 +116,44 @@ class MemoryRepository(AbstractRepository):
             pass
         return next_date
 
-    def get_track_ids_for_genre(self, target_genre: Genre):
-        # TODO
-        raise NotImplementedError
+    def get_track_ids_for_genre(self, target_genre: str) -> List[Track]:
+        genre = next((genre for genre in self.__genres if target_genre == genre.name))
 
-    def get_tracks_by_artist(self, target_artist: Artist) -> List[Track]:
-        # TODO
-        raise NotImplementedError
+        if genre is not None:
+            track_ids = list()
+            for track in self.__tracks:
+                if genre in track.genres:
+                    track_ids.append(track.track_id)
 
-    def get_track_ids_for_album(self, track: Track):
+        else:
+            track_ids = list()
+        return track_ids
 
-        raise NotImplementedError
+    def get_track_ids_for_artist(self, target_artist: str) -> List[Track]:
+        artist = next((artist for artist in self.__artists if target_artist in artist.full_name))
+
+        if artist is not None:
+            track_ids = list()
+            for track in self.__tracks:
+                if track.artist == artist:
+                    track_ids.append(track.track_id)
+
+        else:
+            track_ids = list()
+        return track_ids
+
+    def get_track_ids_for_album(self, target_album: str) -> List[Track]:
+        album = next((album for album in self.__albums if target_album in album.title))
+
+        if album is not None:
+            track_ids = list()
+            for track in self.__tracks:
+                if track.artist == album:
+                    track_ids.append(track.track_id)
+
+        else:
+            track_ids = list()
+        return track_ids
 
 
     def add_album(self, album: Album):
