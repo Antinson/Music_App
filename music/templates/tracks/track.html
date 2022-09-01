@@ -7,6 +7,7 @@
 </head>
 
 <body>
+    <!---->
     <table class="individual_track">
         <tr class="table__row">
             <tr>
@@ -27,7 +28,9 @@
             </tr>
             <tr>
                 <td class="table__cell__individual">Genres</td>
-                <td class="table__cell__individual">{{track.genres}}</td>
+                {% for genre in track.genres %}
+                <td class="table__cell__individual">{{genre}}</td>
+                {% endfor %}
             </tr>
             <tr>
                 <td class="table__cell__individual">Duration</td>
