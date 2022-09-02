@@ -35,7 +35,13 @@ def test_repository_can_get_track(in_memory_repo):
     # maybe check if track has a comment made by user
     # and if genres that are associated are correct
 
-def test_does_not_get_non_existent_track(in_memory_repo):
+def test_repository_does_not_get_non_existent_track(in_memory_repo):
     track = in_memory_repo.get_track(4000)
     assert track is None
 
+def test_repository_can_get_track_id_for_existing_genre(in_memory_repo):
+    track_ids = in_memory_repo.get_track_ids_for_genre('Hip-Hop')
+    assert track_ids == [2, 3, 5, 134, 583, 584, 585, 586, 668, 669, 670, 671, 672,
+                         673, 674, 675, 676, 677, 678, 679, 680, 681, 682, 683,
+                         684, 685, 686, 687, 688, 689, 694, 695, 3316, 3317, 3318,
+                         3319, 3320, 3321, 3322, 3323, 3324]
