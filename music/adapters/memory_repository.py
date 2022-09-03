@@ -26,16 +26,16 @@ class MemoryRepository(AbstractRepository):
         self.__users = list()
         self.__reviews = list()
         self.__artists = list()
-    
-
-    def get_id(self):
-        return len(self.__users) + 1
+        self.__dates = list()
 
     def add_user(self, user: User):
         self.__users.append(user)
 
     def get_user(self, user_name) -> User:
         return next((user for user in self.__users if user.user_name == user_name), None)
+
+    def get_id(self):
+        return len(self.__users) + 1
 
     def add_track(self, track: Track):
         insort_left(self.__tracks, track)
@@ -55,26 +55,24 @@ class MemoryRepository(AbstractRepository):
     def get_number_of_tracks(self) -> int:
         return len(self.__tracks)
 
-    def get_track_by_date(self, target_date: date) -> List[Track]:
-        # set the temporary track and album to have the target date
-        target_track = Track(track_id=None, track_title=None)
-        album_with_target_date = Album(album_id=None, title=None)
-        album_with_target_date.release_year = target_date
-        target_track.album = album_with_target_date
-
+    def get_track_by_date(self, target_date: int) -> List[Track]:
         matching_tracks = list()
 
-        try:
-            index = self.track_index(target_track)
-            for track in self.__tracks[index: None]:
-                if track.album.release_year == target_date:
+        for track in self.__tracks:
+            if track.album is not None and track.album.release_year is not None:
+                track_album_release_year = track.album.release_year
+                if track_album_release_year == target_date:
                     matching_tracks.append(track)
-                else:
-                    break
-        except ValueError:
-            pass
 
         return matching_tracks
+
+    def add_date(self, date: int):
+        if date is not None:
+            self.__dates.append(date)
+            self.__dates.sort()
+
+    def get_dates(self) -> List[int]:
+        return self.__dates
 
     def get_first_track(self) -> Track:
         track = None
@@ -97,30 +95,29 @@ class MemoryRepository(AbstractRepository):
 
     def get_date_of_previous_track(self, track: Track):
         previous_date = None
-
         try:
-            index = self.track_index(track)
-            for stored_track in reversed(self.__tracks[0:index]):
-                if stored_track.date < track.date:
-                    previous_date = stored_track.date
+            index = self.date_index(track.album.release_year)
+            for date in reversed(self.__dates[0:index]):
+                if date < track.album.release_year:
+                    previous_date = date
                     break
         except ValueError:
             pass
+        return previous_date
 
     def get_date_of_next_track(self, track: Track):
         next_date = None
-
         try:
-            index = self.track_index(track)
-            for stored_track in self.__tracks[index + 1: len(self.__tracks)]:
-                if stored_track.date > track.date:
-                    next_date = stored_track.date
+            index = self.date_index(track.album.release_year)
+            for date in self.__dates[index + 1: len(self.__dates)]:
+                if date > track.album.release_year:
+                    next_date = date
                     break
         except ValueError:
             pass
         return next_date
 
-    def get_track_ids_for_genre(self, target_genre: str) -> List[Track]:
+    def get_track_ids_for_genre(self, target_genre: str) -> List[int]:
         genre = next((genre for genre in self.__genres if target_genre == genre.name))
 
         if genre is not None:
@@ -133,35 +130,41 @@ class MemoryRepository(AbstractRepository):
             track_ids = list()
         return track_ids
 
-    def get_track_ids_for_artist(self, target_artist: str) -> List[Track]:
-        artist = next((artist for artist in self.__artists if target_artist in artist.full_name))
+    def get_track_ids_for_artist(self, target_artist: str) -> List[int]:
+        artists = list()
+        for artist in self.__artists:
+            if artist is not None and artist.full_name is not None and target_artist.lower() in artist.full_name.lower() or artist.full_name.lower().startswith(
+                    target_artist.lower()):
+                artists.append(artist)
 
-        if artist is not None:
-            track_ids = list()
-            for track in self.__tracks:
+        track_ids = list()
+        for track in self.__tracks:
+            for artist in artists:
                 if track.artist == artist:
                     track_ids.append(track.track_id)
 
-        else:
-            track_ids = list()
         return track_ids
 
-    def get_track_ids_for_album(self, target_album: str) -> List[Track]:
-        album = next((album for album in self.__albums if target_album in album.title))
+    def get_track_ids_for_album(self, target_album: str):
+        albums = list()
+        for album in self.__albums:
+            if album is not None and album.title is not None and target_album.lower() in album.title.lower() or album.title.lower().startswith(target_album.lower()):
+                albums.append(album)
 
-        if album is not None:
-            track_ids = list()
-            for track in self.__tracks:
-                if track.artist == album:
+        track_ids = list()
+        for track in self.__tracks:
+            for album in albums:
+                if track.album == album:
                     track_ids.append(track.track_id)
 
-        else:
-            track_ids = list()
         return track_ids
+
 
 
     def add_album(self, album: Album):
         self.__albums.append(album)
+        if album.release_year not in self.__dates:
+            self.add_date(album.release_year)
 
     def get_albums(self) -> List[Album]:
         return self.__albums
@@ -178,8 +181,6 @@ class MemoryRepository(AbstractRepository):
     def get_genres(self) -> List[Genre]:
         return self.__genres
 
-
-
     def add_review(self, review: Review):
         # call parent
         super().add_review(review)
@@ -191,6 +192,12 @@ class MemoryRepository(AbstractRepository):
     def track_index(self, track: Track):
         index = bisect_left(self.__tracks, track)
         if index != len(self.__tracks) and self.__tracks[index].album.release_year == track.album.release_year:
+            return index
+        raise ValueError
+
+    def date_index(self, date: int):
+        index = bisect_left(self.__dates, date)
+        if index != len(self.__dates) and self.__dates[index] == date:
             return index
         raise ValueError
 

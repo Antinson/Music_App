@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Simple Track</title>
-    <link rel="stylesheet" href="static/styles.css"/>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}"/>
 </head>
 
 <nav>
@@ -36,9 +36,14 @@
         {% endif %}
     </div>
 
+
 </nav>
 
 <body>
+<div>
+    <h4>{{table_name}}</h4>
+</div>
+<div>
     <table class="center">
         <tr class="table__header">
             {% for header in headings %}
@@ -54,6 +59,8 @@
         </tr>
         {% endfor %}
     </table>
+</div>
+
 </body>
 
 

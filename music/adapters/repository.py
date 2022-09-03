@@ -52,6 +52,14 @@ class AbstractRepository(abc.ABC):
         """
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def add_date(self, target_date: date):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_dates(self):
+        raise NotImplementedError
+
 
 
     @abc.abstractmethod
@@ -100,6 +108,7 @@ class AbstractRepository(abc.ABC):
         If there are Tracks that are tagged by genre id, return an empty list.
         """
         raise NotImplementedError
+
     @abc.abstractmethod
     def get_track_ids_for_artist(self, target_artist: Artist) -> List[Track]:
         """ Returns a list of ids representing Tracks
