@@ -26,6 +26,10 @@ class MemoryRepository(AbstractRepository):
         self.__users = list()
         self.__reviews = list()
         self.__artists = list()
+    
+
+    def get_id(self):
+        return len(self.__users) + 1
 
     def add_user(self, user: User):
         self.__users.append(user)

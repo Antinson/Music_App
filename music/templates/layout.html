@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Music App</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}"/>
+        <link rel="icon" href="{{ url_for('static', filename='logo.jpg') }}">
+    </head>
+    
+    <body>
+        <div id="body">
+
+            {% include 'navigation.html' %}
+            <div id="content-2">
+
+                {% include 'header.html' %}
+            <div id="container">
+
+            {% block content %} {% endblock %}
+
+            {% include 'sidebar.html' %}
+            </div>
+            </div>
+        </div>
+    </body>
+</html>

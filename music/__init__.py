@@ -26,4 +26,8 @@ def create_app(test_config=None):
     with app.app_context():
         from .tracks import tracks_browse
         app.register_blueprint(tracks_browse.tracks_blueprint)
+        from .authentication import auth
+        app.register_blueprint(auth.auth_blueprint)
+        from .home import home
+        app.register_blueprint(home.home_blueprint)
     return app
