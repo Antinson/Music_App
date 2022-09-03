@@ -7,6 +7,10 @@
 </head>
 
 <nav>
+    <form method = "post">
+        <input type="text" name="nm"/>
+        <input type="submit" value="Search"/>
+    </form>
     <div style="float:left">
         {% if first_track_url is not none %}
             <button onclick="location.href='{{first_track_url}}'">First</button>
@@ -43,7 +47,7 @@
         </tr>
         <tr class="table__row">
         {% for track in tracks %}
-            <td class="table__cell">{{track.track_id}}</td>
+            <td class="table__cell"><a href="/browse/{{track.track_id}}">{{track.track_id}}</a></td>
             <td class="table__cell">{{track.title}}</td>
             <td class="table__cell">{{track.artist.full_name}}</td>
             <td class="table__cell">{{track.track_duration}}</td>
