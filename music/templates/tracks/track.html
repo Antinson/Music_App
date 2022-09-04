@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Simple Track</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}"/>
-</head>
+{% extends 'layout.html' %}
 
-<body>
-    <!---->
+{% block content %}
     <table class="individual_track">
         <tr class="table__row">
             <tr>
@@ -42,6 +35,53 @@
             </tr>
         </tr>
     </table>
-</body>
 
-</html>
+    <div class="reviews">
+        <h2>Reviews</h2>
+        <table class="reviews__table">
+            <tr class="table__row">
+                <th class="table__cell">Reviewer</th>
+                <th class="table__cell">Review</th>
+                <th class="table__cell">Rating</th>
+                <th class="table__cell">Time</th>
+            </tr>
+            {% for review in reviews %}
+            <tr class="table__row">
+                <td class="table__cell">{{review.user}}</td>
+                <td class="table__cell">{{review.review_text}}</td>
+                <td class="table__cell">{{review.rating}}</td>
+                <td class="table__cell">{{review.timestamp}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    {% if user_name != None %}
+
+    <main id="main">
+        <div class="form-wrapper">
+            <form action="{{handler_url}}" method="post">
+                {{form.csrf_token}}
+                <br>
+    
+                <div class="form-field">
+                    {{form.review.label}} </br>{{form.review(size = 100, placeholder="type your review", class="textarea", cols="50", rows="6", wrap="hard")}}
+                    {{form.rating.label}} {{form.rating(size = 1, placeholder="your rating 1-5", class="textarea", cols="1", rows="1")}}
+                    {% if form.review.errors or form.rating.errors %}
+                    <ul class="errors">
+                        {% for error in form.review.errors %}
+                        <li>{{error}}</li>
+                        {% endfor %}
+                        {% for error in form.rating.errors %}
+                        <li>{{error}}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                {{form.submit}}
+            </form>
+        </div>
+    </main>
+    {% endif %}
+
+{% endblock %}
