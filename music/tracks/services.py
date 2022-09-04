@@ -2,6 +2,7 @@ from typing import List, Iterable
 
 from music.adapters.repository import AbstractRepository
 from music.domainmodel.track import Track
+from music.domainmodel.review import Review
 
 
 class NonExistentTrackException(Exception):
@@ -39,6 +40,30 @@ def get_tracks_by_id(id_list, repo: AbstractRepository):
     tracks_as_dict = tracks_to_dict(tracks)
     return tracks_as_dict
 
+def add_review(track_id: int, comment_text: str, user_name: str, rating: int, repo: AbstractRepository):
+
+    
+    # Check that the track exists.
+    track = repo.get_track(track_id)
+
+    # Get the current user that commented
+    user = repo.get_user(user_name.lower())
+
+    # Create a review object
+    review = Review(track, comment_text, rating, user_name)
+
+    # Add the review to user's reviews
+    user.add_review(review)
+
+    # Update our repository
+    repo.add_review(review)
+
+def get_reviews_for_track(track_id, repo: AbstractRepository):
+    
+    reviews_for_track = [review for review in repo.get_reviews() if review.track.track_id == track_id]
+
+    return reviews_to_dict(reviews_for_track)
+
 
 # ============================================
 # Functions to convert model entities to dicts
@@ -57,6 +82,17 @@ def track_to_dict(track: Track):
 
     return track_dict
 
+def review_to_dict(review: Review):
+    review_dict = {
+        'user': review.user,
+        'track_id': review.track.track_id,
+        'review_text': review.review_text,
+        'rating': review.rating,
+        'timestamp': review.timestamp
+    }
+
+    return review_dict
+
 
 def tracks_to_dict(tracks: Iterable[Track]):
     return [track_to_dict(track) for track in tracks]
@@ -71,3 +107,6 @@ def dict_to_track(dict):
     track.genres = dict.track_genres
 
     return track
+
+def reviews_to_dict(reviews: Iterable[Review]):
+    return [review_to_dict(review) for review in reviews]
