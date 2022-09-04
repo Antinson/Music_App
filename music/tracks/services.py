@@ -45,11 +45,9 @@ def add_review(track_id: int, comment_text: str, user_name: str, rating: int, re
     
     # Check that the track exists.
     track = repo.get_track(track_id)
-    print(track)
 
     # Get the current user that commented
     user = repo.get_user(user_name.lower())
-    print(user)
 
     # Create a review object
     review = Review(track, comment_text, rating, user_name)

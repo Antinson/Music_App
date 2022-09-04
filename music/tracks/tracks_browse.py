@@ -64,7 +64,7 @@ def get_track_view(track_id):
     header = ["Track Id", "Track Name", "Artist", "Length", "URL"]
     form = ReviewForm()
     reviews = services.get_reviews_for_track(track_id, repo.repo_instance)
-    user_name = None
+    logged_in = False
     # Grabbing data from our memory repo through our services layer
     try:
         track = services.get_track(track_id, repo.repo_instance)
@@ -72,10 +72,9 @@ def get_track_view(track_id):
         return redirect(url_for('tracks_bp.not_found', track_id=track_id))
     
     try:
-        print('we okay')
         user_name = session['user_name']
+        logged_in = True
     except:
-        print('I was triggered')
         pass
 
     if form.validate_on_submit():
@@ -89,43 +88,13 @@ def get_track_view(track_id):
         pass
    
 
-    return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews, user_name=user_name)
+    return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews, logged_in = logged_in)
 
 
 @tracks_blueprint.route("/browse/<int:track_id>/not_found")
 def not_found(track_id):
     return render_template('tracks/not_found.html', track_id=track_id)
 
-@tracks_blueprint.route("/browse/<int:track_id>/comment", methods=['GET', 'POST'])
-@login_required
-def comment_on_track(track_id):
-
-    # Set user_name to the current user's username
-    user_name = session['user_name']
-
-    review = ReviewForm()
-
-    if form.validate_on_submit():
-
-        # Get the track id from the form
-        #track_id = int(form.track_id.data)
-
-        # Storing the new comment
-        services.add_comment(track_id, form.review.data, user_name, form.rating.data, repo.repo_instance)
-
-        # Redirect to the track page
-        return redirect(url_for('tracks_bp.get_track_view', track_id=track_id, form=form))
-
-        if request.method == 'GET':
-            # For a GET request, or if the form data is invalid, return the comment page.
-            track_id = request.args.get('track_id')
-            form.track_id.data = track_id
-        else:
-            track_id = int(form.track_id.data)
-        
-    track = services.get_track(track_id, repo.repo_instance)
-    
-    return render_template('tracks/tracks_comment.html', form=form, track=track)
 
 
 
