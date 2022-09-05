@@ -200,7 +200,7 @@ def get_tracks_by_artist_view():
 # when user types in str
 @tracks_blueprint.route("/search_by_artist/<target_artist>", methods=['GET', 'POST'])
 def get_tracks_by_artist_str(target_artist):
-    header = ["Track Id", "Track Name", "Artist", "Album", "Genre"]
+    header = ["Track Id", "Track Name", "Artist", "Album"]
     try:
         # See if user has put anything in search box and pressed submit
         if request.method == 'POST':
