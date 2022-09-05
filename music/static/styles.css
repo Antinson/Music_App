@@ -60,6 +60,22 @@
     font-family: sans-serif;
 }
 
-.formwrapper {
-    margin: auto;
+.form-control {
+    width: 500px;
 }
+
+.container-cred {
+    display: row;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+
+}
+
+.login-container {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+
+
