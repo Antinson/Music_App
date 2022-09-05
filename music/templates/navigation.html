@@ -1,14 +1,18 @@
-<nav id="nav">
-    <h2 id="nav-header">
-      {% if 'user_name' in session %} Hello, {{ session['user_name'] }} {%
-      endif %}
-    </h2>
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="{{ url_for('static', filename='title_picture.png') }}" class="nav-logo">
+    </a>
+
     {% if 'user_name' in session %}
       <a class="btn-nav" href="{{ url_for('home_bp.home') }}">Home</a>
+      <a class="btn-nav" href="{{ url_for('tracks_bp.get_tracks_table_view') }}">Browse</a>
       <a class="btn-nav" href="{{ url_for('auth_bp.logout') }}">Logout</a>
     {% else %}
       <a class="btn-nav" href="{{ url_for('home_bp.home') }}">Home</a>
+      <a class="btn-nav" href="{{ url_for('tracks_bp.get_tracks_table_view') }}">Browse</a>
       <a class="btn-nav" href="{{ url_for('auth_bp.register') }}">Register</a>
       <a class="btn-nav" href="{{ url_for('auth_bp.login') }}">Login</a>
     {% endif %}
+    </div>
   </nav>
