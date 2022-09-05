@@ -117,7 +117,7 @@ class MemoryRepository(AbstractRepository):
             pass
         return next_date
 
-    def get_track_ids_for_genre(self, target_genre: str) -> List[int]:
+    def get_track_ids_by_genre(self, target_genre: str) -> List[int]:
         genre = next((genre for genre in self.__genres if target_genre == genre.name))
 
         if genre is not None:
@@ -130,10 +130,10 @@ class MemoryRepository(AbstractRepository):
             track_ids = list()
         return track_ids
 
-    def get_track_ids_for_artist(self, target_artist: str) -> List[int]:
+    def get_track_ids_by_artist(self, target_artist: str) -> List[int]:
         artists = list()
         for artist in self.__artists:
-            if artist is not None and artist.full_name is not None and target_artist.lower() in artist.full_name.lower() or artist.full_name.lower().startswith(
+            if artist is not None and artist.full_name is not None and target_artist.lower() == artist.full_name.lower() or artist.full_name.lower().startswith(
                     target_artist.lower()):
                 artists.append(artist)
 
@@ -145,10 +145,38 @@ class MemoryRepository(AbstractRepository):
 
         return track_ids
 
-    def get_track_ids_for_album(self, target_album: str):
+    def get_track_ids_by_artist_id(self, target_artist: int):
+        artists = list()
+        for artist in self.__artists:
+            if artist is not None and artist.artist_id is not None and artist.artist_id == target_artist:
+                artists.append(artist)
+
+        track_ids = list()
+        for track in self.__tracks:
+            for artist in artists:
+                if track.artist == artist:
+                    track_ids.append(track.track_id)
+
+        return track_ids
+
+    def get_track_ids_by_album(self, target_album: str):
         albums = list()
         for album in self.__albums:
-            if album is not None and album.title is not None and target_album.lower() in album.title.lower() or album.title.lower().startswith(target_album.lower()):
+            if album is not None and album.title is not None and target_album.lower() == album.title.lower() or album.title.lower().startswith(target_album.lower()):
+                albums.append(album)
+
+        track_ids = list()
+        for track in self.__tracks:
+            for album in albums:
+                if track.album == album:
+                    track_ids.append(track.track_id)
+
+        return track_ids
+
+    def get_track_ids_by_album_id(self, target_album: int):
+        albums = list()
+        for album in self.__albums:
+            if album is not None and album.album_id is not None and album.album_id == target_album:
                 albums.append(album)
 
         track_ids = list()
