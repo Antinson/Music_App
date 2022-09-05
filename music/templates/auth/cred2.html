@@ -1,7 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-        <div class="container-fluid">
+    <main id="main">
+        <div class="formwrapper">
             <h1 class="form-title">{{ title }}</h1>
             <form method="POST" action="{{ handler_url }}">
                  {{ form.csrf_token }} <!-- Need to include this token - Flask WTForms requires it. -->
@@ -9,31 +10,37 @@
                     {{ form.user_name.label(class="form-label") }} 
                     {{ form.user_name(class="form-control") }}
                     {% if form.user_name.errors or user_name_error_message is not none %}
+                        <ul class="errors">
                             {% if user_name_error_message is not none %}
-                            
+                                <li>
                                     {{ user_name_error_message }}
-                                
+                                </li>
                             {% endif %}
                             {% for error in form.user_name.errors %}
-                                {{ error }}
+                                <li>{{ error }}</li>
                             {% endfor %}
+                        </ul>
                     {% endif %}
                 </div>
                 <div class="form-field">
                     {{ form.password.label(class="form-label") }} 
                     {{ form.password(class="form-control") }}
                     {% if form.password.errors or password_error_message is not none %}
-                        {% if password_error_message is not none %}
-                                {{ password_error_message }}
-                                    
+                        <ul class="errors">
+                            {% if password_error_message is not none %}
+                                <li>
+                                    {{ password_error_message }}
+                                </li>
                             {% endif %}
                             {% for error in form.password.errors %}
-                                {{ error }}
+                                <li>{{ error }}</li>
                             {% endfor %}
+                        </ul>
                     {% endif %}
                 </div>
                 {{ form.submit(class="btn btn-dark") }}
             </form>
         </div>
+    </main>
 {% endblock %}
 

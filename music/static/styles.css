@@ -49,3 +49,17 @@
     text-decoration: none;
     text-transform: uppercase;
 }
+
+.btn-nav:hover {
+    color: rgb(201, 201, 201);
+    text-decoration: none;
+}
+
+.form-title {
+    padding-top: 100px;
+    font-family: sans-serif;
+}
+
+.formwrapper {
+    margin: auto;
+}
