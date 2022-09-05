@@ -50,10 +50,7 @@ def get_tracks_by_date(date, repo: AbstractRepository):
 
 def get_tracks_by_album(target_album, repo: AbstractRepository):
     # returns list of track ids that contain the target_album by album id OR album title
-    if type(target_album) == int:
-        track_ids_by_album = repo.get_track_ids_by_album_id(target_album)
-    else:
-        track_ids_by_album = repo.get_track_ids_by_album(target_album)
+    track_ids_by_album = repo.get_track_ids_by_album(target_album)
 
     # gets the tracks by album/s
     tracks_by_album = repo.get_tracks_by_id(track_ids_by_album)
@@ -62,18 +59,18 @@ def get_tracks_by_album(target_album, repo: AbstractRepository):
 
 def get_tracks_by_artist(target_artist, repo: AbstractRepository):
     # returns list of track ids that contain the target_artist by artist id OR artist name
-    if type(target_artist) == int:
-        track_ids_by_artist = repo.get_track_ids_by_artist_id(target_artist)
-    else:
-        track_ids_by_artist = repo.get_track_ids_by_album(target_artist)
+    track_ids_by_artist = repo.get_track_ids_by_artist(target_artist)
 
-    # gets the tracks by album/s
+    # gets the tracks by matching artist/s
     tracks_by_artist = repo.get_tracks_by_id(track_ids_by_artist)
     return tracks_to_dict(tracks_by_artist)
 
 
 def get_tracks_by_genre(target_genre, repo: AbstractRepository):
+    # returns list of track ids that contain target_genre by genre id OR genre name
     track_ids_by_genre = repo.get_track_ids_by_genre(target_genre)
+
+    # gets the tracks by matching genres/s
     tracks_by_genre = repo.get_tracks_by_id(track_ids_by_genre)
     return tracks_to_dict(tracks_by_genre)
 

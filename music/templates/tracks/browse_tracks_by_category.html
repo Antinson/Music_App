@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Track</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}"/>
+</head>
+
+<nav>
+    <form method = "post">
+        <input type="text" name="nm"/>
+        <input type="submit" value="Search"/>
+    </form>
+    <div style="float:left">
+        {% if first_track_url is not none %}
+            <button onclick="location.href='{{first_track_url}}'">First</button>
+        {% else %}
+            <button disabled>First</button>
+        {% endif %}
+        {% if prev_track_url is not none %}
+            <button onclick="location.href='{{prev_track_url}}'">Previous</button>
+        {% else %}
+            <button disabled>Previous</button>
+        {% endif %}
+    </div>
+    <div style="float:right">
+        {% if next_track_url is not none %}
+            <button onclick="location.href='{{next_track_url}}'">Next</button>
+        {% else %}
+            <button disabled>Next</button>
+        {% endif %}
+        {% if last_track_url is not none %}
+            <button onclick="location.href='{{last_track_url}}'">Last</button>
+        {% else %}
+            <button disabled>Last</button>
+        {% endif %}
+    </div>
+
+
+</nav>
+
+<body>
+<div>
+    <h4>{{table_name}}</h4>
+</div>
+<div>
+    <table class="center">
+        <tr class="table__header">
+            {% for header in headings %}
+            <th class="table__cell">{{header}}</th>
+            {% endfor %}
+        </tr>
+        <tr class="table__row">
+        {% for track in tracks %}
+            {% set genres = track.genres%}
+            <td class="table__cell"><a href="/browse/{{track.track_id}}">{{track.track_id}}</a></td>
+            <td class="table__cell">{{track.title}}</td>
+            <td class="table__cell">{{track.artist.full_name}}</td>
+            <td class="table__cell">{{track.album.title}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+
+
+
+<nav>
+    <div style="float:left">
+        {% if first_track_url is not none %}
+            <button onclick="location.href='{{first_track_url}}'">First</button>
+        {% else %}
+            <button disabled>First</button>
+        {% endif %}
+        {% if prev_track_url is not none %}
+            <button onclick="location.href='{{prev_track_url}}'">Previous</button>
+        {% else %}
+            <button disabled>Previous</button>
+        {% endif %}
+    </div>
+    <div style="float:right">
+        {% if next_track_url is not none %}
+            <button onclick="location.href='{{next_track_url}}'">Next</button>
+        {% else %}
+            <button disabled>Next</button>
+        {% endif %}
+        {% if last_track_url is not none %}
+            <button onclick="location.href='{{last_track_url}}'">Last</button>
+        {% else %}
+            <button disabled>Last</button>
+        {% endif %}
+    </div>
+
+</nav>
+
+</html>

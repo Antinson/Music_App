@@ -101,7 +101,7 @@ class AbstractRepository(abc.ABC):
         """
         raise NotImplementedError
     @abc.abstractmethod
-    def get_track_ids_by_genre(self, target_genre: str):
+    def get_track_ids_by_genre(self, target_genre):
         """ Returns a list of ids representing Tracks
          that are tagged by genre.
 
@@ -110,7 +110,7 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_track_ids_by_artist(self, target_artist: str) -> List[Track]:
+    def get_track_ids_by_artist(self, target_artist) -> List[Track]:
         """ Returns a list of ids representing Tracks
          that are tagged by artist.
 
@@ -119,7 +119,7 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_track_ids_by_album(self, target_album: str) -> List[Track]:
+    def get_track_ids_by_album(self, target_album) -> List[Track]:
         """ Returns a list of ids representing Tracks
          that are tagged by album.
 
@@ -127,14 +127,6 @@ class AbstractRepository(abc.ABC):
         """
         raise NotImplementedError
 
-    @abc.abstractmethod
-    def get_track_ids_by_album_id(self, target_album: int) -> List[Track]:
-        """ Returns a list of ids representing Tracks
-         that are tagged by album.
-
-        If there are Tracks that are tagged by album id, return an empty list.
-        """
-        raise NotImplementedError
 
     @abc.abstractmethod
     def add_album(self, album: Album):

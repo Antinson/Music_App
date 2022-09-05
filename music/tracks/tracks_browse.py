@@ -119,7 +119,7 @@ def get_album_view():
 # when user types in str
 @tracks_blueprint.route("/search_by_album/<target_album>", methods=['GET', 'POST'])
 def get_tracks_by_album_str(target_album):
-    header = ["Track Id", "Title", "Artist", "Length"]
+    header = ["Track Id", "Track Name", "Artist", "Album"]
 
     try:
         # See if user has put anything in search box and pressed submit
@@ -141,13 +141,13 @@ def get_tracks_by_album_str(target_album):
     # number of tracks found by target_album
     table_name = str(len(tracks_by_album)) + " results for " + target_album
 
-    return render_template('tracks/browse_tracks.html', headings=header, table_name=table_name, tracks=tracks_by_album)
+    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks_by_album)
 
 
 # when user types in id
 @tracks_blueprint.route("/search_by_album/<int:target_album>", methods=['GET', 'POST'])
 def get_tracks_by_album_id(target_album):
-    header = ["Track Id", "Title", "Artist", "Length"]
+    header = ["Track Id", "Track Name", "Artist", "Album"]
 
     try:
         # See if user has put anything in search box and pressed submit
@@ -163,18 +163,18 @@ def get_tracks_by_album_id(target_album):
 
     # Get tracks that match album id
     tracks_by_album = services.get_tracks_by_album(target_album, repo.repo_instance)
+
+    # if no tracks found, redirect
     if len(tracks_by_album) == 0:
         return redirect(url_for('tracks_bp.not_found'))
 
     # get album title for display
-    albums = services.get_albums(repo.repo_instance)
-    for album in albums:
-        if album.album_id == target_album:
-            album_title = album.title
+    album_title = tracks_by_album[0]['album'].title
+
     # number of tracks found by target_album
     table_name = str(len(tracks_by_album)) + " results for " + album_title
 
-    return render_template('tracks/browse_tracks.html', headings=header, table_name=table_name, tracks=tracks_by_album)
+    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks_by_album)
 
 
 # Tracks by Artist
@@ -200,7 +200,7 @@ def get_tracks_by_artist_view():
 # when user types in str
 @tracks_blueprint.route("/search_by_artist/<target_artist>", methods=['GET', 'POST'])
 def get_tracks_by_artist_str(target_artist):
-    header = ["Track Id", "Track Name", "Artist", "Length"]
+    header = ["Track Id", "Track Name", "Artist", "Album", "Genre"]
     try:
         # See if user has put anything in search box and pressed submit
         if request.method == 'POST':
@@ -215,18 +215,20 @@ def get_tracks_by_artist_str(target_artist):
 
     # Get tracks that match artist name
     tracks_by_artist = services.get_tracks_by_artist(target_artist, repo.repo_instance)
+
+    # if no tracks found, redirect
     if len(tracks_by_artist) == 0:
         return redirect(url_for('tracks_bp.not_found'))
 
     # number of tracks found by target_album
     table_name = str(len(tracks_by_artist)) + " results for " + target_artist
 
-    return render_template('tracks/browse_tracks.html', headings=header, table_name=table_name, tracks=tracks_by_artist)
+    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks_by_artist)
 
 # when user types in id
 @tracks_blueprint.route("/search_by_artist/<int:target_artist>", methods=['GET', 'POST'])
 def get_tracks_by_artist_id(target_artist):
-    header = ["Track Id", "Track Name", "Artist", "Length"]
+    header = ["Track Id", "Track Name", "Artist", "Album"]
     try:
         # See if user has put anything in search box and pressed submit
         if request.method == 'POST':
@@ -241,32 +243,97 @@ def get_tracks_by_artist_id(target_artist):
 
     # Get tracks that match artist name
     tracks_by_artist = services.get_tracks_by_artist(target_artist, repo.repo_instance)
+
+    # if no tracks found, redirect
     if len(tracks_by_artist) == 0:
         return redirect(url_for('tracks_bp.not_found'))
 
+
     # get artist name for display
-    artists = services.get_artists(repo.repo_instance)
-    for artist in artists:
-        if artist.artist_id == target_artist:
-            artist_name = artist.full_name
+    artist_name = tracks_by_artist[0]['artist'].full_name
+
     # number of tracks found by target_album
     table_name = str(len(tracks_by_artist)) + " results for " + artist_name
 
-    return render_template('tracks/browse_tracks.html', headings=header, table_name=table_name, tracks=tracks_by_artist)
-# Display all genres, when clicked, redirect to Tracks by Genre
-@tracks_blueprint.route("/search_by_genre")
+    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks_by_artist)
+# Tracks by Genre
+@tracks_blueprint.route("/search_by_genre", methods=['GET', 'POST'])
 def get_genres_view():
     header = ['Genre Id', 'Title']
-    genres = services.get_genres(repo.repo_instance)
-    return render_template('tracks/browse_genres.html', headings=header, genres=genres)
-
-
-# Tracks by Genre
-@tracks_blueprint.route("/search_by_genre/<genre_name>")
-def get_tracks_by_genre(genre_name):
-    header = ["Track Id", "Track Name", "Artist", "Length"]
     try:
-        tracks_by_genre = services.get_tracks_by_genre(genre_name, repo.repo_instance)
+        # See if user has put anything in search box and pressed submit
+        if request.method == 'POST':
+            # Get the search term from the form
+            target_genre = request.form["nm"]
+            if type(target_genre) == int:
+                return redirect(url_for('tracks_bp.get_tracks_by_genre_id', target_genre=target_genre))
+            else:
+                return redirect(url_for('tracks_bp.get_tracks_by_genre_str', target_genre=target_genre))
     except:
         return redirect(url_for('tracks_bp.not_found'))
-    return render_template('tracks/browse_tracks.html', headings=header, tracks=tracks_by_genre)
+    else:
+        genres = services.get_genres(repo.repo_instance)
+        return render_template('tracks/browse_genres.html', headings=header, genres=genres)
+
+
+
+# when user types in str
+@tracks_blueprint.route("/search_by_genre/<target_genre>", methods=['GET', 'POST'])
+def get_tracks_by_genre_str(target_genre):
+    header = ["Track Id", "Track Name", "Artist", "Album"]
+    try:
+        # See if user has put anything in search box and pressed submit
+        if request.method == 'POST':
+            # Get the search term from the form
+            target_genre = request.form["nm"]
+            if type(target_genre) == int:
+                return redirect(url_for('tracks_bp.get_tracks_by_genre_id', target_genre=target_genre))
+            else:
+                return redirect(url_for('tracks_bp.get_tracks_by_genre_str', target_genre=target_genre))
+    except:
+        return redirect(url_for('tracks_bp.not_found'))
+
+    # Get tracks that match artist name
+    tracks_by_genre = services.get_tracks_by_genre(target_genre, repo.repo_instance)
+
+    # if no tracks found, redirect
+    if len(tracks_by_genre) == 0:
+        return redirect(url_for('tracks_bp.not_found'))
+
+    # number of tracks found by target_album
+    table_name = str(len(tracks_by_genre)) + " results for " + target_genre
+
+    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks_by_genre)
+
+
+
+# when user types in id
+@tracks_blueprint.route("/search_by_genre/<int:target_genre>", methods=['GET', 'POST'])
+def get_tracks_by_genre_id(target_genre):
+    header = ["Track Id", "Track Name", "Artist", "Album"]
+    try:
+        # See if user has put anything in search box and pressed submit
+        if request.method == 'POST':
+            # Get the search term from the form
+            target_genre = request.form["nm"]
+            if type(target_genre) == int:
+                return redirect(url_for('tracks_bp.get_tracks_by_genre_id', target_genre=target_genre))
+            else:
+                return redirect(url_for('tracks_bp.get_tracks_by_genre_str', target_genre=target_genre))
+    except:
+        return redirect(url_for('tracks_bp.not_found'))
+
+    # Get tracks that match artist name
+    tracks_by_genre = services.get_tracks_by_genre(target_genre, repo.repo_instance)
+
+    # if no tracks found, redirect
+    if len(tracks_by_genre) == 0:
+        return redirect(url_for('tracks_bp.not_found'))
+
+    # get genre name for display
+    genre_name = tracks_by_genre[0]['track_genres'][0].name
+
+    # number of tracks found by target_album
+    table_name = str(len(tracks_by_genre)) + " results for " + genre_name
+
+    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks_by_genre)
