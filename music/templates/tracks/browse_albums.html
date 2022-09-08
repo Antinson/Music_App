@@ -22,7 +22,7 @@
         <tr class="table__row">
         {% for album in albums %}
             <td class="table__cell">{{album.album_id}}</td>
-            <td class="table__cell"><a href="{{url_for('tracks_bp.get_tracks_by_album_id', target_album=album.album_id)}}">{{album.title}}</a></td>
+            <td class="table__cell"><a href="{{url_for('search_bp.get_tracks_by_album_id', target_album=album.album_id)}}">{{album.title}}</a></td>
 
         </tr>
         {% endfor %}

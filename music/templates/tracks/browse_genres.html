@@ -23,7 +23,7 @@
         <tr class="table__row">
         {% for genre in genres %}
             <td class="table__cell">{{genre.genre_id}}</td>
-            <td class="table__cell"><a href="{{url_for('tracks_bp.get_tracks_by_genre_id', target_genre=genre.genre_id)}}">{{genre.name}}</a></td>
+            <td class="table__cell"><a href="{{url_for('search_bp.get_tracks_by_genre_id', target_genre=genre.genre_id)}}">{{genre.name}}</a></td>
 
         </tr>
         {% endfor %}

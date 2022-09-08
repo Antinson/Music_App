@@ -22,7 +22,7 @@
         <tr class="table__row">
         {% for artist in artists %}
             <td class="table__cell">{{artist.artist_id}}</td>
-            <td class="table__cell"><a href="{{url_for('tracks_bp.get_tracks_by_artist_id', target_artist=artist.artist_id)}}">{{artist.full_name}}</a></td>
+            <td class="table__cell"><a href="{{url_for('search_bp.get_tracks_by_artist_id', target_artist=artist.artist_id)}}">{{artist.full_name}}</a></td>
 
         </tr>
         {% endfor %}
