@@ -52,10 +52,11 @@
         </tr>
         <tr class="table__row">
         {% for track in tracks %}
+            {% set genres = track.genres%}
             <td class="table__cell"><a href="/browse/{{track.track_id}}">{{track.track_id}}</a></td>
             <td class="table__cell">{{track.title}}</td>
             <td class="table__cell">{{track.artist.full_name}}</td>
-            <td class="table__cell">{{track.track_duration}}</td>
+            <td class="table__cell">{{track.album.title}}</td>
         </tr>
         {% endfor %}
     </table>

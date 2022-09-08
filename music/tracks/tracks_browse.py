@@ -1,3 +1,6 @@
+
+from datetime import date
+
 from flask import Blueprint, render_template, redirect, url_for, flash, request, session
 from music.authentication.auth import login_required
 
@@ -5,6 +8,7 @@ from better_profanity import profanity
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField, HiddenField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, ValidationError
+
 
 
 import music.tracks.services as services
@@ -15,7 +19,6 @@ tracks_blueprint = Blueprint('tracks_bp', __name__, template_folder='templates')
 
 
 @tracks_blueprint.route("/browse", methods=['GET', 'POST'])  # default page: browse all tracks in order of id
-    
 def get_tracks_table_view():
     header = ["Track Id", "Track Name", "Artist", "Length"]
     try:
@@ -27,36 +30,16 @@ def get_tracks_table_view():
             return redirect(url_for('tracks_bp.get_track_view', track_id=track_id))
     except:
         # If the user has entered an invalid track id or None, redirect to not found
-        return redirect(url_for('tracks_bp.not_found', track_id=track_id))
-    
+        return redirect(url_for('tracks_bp.not_found'))
+
 
     else:
         tracks = services.get_all_tracks(repo.repo_instance)
 
-
-
-        # work in progress
-        # function: limits the number of tracks displayed and sets the urls appropriately
-
-        tracks_per_page = 45
-        tracks_on_page = 0
-
-        first_track_url = None
-        last_track_url = None
-        next_track_url = None
-        prev_track_url = None
-
-        if tracks_on_page > 0:
-            # there are previous tracks
-            prev_track_url = url_for('tracks_bp.get_tracks_table_view')
-            first_track_url = url_for('tracks_bp.get_tracks_table_view')
-        
-
-
-
         return render_template('tracks/browse_tracks.html',
-                            headings=header,
-                            tracks=tracks)
+                               headings=header,
+                               tracks=tracks)
+
 
 # Individual track pages
 @tracks_blueprint.route("/browse/<int:track_id>", methods=['GET', 'POST'])
@@ -91,9 +74,10 @@ def get_track_view(track_id):
     return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews, logged_in = logged_in)
 
 
-@tracks_blueprint.route("/browse/<int:track_id>/not_found")
-def not_found(track_id):
-    return render_template('tracks/not_found.html', track_id=track_id)
+@tracks_blueprint.route("/browse/not_found")
+def not_found():
+    return render_template('tracks/not_found.html')
+
 
 
 
@@ -114,3 +98,4 @@ class ReviewForm(FlaskForm):
     rating = SelectField('Rating', choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
     #rating = TextAreaField('Rating', [DataRequired(), Length(max=1, message='Rating must be between 1 and 5')])
     submit = SubmitField('Submit')
+
