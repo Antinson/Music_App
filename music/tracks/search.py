@@ -249,6 +249,54 @@ def get_tracks_by_genre_id(target_genre):
 
     return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks_by_genre)
 
-@search_blueprint.route("/browse/not_found")
+@search_blueprint.route("/search/not_found")
 def not_found():
     return render_template('tracks/not_found.html')
+
+
+
+# Tracks by date
+@search_blueprint.route("/search_by_date", methods=['GET', 'POST'])
+def get_tracks_by_date_view():
+    try:
+        # See if user has put anything in search box and pressed submit
+        if request.method == 'POST':
+            # Get the search term from the form
+            target_date = request.form["nm"]
+            return redirect(url_for('search_bp.get_tracks_by_date', target_date=target_date))
+    except:
+        return redirect(url_for('search_bp.not_found'))
+    return render_template('tracks/browse_tracks.html')
+
+
+@search_blueprint.route("/search_by_date/<int:target_date>", methods=['GET', 'POST'])
+def get_tracks_by_date(target_date):
+    header = ["Track Id", "Track Name", "Artist", "Length"]
+    try:
+        # See if user has put anything in search box and pressed submit
+        if request.method == 'POST':
+            # Get the search term from the form
+            target_date = request.form["nm"]
+            return redirect(url_for('search_bp.get_tracks_by_date', target_date=target_date))
+    except:
+        return redirect(url_for('search_bp.not_found'))
+
+    # Get tracks with specified date, previous and next date of specified date
+    tracks, prev_date, next_date = services.get_tracks_by_date(target_date, repo.repo_instance)
+    prev_track_url = None
+    next_track_url = None
+    first_track_url = None
+    last_track_url = None
+
+    # number of tracks found by target_date
+    table_name = str(len(tracks)) + " results for year " + str(target_date)
+
+    # create links for previous and next buttons
+    if prev_date is not None:
+        prev_track_url = url_for('search_bp.get_tracks_by_date', target_date=prev_date)
+    if next_date is not None:
+        next_track_url = url_for('search_bp.get_tracks_by_date', target_date=next_date)
+
+    return render_template('tracks/browse_tracks.html', headings=header,
+                           tracks=tracks, prev_track_url=prev_track_url, next_track_url=next_track_url,
+                           first_track_url=first_track_url, last_track_url=last_track_url, table_name=table_name)
