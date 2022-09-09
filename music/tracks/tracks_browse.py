@@ -79,10 +79,13 @@ def get_track_view(track_id):
 
     if form.validate_on_submit():
     # Storing the new comment
-        services.add_review(track_id, form.review.data, user_name, int(form.rating.data), repo.repo_instance)
+        try:
+            services.add_review(track_id, form.review.data, user_name, int(form.rating.data), repo.repo_instance)
 
-        # Redirect to the track page
-        return redirect(url_for('tracks_bp.get_track_view', track_id=track_id))
+            # Redirect to the track page
+            return redirect(url_for('tracks_bp.get_track_view', track_id=track_id))
+        except:
+            return redirect(url_for('auth_bp.login'))
     
     if request.method == 'GET':
         pass
