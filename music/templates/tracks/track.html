@@ -2,7 +2,7 @@
 
 {% block content %}
     <h2>{{track.title}}</h2>
-    <table class="individual_track">
+    <table class="table">
         <tr class="table__row">
             <tr>
                 <td class="table__cell__individual">ID</td>
@@ -40,19 +40,20 @@
     <div class="reviews">
         <h2>Reviews</h2>
             {% for review in reviews %}
-            <div style="width: 20%; float:left">
-                <p>{{review.user}}</p>
-             </div>
-             <div style="width: 80%; float:right">
-                <p>{{review.review_text}}</p>
-                <p>{{review.rating}}</p>
-                <p>{{review.timestamp}}</p>
-             </div>
-            
-
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            {{review.user}}
+                        </div>  
+                        <div class="card-body">
+                        <p class="card-text">{{review.review_text}}</p>
+                        <p class="card-text">Rating: {{review.rating}}/5</p>
+                        <p class="card-text"><small class="text-muted">{{review.timestamp}}</small></p>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
     </div>
-</div>
     
     {% if logged_in == True %}
         <div class="form-wrapper">
@@ -61,20 +62,26 @@
                 <br>
     
                 <div class="form-field">
-                    {{form.review.label}} </br>{{form.review(size = 100, placeholder="type your review", class="textarea", cols="50", rows="6", wrap="hard")}}
-                    {{form.rating.label}} {{form.rating(size = 1, placeholder="your rating 1-5", class="textarea", cols="1", rows="1")}}
-                    {% if form.review.errors or form.rating.errors %}
-                    <ul class="errors">
-                        {% for error in form.review.errors %}
-                        <li>{{error}}</li>
-                        {% endfor %}
-                        {% for error in form.rating.errors %}
-                        <li>{{error}}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
+                    {{form.review(size = 100, placeholder="your review", class="form-control", cols="50", rows="6", wrap="hard")}}<br>
+                    <div class="row g-3">
+                        <div class="col">
+                        {{form.rating.label}} {{form.rating(size = 1, placeholder="your rating 1-5", class="rating", cols="1", rows="1")}}
+                        </div>
+                        {% if form.review.errors or form.rating.errors %}
+                        <ul class="errors">
+                            {% for error in form.review.errors %}
+                            <li>{{error}}</li>
+                            {% endfor %}
+                            {% for error in form.rating.errors %}
+                            <li>{{error}}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    <div class="col">
+                        {{form.submit(class="review-submit")}}
                 </div>
-                {{form.submit}}
+                </div>
+                </div>
             </form>
         </div>
     {% endif %}

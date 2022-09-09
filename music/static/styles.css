@@ -96,16 +96,12 @@
 /* Individual Track Page w/ Comments */
 /* Order of hierarchy */
 
-.individual_track {
+.table {
     margin: auto;
-    width: 50%;
-    padding: 10px;
-    
+    width: 30%;
 }
 
 .reviews {
-    display: row;
-    columns: 2;
     margin: auto;
     width: 50%;
 }
@@ -114,11 +110,36 @@
 .form-wrapper {
     margin: auto;
     width: 50%;
-    padding: 10px;
+    padding-bottom: 20px;
+}
+
+.form-field {
+    margin: auto;
+    width: 50%;
 }
 
 h2 {
     padding-top: 10px;
+    padding-bottom: 10px;
     text-align: center;
     font-family: sans-serif;
+} 
+
+.card {
+    margin-top: 10px;
+}
+
+.col-sm-6 {
+    margin: auto;
+    width: 50%;
+}
+
+.card-header {
+    background-color: rgb(29, 29, 29);
+    color: aliceblue;
+}
+
+.review-submit {
+    float: right;
+    padding-bottom: 5px;
 }
