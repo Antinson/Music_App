@@ -37,7 +37,7 @@ def search_by(form):
         return search_by_album(form.search.data)
 
 def search_by_album(target_album):
-    header = ["Album Id", "Title"]
+    header = ["Track Id", "Track Name", "Artist", "Album"]
     category = "album"
     # Search for the album.
 
@@ -51,11 +51,13 @@ def search_by_album(target_album):
     return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks_by_album, category=category)
 
 def search_by_artist(target_artist):
-    header = ["Artist Id", "Name"]
+    header = ["Track Id", "Track Name", "Artist", "Album"]
     category = "artist"
     # Search for the artist.
 
     tracks_by_artist = services.get_tracks_by_artist(target_artist, repo.repo_instance)
+    print(tracks_by_artist)
+    print(len(tracks_by_artist))
     if len(tracks_by_artist) == 0:
         return redirect(url_for('search_bp.not_found'))
 
@@ -82,11 +84,12 @@ def search_by_date(target_date):
     return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks, category=category)
 
 def search_by_genre(target_genre):
-    header = header = ['Genre Id', 'Title']
+    header = header = ["Track Id", "Track Name", "Artist", "Album", "Genre Id"]
     category = "genre"
     # Search for the genre.
 
     tracks_by_genre = services.get_tracks_by_genre(target_genre, repo.repo_instance)
+    print(tracks_by_genre[0]['track_genres'])
 
     if len(tracks_by_genre) == 0:
         return redirect(url_for('search_bp.not_found'))
@@ -108,3 +111,12 @@ def search_by_track(target_track):
     table_name = str(len(tracks_by_track)) + " results for " + target_track
 
     return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks_by_track)
+
+@search_blueprint.route('/not_found', methods=['GET'])
+def not_found():
+    return render_template('tracks/not_found.html')
+
+class SearchForm(FlaskForm):
+    search = StringField('Search', validators=[DataRequired()])
+    search_type = SelectField('Search Type', choices=[('track', 'Track'), ('genre', 'Genre'), ('artist', 'Artist'), ('date', 'Date'), ('album', 'Album')])
+    submit = SubmitField('Search')
