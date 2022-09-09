@@ -2,31 +2,15 @@
 
 {% block content %}
 
-
-<div>
-    <table class="center">
-          <tr class="table__header">
-              {% for header in headings %}
-              <th class="table__cell">{{header}}</th>
-              {% endfor %}
-          </tr>
-          <tr class="table__row">
-          {% for album in albums %}
-              <td class="table__cell">{{album.album_id}}</td>
-              <td class="table__cell"><a href="{{url_for('search_bp.get_tracks_by_album_id', target_album=album.album_id)}}">{{album.title}}</a></td>
-  
-          </tr>
-          {% endfor %}
-      </table>
-</div>
-<div>
-    <form method="POST" action="{{ handler_url }}">
+<div class="search-container">
+    <div class="input-group">
+    <form method="POST" action="{{ handler_url }}" class="search-form">
         {{ form.csrf_token }}
-        {{form.search}}
-        {{form.search_type}}
-        {{form.submit}}
+        {{form.search(class="form-control", id="search_text_area")}}
+        {{form.search_type(class="form-select", id="search_select_area")}}
+        {{form.submit(id="search_button", class="btn btn-dark")}}
     </form>
-
+    </div>
 </div>
 
 

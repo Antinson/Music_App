@@ -56,8 +56,6 @@ def search_by_artist(target_artist):
     # Search for the artist.
 
     tracks_by_artist = services.get_tracks_by_artist(target_artist, repo.repo_instance)
-    print(tracks_by_artist)
-    print(len(tracks_by_artist))
     if len(tracks_by_artist) == 0:
         return redirect(url_for('search_bp.not_found'))
 
