@@ -105,6 +105,12 @@ def add_review(track_id: int, comment_text: str, user_name: str, rating: int, re
     # Update our repository
     repo.add_review(review)
 
+# Adds track to users liked tracks
+def add_track_to_user(user_name: str, track_id: int, repo: AbstractRepository):
+    user = repo.get_user(user_name.lower())
+    track = repo.get_track(track_id)
+    user.add_liked_track(track)
+
 def get_reviews_for_track(track_id, repo: AbstractRepository):
     
     reviews_for_track = [review for review in repo.get_reviews() if review.track.track_id == track_id]

@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<div class="user-details">
+    <h1 class="display-1">{{ user.user_name }}</h1>
+</div>
+
+<div class="liked-tracks">
+    <h2>Liked Tracks: {{liked_tracks_count}}</h2>
+    <table class="table">
+        <tr>
+            <th>Track ID</th>
+            <th>Track Title</th>
+            <th>Artist</th>
+            <th>Album</th>
+        </tr>
+        {% for track in liked_tracks %}
+        <tr>
+            <td><a href="/browse/{{ track.track_id }}">{{track.track_id}}</a></td>
+            <td>{{track.title}}</td>
+            <td>{{track.artist.full_name}}</td>
+            <td>{{track.album.title}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<div class="reviews">
+    <h2>Reviews: {{ review_count }}</h2>
+        {% for review in reviews %}
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <a href="/browse/{{review.track_id}}" class="user-link-track">Go to Track</a>
+                    </div>
+                <div class="card">
+                    <div class="card-header">
+                        {{review.user}}
+                    </div>  
+                    <div class="card-body">
+                    <p class="card-text">{{review.review_text}}</p>
+                    <p class="card-text">Rating: {{review.rating}}/5</p>
+                    <p class="card-text"><small class="text-muted">{{review.timestamp}}</small></p>
+                    </div>
+                </div>
+            </div>
+            </div>
+        {% endfor %}
+</div>
+
+{% endblock %}

@@ -37,6 +37,8 @@
         </tr>
     </table>
 
+    
+
     <div class="reviews">
         <h2>Reviews</h2>
             {% for review in reviews %}
@@ -56,11 +58,16 @@
     </div>
     
     {% if logged_in == True %}
+    <div class="liked">
+        <form action="" method="post">
+            <input type="submit" name="liked" value="Like" class="btn btn-danger"/>
+        </form> 
+    </div>
         <div class="form-wrapper">
-            <form action="{{handler_url}}" method="post">
+            
+            <form action="{{handler_url}}" method="post" novalidate>
                 {{form.csrf_token}}
                 <br>
-    
                 <div class="form-field">
                     {{form.review(size = 100, placeholder="your review", class="form-control", cols="50", rows="6", wrap="hard")}}<br>
                     <div class="row g-3">

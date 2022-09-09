@@ -46,6 +46,7 @@ def get_tracks_table_view():
 def get_track_view(track_id):
     header = ["Track Id", "Track Name", "Artist", "Length", "URL"]
     form = ReviewForm()
+    liked = LikedForm()
     reviews = services.get_reviews_for_track(track_id, repo.repo_instance)
     logged_in = False
     # Grabbing data from our memory repo through our services layer
@@ -59,6 +60,16 @@ def get_track_view(track_id):
         logged_in = True
     except:
         pass
+
+    if request.method == 'POST':
+        if request.form.get('liked') != None:
+            try:
+                services.add_track_to_user(user_name, track_id, repo.repo_instance)
+            except:
+                return redirect(url_for('auth_bp.login'))
+            
+            return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews, logged_in = logged_in)
+        
 
     if form.validate_on_submit():
     # Storing the new comment
@@ -99,6 +110,8 @@ class ReviewForm(FlaskForm):
     review = TextAreaField('Review', [DataRequired(), Length(min=4, message='Comment must be at least 4 characters long.'), 
                                         ProfanityFree(message = 'Your comment must not contain profanity.')])
     rating = SelectField('Rating', choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
-    #rating = TextAreaField('Rating', [DataRequired(), Length(max=1, message='Rating must be between 1 and 5')])
     submit = SubmitField('Submit')
+    
 
+class LikedForm(FlaskForm):
+    liked = SubmitField('Liked')

@@ -122,6 +122,10 @@ h2 {
     font-family: sans-serif;
 }
 
+.liked {
+    text-align: center;
+}
+
 /* Search page */
 /* By hierarchy */
 
@@ -148,4 +152,27 @@ h2 {
 
 #search_button {
     width: 100%;
+}
+
+/* Users page */
+/* By hierarchy */
+
+.liked-tracks {
+    padding-bottom: 100px;
+}
+
+.user-link-track {
+    text-decoration: none;
+    color: aliceblue;
+}
+
+.user-link-track:hover {
+    text-decoration: none;
+    color: rgb(151, 151, 151);
+}
+
+.display-1 {
+    padding-top: 30px;
+    padding-bottom: 50px;
+    text-align: center;
 }
