@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from music.domainmodel.artist import Artist
 from music.domainmodel.genre import Genre
 from music.domainmodel.album import Album

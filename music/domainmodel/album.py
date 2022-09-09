@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 class Album:
 
     def __init__(self, album_id: int, title: str):

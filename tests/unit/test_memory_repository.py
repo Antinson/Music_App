@@ -45,3 +45,39 @@ def test_repository_can_get_track_id_for_existing_genre(in_memory_repo):
                          673, 674, 675, 676, 677, 678, 679, 680, 681, 682, 683,
                          684, 685, 686, 687, 688, 689, 694, 695, 3316, 3317, 3318,
                          3319, 3320, 3321, 3322, 3323, 3324]
+
+def test_repository_can_get_tracks_of_certain_date(in_memory_repo):
+    target_date = 2001
+    tracks = in_memory_repo.get_track_by_date(target_date)
+
+    for track in tracks:
+        assert track.album.release_year == 2001
+
+    assert len(tracks) == 25
+
+def test_repository_can_previous_date_of_track(in_memory_repo):
+    tracks_of_oldest_date = in_memory_repo.get_track_by_date(1981)
+    tracks_of_earliest_date = in_memory_repo.get_track_by_date(2009)
+    tracks_of_date_in_between = in_memory_repo.get_track_by_date(2001)
+
+    prev_date = in_memory_repo.get_date_of_previous_track(tracks_of_oldest_date[0])
+    next_date = in_memory_repo.get_date_of_next_track(tracks_of_oldest_date[0])
+
+    assert prev_date == None
+    assert next_date == 1982
+
+    prev_date = in_memory_repo.get_date_of_previous_track(tracks_of_earliest_date[0])
+    next_date = in_memory_repo.get_date_of_next_track(tracks_of_earliest_date[0])
+
+    assert prev_date == 2008
+    assert next_date == None
+
+    prev_date = in_memory_repo.get_date_of_previous_track(tracks_of_date_in_between[0])
+    next_date = in_memory_repo.get_date_of_next_track(tracks_of_date_in_between[0])
+
+    assert prev_date == 2000
+    assert next_date == 2002
+
+def test_dates_list(in_memory_repo):
+    dates = in_memory_repo.get_dates()
+    assert dates == [1, 2]

@@ -19,26 +19,73 @@ def get_track(track_id: int, repo: AbstractRepository):
         raise NonExistentTrackException
     return track_to_dict(track)
 
-
 def get_all_tracks(repo: AbstractRepository):
     tracks = repo.get_all_tracks()
     return tracks_to_dict(tracks)
 
 
-def get_first_track(repo: AbstractRepository):
+def get_first_track(repo: AbstractRepository):  # do we need this?
     track = repo.get_first_track()
     return track_to_dict(track)
 
 
-def get_last_track(repo: AbstractRepository):
+def get_last_track(repo: AbstractRepository):  # do we need this?
     track = repo.get_last_track()
     return track_to_dict(track)
 
 
-def get_tracks_by_id(id_list, repo: AbstractRepository):
-    tracks = repo.get_tracks_by_id(id_list)
-    tracks_as_dict = tracks_to_dict(tracks)
-    return tracks_as_dict
+def get_tracks_by_date(date, repo: AbstractRepository):
+    tracks = repo.get_track_by_date(date)
+
+    prev_date = None
+    next_date = None
+
+    if len(tracks) > 0:
+        prev_date = repo.get_date_of_previous_track(tracks[0])
+        next_date = repo.get_date_of_next_track(tracks[0])
+
+        tracks = tracks_to_dict(tracks)
+
+    return tracks, prev_date, next_date
+
+
+def get_tracks_by_album(target_album, repo: AbstractRepository):
+    # returns list of track ids that contain the target_album by album id OR album title
+    track_ids_by_album = repo.get_track_ids_by_album(target_album)
+
+    # gets the tracks by album/s
+    tracks_by_album = repo.get_tracks_by_id(track_ids_by_album)
+    return tracks_to_dict(tracks_by_album)
+
+
+def get_tracks_by_artist(target_artist, repo: AbstractRepository):
+    # returns list of track ids that contain the target_artist by artist id OR artist name
+    track_ids_by_artist = repo.get_track_ids_by_artist(target_artist)
+
+    # gets the tracks by matching artist/s
+    tracks_by_artist = repo.get_tracks_by_id(track_ids_by_artist)
+    return tracks_to_dict(tracks_by_artist)
+
+
+def get_tracks_by_genre(target_genre, repo: AbstractRepository):
+    # returns list of track ids that contain target_genre by genre id OR genre name
+    track_ids_by_genre = repo.get_track_ids_by_genre(target_genre)
+
+    # gets the tracks by matching genres/s
+    tracks_by_genre = repo.get_tracks_by_id(track_ids_by_genre)
+    return tracks_to_dict(tracks_by_genre)
+
+
+def get_genres(repo: AbstractRepository):
+    return repo.get_genres()
+
+
+def get_albums(repo: AbstractRepository):
+    return repo.get_albums()
+
+
+def get_artists(repo: AbstractRepository):
+    return repo.get_artists()
 
 def add_review(track_id: int, comment_text: str, user_name: str, rating: int, repo: AbstractRepository):
 
@@ -104,7 +151,8 @@ def dict_to_track(dict):
     track.album = dict.album
     track.track_url = dict.track_url
     track.track_duration = dict.track_duration
-    track.genres = dict.track_genres
+    for genre in dict.track_genres:
+        track.add_genre(genre)
 
     return track
 
