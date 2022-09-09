@@ -14,35 +14,8 @@
 /* Browse Tracks styling */
 /* By hierarchy */
 
-.table__header {
-    text-align: center;
-    font-family: sans-serif;
-}
-
-.table__cell {
-    font-family: sans-serif;
-    text-align: center;
-    padding: 8px;
-}
-
-.t_title {
-    text-align: center;
-    font-family: sans-serif; 
-}
-
-.track__body {
-    text-align: center;
-    font-family: sans-serif;
-}
-
-.track__header__individual {
-    text-align: center;
-    font-family: sans-serif;
-}
-
-.table__cell__individual {
-    text-align: center;
-    font-family: sans-serif;
+#browse_table {
+    width: 50%;
 }
 
 /* Navigation bar styling */
@@ -87,11 +60,6 @@
 .form-control {
     width: 500px;
 }
-
-
-
-
-
 
 /* Individual Track Page w/ Comments */
 /* Order of hierarchy */
@@ -142,4 +110,14 @@ h2 {
 .review-submit {
     float: right;
     padding-bottom: 5px;
+}
+
+.track__header__individual {
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.table__cell__individual {
+    text-align: center;
+    font-family: sans-serif;
 }

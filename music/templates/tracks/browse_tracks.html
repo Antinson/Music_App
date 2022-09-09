@@ -1,84 +1,27 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-
-<nav>
-    <form method = "post">
-        <input type="text" name="nm"/>
-        <input type="submit" value="Search"/>
-    </form>
-    <div style="float:left">
-        {% if first_track_url is not none %}
-            <button onclick="location.href='{{first_track_url}}'">First</button>
-        {% else %}
-            <button disabled>First</button>
-        {% endif %}
-        {% if prev_track_url is not none %}
-            <button onclick="location.href='{{prev_track_url}}'">Previous</button>
-        {% else %}
-            <button disabled>Previous</button>
-        {% endif %}
-    </div>
-    <div style="float:right">
-        {% if next_track_url is not none %}
-            <button onclick="location.href='{{next_track_url}}'">Next</button>
-        {% else %}
-            <button disabled>Next</button>
-        {% endif %}
-        {% if last_track_url is not none %}
-            <button onclick="location.href='{{last_track_url}}'">Last</button>
-        {% else %}
-            <button disabled>Last</button>
-        {% endif %}
-    </div>
-
-</nav>
-
-    <table class="center">
-        <tr class="table__header">
+    <div class="table-responsive">
+    <table class="table", id="browse_table">
+        <thead>
+            <tr>
             {% for header in headings %}
-            <th class="table__cell">{{header}}</th>
+            <th scope="col">{{header}}</th>
             {% endfor %}
         </tr>
-        <tr class="table__row">
-        {% for track in tracks %}
-            <td class="table__cell"><a href="/browse/{{track.track_id}}">{{track.track_id}}</a></td>
-            <td class="table__cell">{{track.title}}</td>
-            <td class="table__cell">{{track.artist.full_name}}</td>
-            <td class="table__cell">{{track.track_duration}}</td>
-        </tr>
-        {% endfor %}
+        <tbody>
+            {% for track in tracks %}
+                <tr>
+                <td><a href="/browse/{{track.track_id}}">{{track.track_id}}</a></td>
+                <td>{{track.title}}</td>
+                <td>{{track.artist.full_name}}</td>
+                <td>{{track.track_duration}}</td>
+                </tr>
+            {% endfor %} 
+        </tbody>
+        </thead>
+
     </table>
-
-
-
-
-<nav>
-    <div style="float:left">
-        {% if first_track_url is not none %}
-            <button onclick="location.href='{{first_track_url}}'">First</button>
-        {% else %}
-            <button disabled>First</button>
-        {% endif %}
-        {% if prev_track_url is not none %}
-            <button onclick="location.href='{{prev_track_url}}'">Previous</button>
-        {% else %}
-            <button disabled>Previous</button>
-        {% endif %}
     </div>
-    <div style="float:right">
-        {% if next_track_url is not none %}
-            <button onclick="location.href='{{next_track_url}}'">Next</button>
-        {% else %}
-            <button disabled>Next</button>
-        {% endif %}
-        {% if last_track_url is not none %}
-            <button onclick="location.href='{{last_track_url}}'">Last</button>
-        {% else %}
-            <button disabled>Last</button>
-        {% endif %}
-    </div>
-
-</nav>
 
 {% endblock %}
