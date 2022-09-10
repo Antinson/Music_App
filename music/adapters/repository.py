@@ -38,7 +38,7 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_all_track_ids(self) -> dict():
+    def get_all_track_ids(self):
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -46,7 +46,7 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_track_by_date(self, target_date: date) -> List[Track]:
+    def get_track_ids_by_date(self, target_date: date) -> List[int]:
         """
         If there are no Tracks on the given date, return an empty list.
         """

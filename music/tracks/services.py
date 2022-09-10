@@ -27,7 +27,6 @@ def get_all_track_ids(repo: AbstractRepository):
         track_ids_list.append(id)
     return track_ids_list
 
-
 def get_tracks_by_id(id_list, repo: AbstractRepository):
     tracks = repo.get_tracks_by_id(id_list)
     return tracks_to_dict(tracks)
@@ -37,20 +36,23 @@ def get_last_track(repo: AbstractRepository):  #
     track = repo.get_last_track()
     return track_to_dict(track)
 
+def get_tracks_by_track(target_track, repo: AbstractRepository):
+    return []
 
-def get_tracks_by_date(date, repo: AbstractRepository):
-    tracks = repo.get_track_by_date(date)
+
+def get_track_ids_by_date(date, repo: AbstractRepository):
+    track_ids = repo.get_track_ids_by_date(date)
 
     prev_date = None
     next_date = None
 
-    if len(tracks) > 0:
-        prev_date = repo.get_date_of_previous_track(tracks[0])
-        next_date = repo.get_date_of_next_track(tracks[0])
+    if len(track_ids) > 0: # check if there is at least 1 track with specified date
+        track = repo.get_track(track_ids[0])
+        prev_date = repo.get_date_of_previous_track(track)
+        next_date = repo.get_date_of_next_track(track)
 
-        tracks = tracks_to_dict(tracks)
-
-    return tracks, prev_date, next_date
+    # returns tracks specified by date (Track), prev date and next date(int)
+    return track_ids, prev_date, next_date
 
 
 def get_tracks_by_album(target_album, repo: AbstractRepository):
@@ -71,13 +73,11 @@ def get_tracks_by_artist(target_artist, repo: AbstractRepository):
     return tracks_to_dict(tracks_by_artist)
 
 
-def get_tracks_by_genre(target_genre, repo: AbstractRepository):
+def get_track_ids_by_genre(target_genre, repo: AbstractRepository):
     # returns list of track ids that contain target_genre by genre id OR genre name
     track_ids_by_genre = repo.get_track_ids_by_genre(target_genre)
 
-    # gets the tracks by matching genres/s
-    tracks_by_genre = repo.get_tracks_by_id(track_ids_by_genre)
-    return tracks_to_dict(tracks_by_genre)
+    return track_ids_by_genre
 
 
 def get_genres(repo: AbstractRepository):

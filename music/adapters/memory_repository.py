@@ -55,16 +55,16 @@ class MemoryRepository(AbstractRepository):
     def get_number_of_tracks(self) -> int:
         return len(self.__tracks)
 
-    def get_track_by_date(self, target_date: int) -> List[Track]:
-        matching_tracks = list()
+    def get_track_ids_by_date(self, target_date: int) -> List[int]:
+        matching_track_ids = list()
 
         for track in self.__tracks:
             if track.album is not None and track.album.release_year is not None:
                 track_album_release_year = track.album.release_year
                 if track_album_release_year == target_date:
-                    matching_tracks.append(track)
+                    matching_track_ids.append(track.track_id)
 
-        return matching_tracks
+        return matching_track_ids
 
     def add_date(self, date: int):
         if date is not None:

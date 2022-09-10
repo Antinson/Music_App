@@ -5,11 +5,33 @@ from music.tracks.services import NonExistentTrackException
 
 def test_can_get_tracks_with_date(in_memory_repo):
     target_date = 2001
+    cursor = 0
+    tracks_per_page = 19
 
-    tracks, prev_date, next_date = services.get_tracks_by_date(target_date, in_memory_repo)
+    track_ids, prev_year, next_year = services.get_track_ids_by_date(target_date, in_memory_repo)
+    tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], in_memory_repo)
+
+    track = in_memory_repo.get_track(track_ids[0])
+    assert track.track_id == 642
+    assert len(track_ids) == 25
+    assert len(tracks) == 19
+    assert track_ids[0] == 642
+    assert prev_year == 2000
+    assert next_year == 2002
+
     for track in tracks:
         # assert track['album'].release_year == 2006 # should fail
         assert track['album'].release_year == 2001 # should pass
+
+    cursor += tracks_per_page
+    # cursor change, show next 19 tracks
+    tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], in_memory_repo)
+    assert tracks[0]['track_id'] == 3580
+    assert len(track_ids) == 25
+    assert len(tracks) == 6
+    assert track_ids[19] == 3580
+    assert prev_year == 2000
+    assert next_year == 2002
 
 def test_can_get_tracks_by_album(in_memory_repo):
     target_album_title = 'Awol'
