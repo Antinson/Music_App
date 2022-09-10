@@ -224,9 +224,9 @@ def search_by_date():
 
 @search_blueprint.route('/search_by_genre', methods=['GET'])
 def search_by_genre():
-    header = header = ["Track Id", "Track Name", "Artist", "Album", "Genre Id"]
+    header = header = ["Track Id", "Track Name", "Artist", "Album", "Genre/s"]
     category = "genre"
-    tracks_per_page = 19
+    tracks_per_page = 10
 
     # Get parameters
     target_genre = request.args.get('target_genre')

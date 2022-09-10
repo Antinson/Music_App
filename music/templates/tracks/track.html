@@ -22,9 +22,12 @@
             </tr>
             <tr>
                 <td class="table__cell__individual">Genres</td>
-                {% for genre in track.genres %}
-                <td class="table__cell__individual">{{genre}}</td>
-                {% endfor %}
+                <td class="table__cell__individual">
+                    {% for genre in track.track_genres %}
+                        {{genre.name}}<br>
+                    {% endfor %}
+                </td>
+
             </tr>
             <tr>
                 <td class="table__cell__individual">Duration</td>

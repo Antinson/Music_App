@@ -132,27 +132,6 @@ a:hover {
     font-family: sans-serif;
 }
 
-.page-nav-right{
-    padding-top: 10px;
-    padding-right: 5px;
-    float: right;
-}
-
-.page-nav-left {
-    padding-top: 10px;
-    padding-left: 5px;
-    float: left;
-}
-
-.result-wrap{
-    width: 100%;
-    padding-top: 10px;
-    padding-bottom: 20px;
-    text-align: center;
-}
-
-
-
 .liked {
     padding-top: 20px;
     text-align: center;
@@ -185,6 +164,27 @@ a:hover {
 #search_button {
     width: 100%;
 }
+
+.page-nav-right{
+    padding-top: 10px;
+    padding-right: 5px;
+    float: right;
+}
+
+.page-nav-left {
+    padding-top: 10px;
+    padding-left: 5px;
+    float: left;
+}
+
+.result-wrap{
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+
 
 /* Users page */
 /* By hierarchy */
