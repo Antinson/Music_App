@@ -33,6 +33,17 @@ def test_can_get_tracks_with_date(in_memory_repo):
     assert prev_year == 2000
     assert next_year == 2002
 
+def test_can_get_tracks_by_title(in_memory_repo):
+    target_track = "Untitled"
+
+    track_ids = services.get_track_ids_by_track_title(target_track, in_memory_repo)
+    tracks = services.get_tracks_by_id(track_ids, in_memory_repo)
+
+    assert len(tracks) == 36
+
+    for track in tracks:
+        assert track['title'].lower().startswith(target_track.lower()) == True
+
 def test_can_get_tracks_by_album(in_memory_repo):
     target_album_title = 'Awol'
 
@@ -141,6 +152,7 @@ def test_can_get_tracks_by_genre(in_memory_repo):
 
     # searching by genre id
     target_genre_id = 21
+    tracks_ids = services.get_track_ids_by_genre(target_genre_id, in_memory_repo)
     tracks_by_genre_id = services.get_tracks_by_genre(target_genre_id, in_memory_repo)
     assert len(tracks_by_genre_id) == 41
 

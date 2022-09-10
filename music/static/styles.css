@@ -208,3 +208,10 @@ a:hover {
     padding-bottom: 50px;
     text-align: center;
 }
+
+/* Not found page */
+.error_msg{
+    padding-top: 200px;
+    text-align: center;
+    font-family: sans-serif;
+}

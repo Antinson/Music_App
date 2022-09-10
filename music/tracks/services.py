@@ -13,11 +13,13 @@ class UnknownUserException(Exception):
     pass
 
 
+# Used in tracks_browse.py
 def get_track(track_id: int, repo: AbstractRepository):
     track = repo.get_track(track_id)
     if track is None:
         raise NonExistentTrackException
     return track_to_dict(track)
+
 
 def get_all_track_ids(repo: AbstractRepository):
     track_ids = repo.get_all_track_ids()
@@ -27,17 +29,15 @@ def get_all_track_ids(repo: AbstractRepository):
         track_ids_list.append(id)
     return track_ids_list
 
+# Used in both tracks_browse.py and search.py
 def get_tracks_by_id(id_list, repo: AbstractRepository):
     tracks = repo.get_tracks_by_id(id_list)
     return tracks_to_dict(tracks)
 
-
-def get_last_track(repo: AbstractRepository):  #
-    track = repo.get_last_track()
-    return track_to_dict(track)
-
-def get_tracks_by_track(target_track, repo: AbstractRepository):
-    return []
+# Used in search.py
+def get_track_ids_by_track_title(target_track, repo: AbstractRepository):
+    track_ids_by_title = repo.get_track_ids_by_track_title(target_track)
+    return track_ids_by_title
 
 
 def get_track_ids_by_date(date, repo: AbstractRepository):
@@ -46,7 +46,7 @@ def get_track_ids_by_date(date, repo: AbstractRepository):
     prev_date = None
     next_date = None
 
-    if len(track_ids) > 0: # check if there is at least 1 track with specified date
+    if len(track_ids) > 0:  # check if there is at least 1 track with specified date
         track = repo.get_track(track_ids[0])
         prev_date = repo.get_date_of_previous_track(track)
         next_date = repo.get_date_of_next_track(track)
@@ -70,28 +70,15 @@ def get_track_ids_by_artist(target_artist, repo: AbstractRepository):
 def get_track_ids_by_genre(target_genre, repo: AbstractRepository):
     # returns list of track ids that contain target_genre by genre id OR genre name
     track_ids_by_genre = repo.get_track_ids_by_genre(target_genre)
-
     return track_ids_by_genre
 
-
-def get_genres(repo: AbstractRepository):
-    return repo.get_genres()
-
-
-def get_albums(repo: AbstractRepository):
-    return repo.get_albums()
-
-
-def get_artists(repo: AbstractRepository):
-    return repo.get_artists()
 
 def get_user_liked_tracks(user_name: str, repo: AbstractRepository):
     user = repo.get_user(user_name.lower())
     return tracks_to_dict(user.liked_tracks)
 
-def add_review(track_id: int, comment_text: str, user_name: str, rating: int, repo: AbstractRepository):
 
-    
+def add_review(track_id: int, comment_text: str, user_name: str, rating: int, repo: AbstractRepository):
     # Check that the track exists.
     track = repo.get_track(track_id)
 
@@ -107,11 +94,13 @@ def add_review(track_id: int, comment_text: str, user_name: str, rating: int, re
     # Update our repository
     repo.add_review(review)
 
+
 # Adds track to users liked tracks
 def add_track_to_user(user_name: str, track_id: int, repo: AbstractRepository):
     user = repo.get_user(user_name.lower())
     track = repo.get_track(track_id)
     user.add_liked_track(track)
+
 
 # Removes track from users liked tracks
 def remove_track_from_user(user_name: str, track_id: int, repo: AbstractRepository):
@@ -119,8 +108,8 @@ def remove_track_from_user(user_name: str, track_id: int, repo: AbstractReposito
     track = repo.get_track(track_id)
     user.remove_liked_track(track)
 
+
 def get_reviews_for_track(track_id, repo: AbstractRepository):
-    
     reviews_for_track = [review for review in repo.get_reviews() if review.track.track_id == track_id]
 
     return reviews_to_dict(reviews_for_track)
@@ -142,6 +131,7 @@ def track_to_dict(track: Track):
     }
 
     return track_dict
+
 
 def review_to_dict(review: Review):
     review_dict = {
@@ -169,6 +159,7 @@ def dict_to_track(dict):
         track.add_genre(genre)
 
     return track
+
 
 def reviews_to_dict(reviews: Iterable[Review]):
     return [review_to_dict(review) for review in reviews]

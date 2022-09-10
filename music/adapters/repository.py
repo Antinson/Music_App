@@ -61,22 +61,6 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
 
-
-    @abc.abstractmethod
-    def get_first_track(self) -> Track:
-        """ Returns the first Track, ordered by date
-        Returns None if the repository is empty.
-        """
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def get_last_track(self) -> Track:
-        """ Returns the last Article, ordered by date, from the repository.
-
-        Returns None if the repository is empty.
-        """
-        raise NotImplementedError
-
     @abc.abstractmethod
     def get_tracks_by_id(self, id_list):
         """ Returns a list of Track, whose ids match those in id_list
@@ -100,6 +84,14 @@ class AbstractRepository(abc.ABC):
         on a later date.
         """
         raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_track_ids_by_track_title(self, target_track) -> List[int]:
+        """ Returns a List of Track ids that represent Tracks
+        that are tagged by Track title
+        """
+        raise NotImplementedError
+
     @abc.abstractmethod
     def get_track_ids_by_genre(self, target_genre):
         """ Returns a list of ids representing Tracks
