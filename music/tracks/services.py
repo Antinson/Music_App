@@ -55,22 +55,16 @@ def get_track_ids_by_date(date, repo: AbstractRepository):
     return track_ids, prev_date, next_date
 
 
-def get_tracks_by_album(target_album, repo: AbstractRepository):
+def get_track_ids_by_album(target_album, repo: AbstractRepository):
     # returns list of track ids that contain the target_album by album id OR album title
     track_ids_by_album = repo.get_track_ids_by_album(target_album)
-
-    # gets the tracks by album/s
-    tracks_by_album = repo.get_tracks_by_id(track_ids_by_album)
-    return tracks_to_dict(tracks_by_album)
+    return track_ids_by_album
 
 
-def get_tracks_by_artist(target_artist, repo: AbstractRepository):
+def get_track_ids_by_artist(target_artist, repo: AbstractRepository):
     # returns list of track ids that contain the target_artist by artist id OR artist name
     track_ids_by_artist = repo.get_track_ids_by_artist(target_artist)
-
-    # gets the tracks by matching artist/s
-    tracks_by_artist = repo.get_tracks_by_id(track_ids_by_artist)
-    return tracks_to_dict(tracks_by_artist)
+    return track_ids_by_artist
 
 
 def get_track_ids_by_genre(target_genre, repo: AbstractRepository):

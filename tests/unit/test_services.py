@@ -149,7 +149,7 @@ def test_can_get_tracks_by_genre(in_memory_repo):
     assert type(tracks_by_genre_id[0]) is dict
     assert tracks_by_genre_id[0]['track_genres'][0].name == 'Hip-Hop' # track_genres is a list
 
-def test_can_get_nav_links(in_memory_repo):
+def test_can_get_correct_slicing_for_display(in_memory_repo):
     cursor = 0
     tracks_per_page = 10
     track_ids = services.get_all_track_ids(in_memory_repo)

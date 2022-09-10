@@ -28,54 +28,136 @@ def search_by(form):
     if form.search_type.data == 'track':
         return search_by_track(form.search.data)
     elif form.search_type.data == 'genre':
-        return search_by_genre(form.search.data)
+        return redirect(url_for('search_bp.search_by_genre', target_genre=form.search.data))
     elif form.search_type.data == 'artist':
-        return search_by_artist(form.search.data)
+        return redirect(url_for('search_bp.search_by_artist', target_artist=form.search.data))
     elif form.search_type.data == 'date':
-        return search_by_date(form.search.data)
+        return redirect(url_for('search_bp.search_by_date', target_date=form.search.data))
     elif form.search_type.data == 'album':
-        return search_by_album(form.search.data)
+        return redirect(url_for('search_bp.search_by_album', target_album=form.search.data))
 
-
-def search_by_album(target_album):
+@search_blueprint.route('/search_by_album', methods=['GET'])
+def search_by_album():
     header = ["Track Id", "Track Name", "Artist", "Album"]
     category = "album"
-    # Search for the album.
+    tracks_per_page = 19
 
-    tracks_by_album = services.get_tracks_by_album(target_album, repo.repo_instance)
-    if len(tracks_by_album) == 0:
+    # Get parameters
+    target_album = request.args.get('target_album')
+    cursor = request.args.get('cursor')
+
+    if cursor is None:
+        cursor = 0
+    else:
+        cursor = int(float(cursor))
+
+    # Search for the album.
+    try:
+        # Get all tracks by specified album
+        track_ids = services.get_track_ids_by_album(target_album, repo.repo_instance)
+        tracks_by_album = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], repo.repo_instance)
+    except ValueError:
         return redirect(url_for('search_bp.not_found'))
 
-    # number of tracks found by target_album
-    table_name = str(len(tracks_by_album)) + " results for " + target_album
+    first_page_url = None
+    prev_page_url = None
+    next_page_url = None
+    last_page_url = None
 
-    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name,
-                           tracks=tracks_by_album, category=category)
+    if cursor > 0:
+        # There is a previous page
+        if cursor - tracks_per_page > 0:
+            prev_page_url = url_for('search_bp.search_by_album', target_album=target_album, cursor=cursor - tracks_per_page)
+        else:
+            prev_page_url = url_for('search_bp.search_by_album', target_album=target_album)
+        first_page_url = url_for('search_bp.search_by_album', target_album=target_album)
+    if cursor + tracks_per_page < len(track_ids):
+        # There is a following page
+        next_page_url = url_for('search_bp.search_by_album', target_album=target_album, cursor=cursor + tracks_per_page)
+        last_cursor = int(float(len(track_ids) / tracks_per_page))
+        last_page_url = url_for('search_bp.search_by_album', target_album=target_album, cursor=last_cursor * tracks_per_page)
 
 
-def search_by_artist(target_artist):
+    # Number of tracks found by target_album
+    table_name = str(len(track_ids)) + " results for " + target_album
+
+    return render_template(
+        'tracks/browse_tracks_by_category.html',
+        headings=header,
+        table_name=table_name,
+        tracks=tracks_by_album,
+        category=category,
+        first_page_url=first_page_url,
+        prev_page_url=prev_page_url,
+        next_page_url=next_page_url,
+        last_page_url=last_page_url)
+@search_blueprint.route('/search_by_artist', methods=['GET'])
+def search_by_artist():
     header = ["Track Id", "Track Name", "Artist", "Album"]
     category = "artist"
-    # Search for the artist.
+    tracks_per_page = 19
 
-    tracks_by_artist = services.get_tracks_by_artist(target_artist, repo.repo_instance)
-    if len(tracks_by_artist) == 0:
+    # Get parameters
+    target_artist = request.args.get('target_artist')
+    cursor = request.args.get('cursor')
+
+    if cursor is None:
+        cursor = 0
+    else:
+        cursor = int(float(cursor))
+
+    # Search for the artist.
+    try:
+        # Get all tracks by specified artist
+        track_ids = services.get_track_ids_by_artist(target_artist, repo.repo_instance)
+        # Limiting tracks to display
+        tracks_by_artist = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], repo.repo_instance)
+    except ValueError:
         return redirect(url_for('search_bp.not_found'))
 
-    # number of tracks found by target_artist
-    table_name = str(len(tracks_by_artist)) + " results for " + target_artist
+    first_page_url = None
+    prev_page_url = None
+    next_page_url = None
+    last_page_url = None
 
-    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name,
-                           tracks=tracks_by_artist, category=category)
+    if cursor > 0:
+        # There is a previous page
+        if cursor - tracks_per_page > 0:
+            prev_page_url = url_for('search_bp.search_by_artist', target_artist=target_artist, cursor=cursor - tracks_per_page)
+        else:
+            prev_page_url = url_for('search_bp.search_by_artist', target_artist=target_artist)
+        first_page_url = url_for('search_bp.search_by_artist', target_artist=target_artist)
+    if cursor + tracks_per_page < len(track_ids):
+        # There is a following page
+        next_page_url = url_for('search_bp.search_by_artist', target_artist=target_artist, cursor=cursor + tracks_per_page)
+        last_cursor = int(float(len(track_ids) / tracks_per_page))
+        last_page_url = url_for('search_bp.search_by_artist', target_artist=target_artist, cursor=last_cursor * tracks_per_page)
 
 
-def search_by_date(target_date):
+    # Number of tracks found by target_artist
+    table_name = str(len(track_ids)) + " results for " + target_artist
+
+    return render_template(
+        'tracks/browse_tracks_by_category.html',
+        headings=header,
+        table_name=table_name,
+        tracks=tracks_by_artist,
+        category=category,
+        first_page_url=first_page_url,
+        prev_page_url=prev_page_url,
+        next_page_url=next_page_url,
+        last_page_url=last_page_url)
+
+@search_blueprint.route('/search_by_date', methods=['GET'])
+def search_by_date():
     header = ["Track Id", "Track Name", "Artist", "Length"]
     category = "date"
     tracks_per_page = 19
+
+    # Get parameters
+    target_date = request.args.get('target_date')
     cursor = request.args.get('cursor')
 
-    # set cursor
     if cursor is None:
         cursor = 0
     else:
@@ -83,48 +165,48 @@ def search_by_date(target_date):
 
     # Search for the date.
     try:
-        # all tracks by the specified date
+        # Get all tracks by the specified date
         track_ids, prev_year, next_year = services.get_track_ids_by_date(target_date, repo.repo_instance)
-        # limiting tracks to display
+        # Limiting tracks to display
         tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], repo.repo_instance)
 
     except ValueError:
         return redirect(url_for('search_bp.not_found'))
 
-    # previous links
+
     prev_year_url = None
     first_page_url = None
     prev_page_url = None
 
-    # next links
     next_year_url = None
     next_page_url = None
     last_page_url = None
 
     if cursor > 0:
-        # there are previous pages
+        # There is a previous page
         if cursor - tracks_per_page < 0:
-            prev_page_url = url_for('search_bp.get_tracks_by_date', target_date=target_date, cursor=cursor - tracks_per_page)
+            prev_page_url = url_for('search_bp.search_by_date', target_date=target_date, cursor=cursor - tracks_per_page)
         else:
-            prev_page_url = url_for('search_bp.get_tracks_by_date', target_date=target_date)
-        first_page_url = url_for('search_bp.get_tracks_by_date', target_date=target_date)
+            prev_page_url = url_for('search_bp.search_by_date', target_date=target_date)
+        first_page_url = url_for('search_bp.search_by_date', target_date=target_date)
     if cursor + tracks_per_page < len(track_ids):
-        next_page_url = url_for('search_bp.get_tracks_by_date', target_date=target_date, cursor=cursor + tracks_per_page)
+        # There is a following page
+        next_page_url = url_for('search_bp.search_by_date', target_date=target_date, cursor=cursor + tracks_per_page)
 
         last_cursor = int(len(track_ids))
         if len(track_ids) % tracks_per_page == 0:
             last_cursor -= tracks_per_page
-        last_page_url = url_for('search_bp.get_tracks_by_date', target_date=target_date, cursor=last_cursor)
+        last_page_url = url_for('search_bp.search_by_date', target_date=target_date, cursor=last_cursor)
 
     if prev_year is not None:
-        # there is a previous year
-        prev_year_url = url_for('search_bp.get_tracks_by_date', target_date=prev_year)
+        # There is a previous year
+        prev_year_url = url_for('search_bp.search_by_date', target_date=prev_year)
     if next_year is not None:
-        # there is a following year
-        next_year_url = url_for('search_bp.get_tracks_by_date', target_date=next_year)
+        # There is a following year
+        next_year_url = url_for('search_bp.search_by_date', target_date=next_year)
 
 
-    # number of tracks found by target_date
+    # Number of tracks found by target_date
     table_name = str(len(tracks)) + " results for year " + str(target_date)
 
     return render_template(
@@ -140,11 +222,14 @@ def search_by_date(target_date):
         next_page_url=next_page_url,
         last_page_url=last_page_url)
 
-
-def search_by_genre(target_genre):
+@search_blueprint.route('/search_by_genre', methods=['GET'])
+def search_by_genre():
     header = header = ["Track Id", "Track Name", "Artist", "Album", "Genre Id"]
     category = "genre"
     tracks_per_page = 19
+
+    # Get parameters
+    target_genre = request.args.get('target_genre')
     cursor = request.args.get('cursor')
 
     if cursor is None:
@@ -165,22 +250,22 @@ def search_by_genre(target_genre):
     last_page_url = None
 
     if cursor > 0:
-        # there are previous pages
-        if cursor - tracks_per_page < 0:
-            prev_page_url = url_for('search_bp.search')
+        # There is a previous page
+        if cursor - tracks_per_page > 0:
+            prev_page_url = url_for('search_bp.search_by_genre', target_genre=target_genre,
+                                    cursor=cursor - tracks_per_page)
         else:
-            prev_page_url = url_for('search_bp.search', target_genre=target_genre, cursor=cursor - tracks_per_page)
-        first_page_url = url_for('search_bp.search')
+            prev_page_url = url_for('search_bp.search_by_genre', target_genre=target_genre)
+
+        first_page_url = url_for('search_bp.search_by_genre', target_genre=target_genre)
 
     if cursor + tracks_per_page < len(track_ids):
-        # there are more pages
-        next_page_url = url_for('search_bp.search', target_genre=target_genre, cursor=cursor + tracks_per_page)
-        last_cursor = int(len(track_ids))
-        if len(track_ids) % tracks_per_page == 0:
-            last_cursor -= tracks_per_page
-        last_page_url = url_for('search_bp.search', target_genre=target_genre, cursor=last_cursor)
+        # There is a following page
+        next_page_url = url_for('search_bp.search_by_genre', target_genre=target_genre, cursor=cursor + tracks_per_page)
+        last_cursor = int(float(len(track_ids) / tracks_per_page))
+        last_page_url = url_for('search_bp.search_by_genre', target_genre=target_genre, cursor=last_cursor * tracks_per_page)
 
-    # number of tracks found by target_genre
+    # Number of tracks found by target_genre
     table_name = str(len(track_ids)) + " results for " + target_genre
 
     return render_template(
@@ -203,7 +288,7 @@ def search_by_track(target_track):
     if len(tracks_by_track) == 0:
         return redirect(url_for('search_bp.not_found'))
 
-    # number of tracks found by target_track
+    # Number of tracks found by target_track
     table_name = str(len(tracks_by_track)) + " results for " + target_track
 
     return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name,
