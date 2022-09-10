@@ -2,14 +2,17 @@
 
 {% block content %}
 
-<div>
-    <form method="POST" action="{{ handler_url }}">
+<div class="search-container">
+    <div class="input-group">
+    <form method="POST" action="{{ handler_url }}" class="search-form">
         {{ form.csrf_token }}
-        {{form.search}}
-        {{form.search_type}}
-        {{form.submit}}
+        {{form.search(class="form-control", id="search_text_area")}}
+        {{form.search_type(class="form-select", id="search_select_area")}}
+        {{form.submit(id="search_button", class="btn btn-dark")}}
     </form>
+    </div>
 </div>
+
 
 
 {% endblock %}

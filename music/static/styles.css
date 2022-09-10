@@ -107,6 +107,16 @@ h2 {
     color: aliceblue;
 }
 
+a {
+    color: aliceblue;
+    text-decoration: none;
+}
+
+a:hover {
+    color: rgb(163, 163, 163);
+    text-decoration: none;
+}
+
 .review-submit {
     float: right;
     padding-bottom: 5px;
@@ -141,3 +151,60 @@ h2 {
     text-align: center;
 }
 
+
+
+.liked {
+    padding-top: 20px;
+    text-align: center;
+}
+
+/* Search page */
+/* By hierarchy */
+
+.search-container {
+    margin: auto;
+    width: 50%;
+}
+
+.search-form {
+    margin: auto;
+    margin-top: 30%;
+    margin-bottom: 30%;
+    width: 50%;
+}
+
+#search_text_area {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+#search_select_area {
+    margin-bottom: 10px;
+}
+
+#search_button {
+    width: 100%;
+}
+
+/* Users page */
+/* By hierarchy */
+
+.liked-tracks {
+    padding-bottom: 100px;
+}
+
+.user-link-track {
+    text-decoration: none;
+    color: aliceblue;
+}
+
+.user-link-track:hover {
+    text-decoration: none;
+    color: rgb(151, 151, 151);
+}
+
+.display-1 {
+    padding-top: 30px;
+    padding-bottom: 50px;
+    text-align: center;
+}
