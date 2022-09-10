@@ -37,7 +37,21 @@
         </tr>
     </table>
 
-    
+    {% if logged_in == True %}
+    {% if track_already_liked == True %}
+        <div class="liked">
+            <form action="" method="post">
+                <input type="submit" name="unliked" value="Unlike" class="btn btn-danger"/>
+            </form> 
+        </div>
+    {% else %}
+        <div class="liked">
+            <form action="" method="post">
+                <input type="submit" name="liked" value="Like" class="btn btn-danger"/>
+            </form> 
+        </div>
+    {% endif %}
+    {% endif %}
 
     <div class="reviews">
         <h2>Reviews</h2>
@@ -45,7 +59,7 @@
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-header">
-                            {{review.user}}
+                            <a href="/user/{{review.user}}">{{review.user}}</a>
                         </div>  
                         <div class="card-body">
                         <p class="card-text">{{review.review_text}}</p>
@@ -58,11 +72,6 @@
     </div>
     
     {% if logged_in == True %}
-    <div class="liked">
-        <form action="" method="post">
-            <input type="submit" name="liked" value="Like" class="btn btn-danger"/>
-        </form> 
-    </div>
         <div class="form-wrapper">
             
             <form action="{{handler_url}}" method="post" novalidate>

@@ -107,6 +107,16 @@ h2 {
     color: aliceblue;
 }
 
+a {
+    color: aliceblue;
+    text-decoration: none;
+}
+
+a:hover {
+    color: rgb(163, 163, 163);
+    text-decoration: none;
+}
+
 .review-submit {
     float: right;
     padding-bottom: 5px;
@@ -123,6 +133,7 @@ h2 {
 }
 
 .liked {
+    padding-top: 20px;
     text-align: center;
 }
 

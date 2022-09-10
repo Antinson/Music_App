@@ -87,6 +87,10 @@ def get_albums(repo: AbstractRepository):
 def get_artists(repo: AbstractRepository):
     return repo.get_artists()
 
+def get_user_liked_tracks(user_name: str, repo: AbstractRepository):
+    user = repo.get_user(user_name.lower())
+    return tracks_to_dict(user.liked_tracks)
+
 def add_review(track_id: int, comment_text: str, user_name: str, rating: int, repo: AbstractRepository):
 
     
@@ -110,6 +114,12 @@ def add_track_to_user(user_name: str, track_id: int, repo: AbstractRepository):
     user = repo.get_user(user_name.lower())
     track = repo.get_track(track_id)
     user.add_liked_track(track)
+
+# Removes track from users liked tracks
+def remove_track_from_user(user_name: str, track_id: int, repo: AbstractRepository):
+    user = repo.get_user(user_name.lower())
+    track = repo.get_track(track_id)
+    user.remove_liked_track(track)
 
 def get_reviews_for_track(track_id, repo: AbstractRepository):
     
