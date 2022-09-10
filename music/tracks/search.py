@@ -84,7 +84,7 @@ def search_by_album():
                                 cursor=last_cursor * tracks_per_page)
 
     # Number of tracks found by target_album
-    table_name = str(len(track_ids)) + " results for " + target_album
+    table_name = "Search by Album: " + str(len(track_ids)) + " results for '" + target_album + "'"
 
     return render_template(
         'tracks/browse_tracks_by_category.html',
@@ -146,7 +146,7 @@ def search_by_artist():
                                 cursor=last_cursor * tracks_per_page)
 
     # Number of tracks found by target_artist
-    table_name = str(len(track_ids)) + " results for " + target_artist
+    table_name = "Search by Artist: " + str(len(track_ids)) + " results for '" + target_artist + "'"
 
     return render_template(
         'tracks/browse_tracks_by_category.html',
@@ -218,7 +218,7 @@ def search_by_date():
         next_year_url = url_for('search_bp.search_by_date', target_date=next_date)
 
     # number of tracks found by target_date
-    table_name = str(len(track_ids)) + " results for year " + str(target_date)
+    table_name = "Search by Release Year: " + str(len(track_ids)) + " results for '" + target_date + "'"
 
     return render_template(
         'tracks/browse_tracks_by_category.html',
@@ -281,7 +281,7 @@ def search_by_genre():
                                 cursor=last_cursor * tracks_per_page)
 
     # Number of tracks found by target_genre
-    table_name = str(len(track_ids)) + " results for " + target_genre
+    table_name = "Search by Genre: " + str(len(track_ids)) + " results for '" + target_genre + "'"
 
     return render_template(
         'tracks/browse_tracks_by_category.html',
@@ -343,7 +343,7 @@ def search_by_track():
                                 cursor=last_cursor * tracks_per_page)
 
     # Number of tracks found by target_track
-    table_name = str(len(track_ids)) + " results for " + target_track
+    table_name = "Search by Track Title: " + str(len(track_ids)) + " results for '" + target_track + "'"
 
     return render_template(
         'tracks/browse_tracks_by_category.html',
