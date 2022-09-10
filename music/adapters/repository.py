@@ -38,7 +38,7 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_all_tracks(self) -> List[Track]:
+    def get_all_track_ids(self) -> dict():
         raise NotImplementedError
 
     @abc.abstractmethod

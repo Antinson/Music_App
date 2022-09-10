@@ -6,9 +6,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, ValidationError
 
-
-
 search_blueprint = Blueprint('search_bp', __name__, template_folder='templates')
+
 
 @search_blueprint.route('/search', methods=['GET', 'POST'])
 def search():
@@ -24,17 +23,19 @@ def search():
         search_target=url_for('search_bp.search')
     )
 
+
 def search_by(form):
-    if (form.search_type.data == 'track'):
+    if form.search_type.data == 'track':
         return search_by_track(form.search.data)
-    elif (form.search_type.data == 'genre'):
+    elif form.search_type.data == 'genre':
         return search_by_genre(form.search.data)
-    elif (form.search_type.data == 'artist'):
+    elif form.search_type.data == 'artist':
         return search_by_artist(form.search.data)
-    elif (form.search_type.data == 'date'):
+    elif form.search_type.data == 'date':
         return search_by_date(form.search.data)
-    elif (form.search_type.data == 'album'):
+    elif form.search_type.data == 'album':
         return search_by_album(form.search.data)
+
 
 def search_by_album(target_album):
     header = ["Track Id", "Track Name", "Artist", "Album"]
@@ -48,7 +49,9 @@ def search_by_album(target_album):
     # number of tracks found by target_album
     table_name = str(len(tracks_by_album)) + " results for " + target_album
 
-    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks_by_album, category=category)
+    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name,
+                           tracks=tracks_by_album, category=category)
+
 
 def search_by_artist(target_artist):
     header = ["Track Id", "Track Name", "Artist", "Album"]
@@ -64,7 +67,9 @@ def search_by_artist(target_artist):
     # number of tracks found by target_artist
     table_name = str(len(tracks_by_artist)) + " results for " + target_artist
 
-    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks_by_artist, category=category)
+    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name,
+                           tracks=tracks_by_artist, category=category)
+
 
 def search_by_date(target_date):
     header = ["Track Id", "Track Name", "Artist", "Length"]
@@ -80,8 +85,9 @@ def search_by_date(target_date):
     # number of tracks found by target_date
     table_name = str(len(tracks)) + " results for year " + str(target_date)
 
+    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name,
+                           tracks=tracks, category=category)
 
-    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks, category=category)
 
 def search_by_genre(target_genre):
     header = header = ["Track Id", "Track Name", "Artist", "Album", "Genre Id"]
@@ -97,7 +103,9 @@ def search_by_genre(target_genre):
     # number of tracks found by target_genre
     table_name = str(len(tracks_by_genre)) + " results for " + target_genre
 
-    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks_by_genre, category=category)
+    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name,
+                           tracks=tracks_by_genre, category=category)
+
 
 def search_by_track(target_track):
     header = ["Track Id", "Track Name", "Artist", "Album"]
@@ -110,7 +118,8 @@ def search_by_track(target_track):
     # number of tracks found by target_track
     table_name = str(len(tracks_by_track)) + " results for " + target_track
 
-    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name, tracks=tracks_by_track)
+    return render_template('tracks/browse_tracks_by_category.html', headings=header, table_name=table_name,
+                           tracks=tracks_by_track)
 
 @search_blueprint.route('/not_found', methods=['GET'])
 def not_found():

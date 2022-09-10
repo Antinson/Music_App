@@ -127,8 +127,33 @@ def test_can_get_tracks_by_genre(in_memory_repo):
     assert type(tracks_by_genre_id[0]) is dict
     assert tracks_by_genre_id[0]['track_genres'][0].name == 'Hip-Hop' # track_genres is a list
 
+def test_can_get_nav_links(in_memory_repo):
+    cursor = 0
+    tracks_per_page = 10
+    track_ids = services.get_all_track_ids(in_memory_repo)
+    tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], in_memory_repo)
+
+    assert len(track_ids) == 2000
+
+    # checks the first track id which the cursor points to
+    assert tracks[0]['track_id'] == 2
+
+    # next iteration
+    cursor += tracks_per_page
+    track_ids = services.get_all_track_ids(in_memory_repo)
+    tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], in_memory_repo)
+
+    # checks the first track id which the cursor points to
+    assert tracks[0]['track_id'] == 135
 
 
+    # next iteration
+    cursor += tracks_per_page
+    track_ids = services.get_all_track_ids(in_memory_repo)
+    tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], in_memory_repo)
+
+    # checks the first track id which the cursor points to
+    assert tracks[0]['track_id'] == 146
 
 
 

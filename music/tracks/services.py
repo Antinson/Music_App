@@ -19,17 +19,21 @@ def get_track(track_id: int, repo: AbstractRepository):
         raise NonExistentTrackException
     return track_to_dict(track)
 
-def get_all_tracks(repo: AbstractRepository):
-    tracks = repo.get_all_tracks()
+def get_all_track_ids(repo: AbstractRepository):
+    track_ids = repo.get_all_track_ids()
+    track_ids_list = []
+
+    for id in track_ids:
+        track_ids_list.append(id)
+    return track_ids_list
+
+
+def get_tracks_by_id(id_list, repo: AbstractRepository):
+    tracks = repo.get_tracks_by_id(id_list)
     return tracks_to_dict(tracks)
 
 
-def get_first_track(repo: AbstractRepository):  # do we need this?
-    track = repo.get_first_track()
-    return track_to_dict(track)
-
-
-def get_last_track(repo: AbstractRepository):  # do we need this?
+def get_last_track(repo: AbstractRepository):  #
     track = repo.get_last_track()
     return track_to_dict(track)
 

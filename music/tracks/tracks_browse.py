@@ -21,6 +21,8 @@ tracks_blueprint = Blueprint('tracks_bp', __name__, template_folder='templates')
 @tracks_blueprint.route("/browse", methods=['GET', 'POST'])  # default page: browse all tracks in order of id
 def get_tracks_table_view():
     header = ["Track Id", "Track Name", "Artist", "Length"]
+    tracks_per_page = 19
+    cursor = request.args.get('cursor')
     try:
         # See if user has put anything in search box and pressed submit
         if request.method == 'POST':
@@ -34,11 +36,42 @@ def get_tracks_table_view():
 
 
     else:
-        tracks = services.get_all_tracks(repo.repo_instance)
 
-        return render_template('tracks/browse_tracks.html',
-                               headings=header,
-                               tracks=tracks)
+
+        if cursor is None:
+            cursor = 0
+        else:
+            cursor = int(float(cursor))
+
+        track_ids = services.get_all_track_ids(repo.repo_instance)
+        tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], repo.repo_instance)
+
+        first_page_url = None
+        prev_page_url = None
+        next_page_url = None
+        last_page_url = None
+
+        if cursor > 0:
+            # there are previous pages
+            if cursor - tracks_per_page < 0:
+                prev_page_url = url_for('tracks_bp.get_tracks_table_view')
+            else:
+                prev_page_url = url_for('tracks_bp.get_tracks_table_view', cursor=cursor - tracks_per_page)
+            first_page_url = url_for('tracks_bp.get_tracks_table_view')
+
+        if cursor + tracks_per_page < len(track_ids):
+            # there are more pages
+            next_page_url = url_for('tracks_bp.get_tracks_table_view', cursor=cursor +tracks_per_page)
+            last_page_url = url_for('tracks_bp.get_tracks_table_view', cursor=int(len(track_ids)) - tracks_per_page)
+
+        return render_template(
+            'tracks/browse_tracks.html',
+            headings=header,
+            tracks=tracks,
+            first_page_url=first_page_url,
+            prev_page_url=prev_page_url,
+            next_page_url=next_page_url,
+            last_page_url=last_page_url)
 
 
 # Individual track pages

@@ -49,8 +49,8 @@ class MemoryRepository(AbstractRepository):
             pass
         return track
 
-    def get_all_tracks(self):
-        return self.__tracks
+    def get_all_track_ids(self):
+        return self.__tracks_index
 
     def get_number_of_tracks(self) -> int:
         return len(self.__tracks)
