@@ -82,19 +82,21 @@ def get_track_view(track_id):
     liked = LikedForm()
     reviews = services.get_reviews_for_track(track_id, repo.repo_instance)
     logged_in = False
-    track_already_liked = False
+    track_already_liked = None
     # Grabbing data from our memory repo through our services layer
     try:
         track = services.get_track(track_id, repo.repo_instance)
     except:
         return redirect(url_for('tracks_bp.not_found', track_id=track_id))
-    
+
     try:
         user_name = session['user_name']
         logged_in = True
         user_liked_tracks = services.get_user_liked_tracks(user_name.lower(), repo.repo_instance)
         if track in user_liked_tracks:
             track_already_liked = True
+        else:
+            track_already_liked = False
     except:
         pass
 
@@ -105,7 +107,7 @@ def get_track_view(track_id):
                 track_already_liked = True
             except:
                 return redirect(url_for('auth_bp.login'))
-            
+
             return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews, logged_in = logged_in, track_already_liked=track_already_liked)
         elif request.form.get('unliked') != None:
             try:
@@ -115,23 +117,22 @@ def get_track_view(track_id):
                 return redirect(url_for('auth_bp.login'))
 
             return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews, logged_in = logged_in, track_already_liked=track_already_liked)
-        
 
-    if form.validate_on_submit():
-    # Storing the new comment
-        try:
-            services.add_review(track_id, form.review.data, user_name, int(form.rating.data), repo.repo_instance)
 
-            # Redirect to the track page
-            return redirect(url_for('tracks_bp.get_track_view', track_id=track_id))
-        except:
-            return redirect(url_for('auth_bp.login'))
-    
+        elif form.validate_on_submit():
+        # Storing the new comment
+            try:
+                services.add_review(track_id, form.review.data, user_name, int(form.rating.data), repo.repo_instance)
+
+                # Redirect to the track page
+                return redirect(url_for('tracks_bp.get_track_view', track_id=track_id))
+            except:
+                return redirect(url_for('auth_bp.login'))
+
     if request.method == 'GET':
         pass
-   
 
-    return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews, logged_in = logged_in)
+    return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews, logged_in = logged_in, track_already_liked = track_already_liked)
 
 
 @tracks_blueprint.route("/browse/not_found")
@@ -153,11 +154,11 @@ class ProfanityFree:
             raise ValidationError(self.message)
 
 class ReviewForm(FlaskForm):
-    review = TextAreaField('Review', [DataRequired(), Length(min=4, message='Comment must be at least 4 characters long.'), 
+    review = TextAreaField('Review', [DataRequired(), Length(min=4, message='Comment must be at least 4 characters long.'),
                                         ProfanityFree(message = 'Your comment must not contain profanity.')])
     rating = SelectField('Rating', choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
     submit = SubmitField('Submit')
-    
+
 
 class LikedForm(FlaskForm):
     liked = SubmitField('Liked')

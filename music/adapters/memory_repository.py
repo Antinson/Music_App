@@ -38,6 +38,9 @@ class MemoryRepository(AbstractRepository):
         insort_left(self.__tracks, track)
         self.__tracks_index[track.track_id] = track
 
+    def get_id(self):
+        return len(self.__users) + 1
+
     def get_track(self, id: int) -> Track:
         track = None
         try:
