@@ -5,11 +5,44 @@ from music.tracks.services import NonExistentTrackException
 
 def test_can_get_tracks_with_date(in_memory_repo):
     target_date = 2001
+    cursor = 0
+    tracks_per_page = 19
 
-    tracks, prev_date, next_date = services.get_tracks_by_date(target_date, in_memory_repo)
+    track_ids, prev_year, next_year = services.get_track_ids_by_date(target_date, in_memory_repo)
+    tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], in_memory_repo)
+
+    track = in_memory_repo.get_track(track_ids[0])
+    assert track.track_id == 642
+    assert len(track_ids) == 25
+    assert len(tracks) == 19
+    assert track_ids[0] == 642
+    assert prev_year == 2000
+    assert next_year == 2002
+
     for track in tracks:
         # assert track['album'].release_year == 2006 # should fail
         assert track['album'].release_year == 2001 # should pass
+
+    cursor += tracks_per_page
+    # cursor change, show next 19 tracks
+    tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], in_memory_repo)
+    assert tracks[0]['track_id'] == 3580
+    assert len(track_ids) == 25
+    assert len(tracks) == 6
+    assert track_ids[19] == 3580
+    assert prev_year == 2000
+    assert next_year == 2002
+
+def test_can_get_tracks_by_title(in_memory_repo):
+    target_track = "Untitled"
+
+    track_ids = services.get_track_ids_by_track_title(target_track, in_memory_repo)
+    tracks = services.get_tracks_by_id(track_ids, in_memory_repo)
+
+    assert len(tracks) == 36
+
+    for track in tracks:
+        assert track['title'].lower().startswith(target_track.lower()) == True
 
 def test_can_get_tracks_by_album(in_memory_repo):
     target_album_title = 'Awol'
@@ -119,6 +152,7 @@ def test_can_get_tracks_by_genre(in_memory_repo):
 
     # searching by genre id
     target_genre_id = 21
+    tracks_ids = services.get_track_ids_by_genre(target_genre_id, in_memory_repo)
     tracks_by_genre_id = services.get_tracks_by_genre(target_genre_id, in_memory_repo)
     assert len(tracks_by_genre_id) == 41
 
@@ -127,8 +161,33 @@ def test_can_get_tracks_by_genre(in_memory_repo):
     assert type(tracks_by_genre_id[0]) is dict
     assert tracks_by_genre_id[0]['track_genres'][0].name == 'Hip-Hop' # track_genres is a list
 
+def test_can_get_correct_slicing_for_display(in_memory_repo):
+    cursor = 0
+    tracks_per_page = 10
+    track_ids = services.get_all_track_ids(in_memory_repo)
+    tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], in_memory_repo)
+
+    assert len(track_ids) == 2000
+
+    # checks the first track id which the cursor points to
+    assert tracks[0]['track_id'] == 2
+
+    # next iteration
+    cursor += tracks_per_page
+    track_ids = services.get_all_track_ids(in_memory_repo)
+    tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], in_memory_repo)
+
+    # checks the first track id which the cursor points to
+    assert tracks[0]['track_id'] == 135
 
 
+    # next iteration
+    cursor += tracks_per_page
+    track_ids = services.get_all_track_ids(in_memory_repo)
+    tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], in_memory_repo)
+
+    # checks the first track id which the cursor points to
+    assert tracks[0]['track_id'] == 146
 
 
 

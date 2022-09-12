@@ -77,12 +77,15 @@ def login_required(view):
 
 @auth_blueprint.route('/admin')
 def admin():
-    services.add_user('admin', 'Admin123**', repo.repo_instance)
-    user = services.get_user("admin", repo.repo_instance)
-    services.authenticate_user(user['user_name'], "Admin123**", repo.repo_instance)
     session.clear()
-    session['user_name'] = user['user_name']
-    print("you in")
+    try:
+        services.add_user('admin', 'Admin123**', repo.repo_instance)
+    except:
+        user = services.get_user("admin", repo.repo_instance)
+        services.authenticate_user(user['user_name'], "Admin123**", repo.repo_instance)
+        session.clear()
+        session['user_name'] = user['user_name']
+        print("you in")
     return redirect(url_for('home_bp.home'))
 
 

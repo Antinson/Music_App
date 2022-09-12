@@ -32,4 +32,6 @@ def create_app(test_config=None):
         app.register_blueprint(home.home_blueprint)
         from .tracks import search
         app.register_blueprint(search.search_blueprint)
+        from .users import users
+        app.register_blueprint(users.user_blueprint)
     return app

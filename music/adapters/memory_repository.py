@@ -34,12 +34,12 @@ class MemoryRepository(AbstractRepository):
     def get_user(self, user_name) -> User:
         return next((user for user in self.__users if user.user_name == user_name), None)
 
-    def get_id(self):
-        return len(self.__users) + 1
-
     def add_track(self, track: Track):
         insort_left(self.__tracks, track)
         self.__tracks_index[track.track_id] = track
+
+    def get_id(self):
+        return len(self.__users) + 1
 
     def get_track(self, id: int) -> Track:
         track = None
@@ -49,22 +49,22 @@ class MemoryRepository(AbstractRepository):
             pass
         return track
 
-    def get_all_tracks(self):
-        return self.__tracks
+    def get_all_track_ids(self):
+        return self.__tracks_index
 
     def get_number_of_tracks(self) -> int:
         return len(self.__tracks)
 
-    def get_track_by_date(self, target_date: int) -> List[Track]:
-        matching_tracks = list()
+    def get_track_ids_by_date(self, target_date: int) -> List[int]:
+        matching_track_ids = list()
 
         for track in self.__tracks:
             if track.album is not None and track.album.release_year is not None:
                 track_album_release_year = track.album.release_year
                 if track_album_release_year == target_date:
-                    matching_tracks.append(track)
+                    matching_track_ids.append(track.track_id)
 
-        return matching_tracks
+        return matching_track_ids
 
     def add_date(self, date: int):
         if date is not None:
@@ -73,20 +73,6 @@ class MemoryRepository(AbstractRepository):
 
     def get_dates(self) -> List[int]:
         return self.__dates
-
-    def get_first_track(self) -> Track:
-        track = None
-
-        if len(self.__tracks) > 0:
-            track = self.__tracks[0]
-        return track
-
-    def get_last_track(self) -> Track:
-        track = None
-
-        if len(self.__tracks) > 0:
-            track = self.__tracks[-1]
-        return track
 
     def get_tracks_by_id(self, id_list):
         existing_ids = [id for id in id_list if id in self.__tracks_index]
@@ -117,6 +103,16 @@ class MemoryRepository(AbstractRepository):
             pass
         return next_date
 
+    def get_track_ids_by_track_title(self, target_track) -> List[int]:
+        track_ids = list()
+
+        target_track = target_track.strip().lower()
+        for track in self.__tracks:
+            if track is not None and track.title is not None and track.track_id is not None and target_track == track.title.lower() or track.title.lower().startswith(target_track):
+                track_ids.append(track.track_id)
+
+        return track_ids
+
     def get_track_ids_by_genre(self, target_genre) -> List[int]:
         genres = list()
 
@@ -125,10 +121,10 @@ class MemoryRepository(AbstractRepository):
                 if genre is not None and genre.genre_id is not None and genre.genre_id == target_genre:
                     genres.append(genre)
         else:
-            target_genre = target_genre.strip()
+            target_genre = target_genre.strip().lower()
             for genre in self.__genres:
-                if genre is not None and genre.name is not None and target_genre.lower() == genre.name.lower() or genre.name.lower().startswith(
-                        target_genre.lower()):
+                if genre is not None and genre.name is not None and target_genre == genre.name.lower() or genre.name.lower().startswith(
+                        target_genre):
                     genres.append(genre)
 
         # get track_ids that has the target_genre

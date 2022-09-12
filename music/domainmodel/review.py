@@ -56,7 +56,7 @@ class Review:
 
     @property
     def timestamp(self) -> datetime:
-        return self.__timestamp
+        return f"{self.__timestamp:%D %H:%M}"
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
