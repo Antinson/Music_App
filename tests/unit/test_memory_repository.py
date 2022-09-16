@@ -62,6 +62,10 @@ def test_repository_does_not_get_non_existent_track(in_memory_repo):
     track = in_memory_repo.get_track(4000)
     assert track is None
 
+def test_repository_can_get_all_track_ids(in_memory_repo):
+    track_ids = in_memory_repo.get_all_track_ids()
+    assert len(track_ids) == 2000
+
 def test_repository_can_get_tracks_by_id(in_memory_repo):
     tracks = in_memory_repo.get_tracks_by_id([2, 20, 48])
     assert len(tracks) == 3
@@ -80,8 +84,9 @@ def test_repository_does_not_get_tracks_when_no_matching_track_id(in_memory_repo
     assert len(tracks) == 1
     assert tracks[0].title == 'Food'
 
-def test_repository_can_get_track_id_for_existing_genre(in_memory_repo):
-    track_ids = in_memory_repo.get_track_ids_by_genre('Hip-Hop')
+def test_repository_can_get_track_ids_for_existing_genre(in_memory_repo):
+    target_genre = 'Hip-Hop'
+    track_ids = in_memory_repo.get_track_ids_by_genre(target_genre)
 
     assert track_ids == [2, 3, 5, 134, 583, 584, 585, 586, 668, 669, 670, 671, 672,
                          673, 674, 675, 676, 677, 678, 679, 680, 681, 682, 683,
@@ -94,17 +99,65 @@ def test_repository_can_get_track_id_for_existing_genre(in_memory_repo):
     # all tracks retrieved should contain the genre 'Hip-Hop'
     for track in tracks:
         for genre in track.genres:
-            if genre.name == 'Hip-Hop':
-                assert genre.name == 'Hip-Hop'
+            if genre.name == target_genre:
+                assert genre.name == target_genre
 
 
-def test_repository_does_not_get_tracks_when_no_matching_genre(in_memory_repo):
+def test_repository_does_not_get_track_ids_when_no_matching_genre(in_memory_repo):
     target_genre = 'Dubstep'
-    tracks = in_memory_repo.get_track_ids_by_genre(target_genre)
+    track_ids = in_memory_repo.get_track_ids_by_genre(target_genre)
 
-    assert len(tracks) == 0
+    assert len(track_ids) == 0
+
+def test_repository_can_get_track_ids_for_existing_album(in_memory_repo):
+    target_album = 'Niris'
+    track_ids = in_memory_repo.get_track_ids_by_album(target_album)
+    tracks = in_memory_repo.get_tracks_by_id(track_ids)
+
+    for track in tracks:
+        assert track.album.title == target_album
+
+def test_repository_does_not_get_track_ids_when_no_matching_album(in_memory_repo):
+    target_album = 'My Newest Album'
+    track_ids = in_memory_repo.get_track_ids_by_album(target_album)
+
+    assert len(track_ids) == 0
 
 
+def test_repository_can_get_track_ids_for_existing_artist(in_memory_repo):
+    target_artist = 'Area C'
+    track_ids = in_memory_repo.get_track_ids_by_artist(target_artist)
+
+    assert len(track_ids) == 13
+
+    tracks = in_memory_repo.get_tracks_by_id(track_ids)
+
+    for track in tracks:
+        assert track.artist.full_name == target_artist
+
+def test_repository_does_not_get_track_ids_when_no_matching_artist(in_memory_repo):
+    target_artist = 'New Jeans'
+    track_ids = in_memory_repo.get_track_ids_by_artist(target_artist)
+
+    assert len(track_ids) == 0
+
+def test_repository_can_get_track_ids_for_exsisting_track_title(in_memory_repo):
+    target_track_title = 'The  '
+    track_ids = in_memory_repo.get_track_ids_by_track_title(target_track_title)
+
+    # check how many tracks starts with 'The' as their track title
+    assert len(track_ids) == 95
+
+    tracks = in_memory_repo.get_tracks_by_id(track_ids)
+    target_track_title = target_track_title.strip().lower() # 'the'
+    for track in tracks:
+        assert track.title.lower().startswith(target_track_title)
+
+
+def test_repository_does_not_get_track_ids_when_no_matching_track_title(in_memory_repo):
+    target_track_title = 'Pencil '
+    track_ids = in_memory_repo.get_track_ids_by_track_title(target_track_title)
+    assert len(track_ids) == 0
 
 
 def test_repository_can_get_tracks_of_certain_date(in_memory_repo):
@@ -154,8 +207,46 @@ def test_repository_returns_none_when_no_next_date_of_target_date(in_memory_repo
     next_date = in_memory_repo.get_date_of_next_track(tracks[0])
     assert next_date == None
 
+def test_repository_can_add_date(in_memory_repo):
+    date = 2022
+    in_memory_repo.add_date(date)
+    stored_dates = in_memory_repo.get_dates()
+    assert date in stored_dates
 
-def test_repository_can_get_dates_list(in_memory_repo):
+def test_repository_get_get_stored_dates(in_memory_repo):
     dates = in_memory_repo.get_dates()
     assert dates == [1981, 1982, 1995, 1996, 1998, 1999, 2000, 2001, 2002, 2003,
                      2004, 2005, 2006, 2007, 2008, 2009]
+
+def test_repository_can_add_review(in_memory_repo):
+    user = User(3, 'Tim', 'password')
+    track = in_memory_repo.get_track(1270)
+
+    review = Review(track, 'this song is so good!', 5, user.user_name)
+    in_memory_repo.add_review(review)
+
+    reviews = in_memory_repo.get_reviews()
+
+    # check if review made is added
+    assert review in reviews
+
+def test_repository_can_get_reviews(in_memory_repo):
+    user = User(3, 'Tim', 'password')
+    track = in_memory_repo.get_track(1270)
+
+    review = Review(track, 'this song is so good!', 5, user.user_name)
+    in_memory_repo.add_review(review)
+
+    track = in_memory_repo.get_track(140)
+    review = Review(track, 'mid', 2, user.user_name)
+    in_memory_repo.add_review(review)
+
+    user = User(4, 'Jewel', 'password')
+    track = in_memory_repo.get_track(20)
+    review = Review(track, 'nice :)', 4, user.user_name)
+    in_memory_repo.add_review(review)
+
+    # check total reviews made
+    reviews = in_memory_repo.get_reviews()
+    assert len(reviews) == 3
+

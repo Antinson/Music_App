@@ -246,4 +246,3 @@ def populate(data_path: Path, repo: MemoryRepository):
     # Load csv data into the repository.
     load_tracks_and_album(data_path, repo)
 
-    # TODO: load reviews and users
