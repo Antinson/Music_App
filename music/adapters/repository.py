@@ -154,7 +154,10 @@ class AbstractRepository(abc.ABC):
         """
 
         if review.track is None:
-            raise RepositoryException('Review not correctly attached to an Track')
+            raise RepositoryException('Review not correctly attached to a Track')
+        if review.user is None:
+            raise RepositoryException('Review not correctly attached to a User')
+
 
     @abc.abstractmethod
     def get_reviews(self):

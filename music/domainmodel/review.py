@@ -55,7 +55,7 @@ class Review:
             raise ValueError("Wrong value for the rating")
 
     @property
-    def timestamp(self) -> datetime:
+    def timestamp(self) -> str:
         return f"{self.__timestamp:%D %H:%M}"
 
     def __eq__(self, other):

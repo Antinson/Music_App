@@ -1,11 +1,9 @@
 import csv
 from pathlib import Path
-from datetime import date, datetime
 from typing import List
 
-from bisect import bisect, bisect_left, insort_left
+from bisect import bisect_left, insort_left
 
-from werkzeug.security import generate_password_hash
 
 from music.adapters.repository import AbstractRepository, RepositoryException
 from music.domainmodel.track import Track

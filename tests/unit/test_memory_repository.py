@@ -1,17 +1,10 @@
-from datetime import date, datetime
-from typing import List
-
-import pytest
-
-from music.domainmodel.artist import Artist
 from music.domainmodel.track import Track
-from music.domainmodel.genre import Genre
 from music.domainmodel.review import Review
-from music.domainmodel.album import Album
 from music.domainmodel.user import User
-
+from music.adapters.repository import RepositoryException
 
 import pytest
+
 
 def test_repository_can_add_user(in_memory_repo):
     user = User(3, 'tim', 'password')
@@ -46,6 +39,7 @@ def test_repository_can__add_track(in_memory_repo):
     track = Track(1, "Test SoOo0nnng")
     in_memory_repo.add_track(track)
 
+
 def test_repository_can_get_track(in_memory_repo):
     track = in_memory_repo.get_track(2)
 
@@ -58,13 +52,16 @@ def test_repository_can_get_track(in_memory_repo):
     # maybe check if track has a comment made by user
     # and if genres that are associated are correct
 
+
 def test_repository_does_not_get_non_existent_track(in_memory_repo):
     track = in_memory_repo.get_track(4000)
     assert track is None
 
+
 def test_repository_can_get_all_track_ids(in_memory_repo):
     track_ids = in_memory_repo.get_all_track_ids()
     assert len(track_ids) == 2000
+
 
 def test_repository_can_get_tracks_by_id(in_memory_repo):
     tracks = in_memory_repo.get_tracks_by_id([2, 20, 48])
@@ -73,6 +70,7 @@ def test_repository_can_get_tracks_by_id(in_memory_repo):
     assert tracks[0].title == 'Food'
     assert tracks[1].title == 'Spiritual Level'
     assert tracks[2].title == 'Light of Light'
+
 
 def test_repository_does_not_get_tracks_when_no_matching_track_id(in_memory_repo):
     # for non existing track ids only
@@ -83,6 +81,7 @@ def test_repository_does_not_get_tracks_when_no_matching_track_id(in_memory_repo
     tracks = in_memory_repo.get_tracks_by_id([2, 4, 6, 7, 8])
     assert len(tracks) == 1
     assert tracks[0].title == 'Food'
+
 
 def test_repository_can_get_track_ids_for_existing_genre(in_memory_repo):
     target_genre = 'Hip-Hop'
@@ -109,6 +108,7 @@ def test_repository_does_not_get_track_ids_when_no_matching_genre(in_memory_repo
 
     assert len(track_ids) == 0
 
+
 def test_repository_can_get_track_ids_for_existing_album(in_memory_repo):
     target_album = 'Niris'
     track_ids = in_memory_repo.get_track_ids_by_album(target_album)
@@ -116,6 +116,7 @@ def test_repository_can_get_track_ids_for_existing_album(in_memory_repo):
 
     for track in tracks:
         assert track.album.title == target_album
+
 
 def test_repository_does_not_get_track_ids_when_no_matching_album(in_memory_repo):
     target_album = 'My Newest Album'
@@ -135,11 +136,13 @@ def test_repository_can_get_track_ids_for_existing_artist(in_memory_repo):
     for track in tracks:
         assert track.artist.full_name == target_artist
 
+
 def test_repository_does_not_get_track_ids_when_no_matching_artist(in_memory_repo):
     target_artist = 'New Jeans'
     track_ids = in_memory_repo.get_track_ids_by_artist(target_artist)
 
     assert len(track_ids) == 0
+
 
 def test_repository_can_get_track_ids_for_exsisting_track_title(in_memory_repo):
     target_track_title = 'The  '
@@ -149,7 +152,7 @@ def test_repository_can_get_track_ids_for_exsisting_track_title(in_memory_repo):
     assert len(track_ids) == 95
 
     tracks = in_memory_repo.get_tracks_by_id(track_ids)
-    target_track_title = target_track_title.strip().lower() # 'the'
+    target_track_title = target_track_title.strip().lower()  # 'the'
     for track in tracks:
         assert track.title.lower().startswith(target_track_title)
 
@@ -169,11 +172,13 @@ def test_repository_can_get_tracks_of_certain_date(in_memory_repo):
 
     assert len(tracks) == 25
 
+
 def test_repository_does_not_get_tracks_when_no_matching_date(in_memory_repo):
     target_date = 2010
     tracks = in_memory_repo.get_track_ids_by_date(target_date)
 
     assert len(tracks) == 0
+
 
 def test_repository_can_get_previous_date_of_target_date(in_memory_repo):
     target_date = 2008
@@ -183,6 +188,7 @@ def test_repository_can_get_previous_date_of_target_date(in_memory_repo):
     prev_date = in_memory_repo.get_date_of_previous_track(tracks[0])
     assert prev_date == 2007
 
+
 def test_repository_can_get_next_date_of_target_date(in_memory_repo):
     target_date = 2000
     track_ids_of_target_date = in_memory_repo.get_track_ids_by_date(target_date)
@@ -191,13 +197,15 @@ def test_repository_can_get_next_date_of_target_date(in_memory_repo):
     next_date = in_memory_repo.get_date_of_next_track(tracks[0])
     assert next_date == 2001
 
+
 def test_repository_returns_none_when_no_previous_date_of_target_date(in_memory_repo):
     target_date = 1981
     track_ids_of_target_date = in_memory_repo.get_track_ids_by_date(target_date)
     tracks = in_memory_repo.get_tracks_by_id(track_ids_of_target_date)
 
     prev_date = in_memory_repo.get_date_of_previous_track(tracks[0])
-    assert prev_date == None
+    assert prev_date is None
+
 
 def test_repository_returns_none_when_no_next_date_of_target_date(in_memory_repo):
     target_date = 2009
@@ -205,7 +213,8 @@ def test_repository_returns_none_when_no_next_date_of_target_date(in_memory_repo
     tracks = in_memory_repo.get_tracks_by_id(track_ids_of_target_date)
 
     next_date = in_memory_repo.get_date_of_next_track(tracks[0])
-    assert next_date == None
+    assert next_date is None
+
 
 def test_repository_can_add_date(in_memory_repo):
     date = 2022
@@ -213,10 +222,12 @@ def test_repository_can_add_date(in_memory_repo):
     stored_dates = in_memory_repo.get_dates()
     assert date in stored_dates
 
+
 def test_repository_get_get_stored_dates(in_memory_repo):
     dates = in_memory_repo.get_dates()
     assert dates == [1981, 1982, 1995, 1996, 1998, 1999, 2000, 2001, 2002, 2003,
                      2004, 2005, 2006, 2007, 2008, 2009]
+
 
 def test_repository_can_add_review(in_memory_repo):
     user = User(3, 'Tim', 'password')
@@ -230,10 +241,11 @@ def test_repository_can_add_review(in_memory_repo):
     # check if review made is added
     assert review in reviews
 
+
 def test_repository_can_get_reviews(in_memory_repo):
     user = User(3, 'Tim', 'password')
-    track = in_memory_repo.get_track(1270)
 
+    track = in_memory_repo.get_track(1270)
     review = Review(track, 'this song is so good!', 5, user.user_name)
     in_memory_repo.add_review(review)
 
@@ -241,7 +253,7 @@ def test_repository_can_get_reviews(in_memory_repo):
     review = Review(track, 'mid', 2, user.user_name)
     in_memory_repo.add_review(review)
 
-    user = User(4, 'Jewel', 'password')
+    user = User(4, 'Jewel', 'secret')
     track = in_memory_repo.get_track(20)
     review = Review(track, 'nice :)', 4, user.user_name)
     in_memory_repo.add_review(review)
@@ -250,3 +262,21 @@ def test_repository_can_get_reviews(in_memory_repo):
     reviews = in_memory_repo.get_reviews()
     assert len(reviews) == 3
 
+
+def test_repository_does_not_add_review_without_proper_user_and_review_attachment(in_memory_repo):
+    track = in_memory_repo.get_track(1270)
+    review = Review(track, 'made me cry', 5, None)
+
+    # check if error is raised bc the review has no user
+    with pytest.raises(RepositoryException):
+        in_memory_repo.add_review(review)
+
+def test_repository_does_not_add_review_without_proper_track_and_review_attachment(in_memory_repo):
+    user = User(4, 'Jewel', 'secret')
+    review = Review(None, 'made me cry', 5, user)
+
+    user.add_review(review)
+
+    # checks if exception is raised bc the review does not refer to a Track
+    with pytest.raises(RepositoryException):
+        in_memory_repo.add_review(review)
