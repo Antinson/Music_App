@@ -85,7 +85,6 @@ def admin():
         services.authenticate_user(user['user_name'], "Admin123**", repo.repo_instance)
         session.clear()
         session['user_name'] = user['user_name']
-        print("you in")
     return redirect(url_for('home_bp.home'))
 
 
