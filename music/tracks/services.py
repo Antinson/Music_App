@@ -36,6 +36,8 @@ def get_tracks_by_id(id_list, repo: AbstractRepository):
 
 # Used in search.py
 def get_track_ids_by_track_title(target_track, repo: AbstractRepository):
+    if target_track is None or type(target_track) == int:
+        raise NonExistentTrackException
     track_ids_by_title = repo.get_track_ids_by_track_title(target_track)
     return track_ids_by_title
 
@@ -78,7 +80,7 @@ def get_user_liked_tracks(user_name: str, repo: AbstractRepository):
     return tracks_to_dict(user.liked_tracks)
 
 
-def add_review(track_id: int, comment_text: str, user_name: str, rating: int, repo: AbstractRepository):
+def add_review(track_id: int, comment_text: str, rating: int, user_name: str, repo: AbstractRepository):
     # Check that the track exists.
     track = repo.get_track(track_id)
 

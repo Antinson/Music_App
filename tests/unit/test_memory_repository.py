@@ -273,7 +273,7 @@ def test_repository_does_not_add_review_without_proper_user_and_review_attachmen
 
 def test_repository_does_not_add_review_without_proper_track_and_review_attachment(in_memory_repo):
     user = User(4, 'Jewel', 'secret')
-    review = Review(None, 'made me cry', 5, user)
+    review = Review(None, 'made me cry', 5, 'jewel')
 
     user.add_review(review)
 

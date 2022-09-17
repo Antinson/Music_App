@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import List
 
 from bisect import bisect_left, insort_left
+from werkzeug.security import generate_password_hash
 
 
 from music.adapters.repository import AbstractRepository, RepositoryException
@@ -114,16 +115,11 @@ class MemoryRepository(AbstractRepository):
     def get_track_ids_by_genre(self, target_genre) -> List[int]:
         genres = list()
 
-        if type(target_genre) == int:
-            for genre in self.__genres:
-                if genre is not None and genre.genre_id is not None and genre.genre_id == target_genre:
-                    genres.append(genre)
-        else:
-            target_genre = target_genre.strip().lower()
-            for genre in self.__genres:
-                if genre is not None and genre.name is not None and target_genre == genre.name.lower() or genre.name.lower().startswith(
-                        target_genre):
-                    genres.append(genre)
+        target_genre = target_genre.strip().lower()
+        for genre in self.__genres:
+            if genre is not None and genre.name is not None and target_genre == genre.name.lower() or genre.name.lower().startswith(
+                    target_genre):
+                genres.append(genre)
 
         # get track_ids that has the target_genre
         track_ids = list()
@@ -137,16 +133,11 @@ class MemoryRepository(AbstractRepository):
     def get_track_ids_by_artist(self, target_artist) -> List[int]:
         artists = list()
 
-        if type(target_artist) == int:
-            for artist in self.__artists:
-                if artist is not None and artist.artist_id is not None and artist.artist_id == target_artist:
-                    artists.append(artist)
-        else:
-            target_artist = target_artist.strip()
-            for artist in self.__artists:
-                if artist is not None and artist.full_name is not None and target_artist.lower() == artist.full_name.lower() or artist.full_name.lower().startswith(
-                        target_artist.lower()):
-                    artists.append(artist)
+        target_artist = target_artist.strip()
+        for artist in self.__artists:
+            if artist is not None and artist.full_name is not None and target_artist.lower() == artist.full_name.lower() or artist.full_name.lower().startswith(
+                    target_artist.lower()):
+                artists.append(artist)
 
         # get track_ids that has the target_artist
         track_ids = list()
@@ -160,16 +151,11 @@ class MemoryRepository(AbstractRepository):
     def get_track_ids_by_album(self, target_album) -> List[int]:
         albums = list()
 
-        if type(target_album) == int:
-            for album in self.__albums:
-                if album is not None and album.album_id is not None and album.album_id == target_album:
-                    albums.append(album)
-        else:
-            target_album = target_album.strip()
-            for album in self.__albums:
-                if album is not None and album.title is not None and target_album.lower() == album.title.lower() or album.title.lower().startswith(
-                        target_album.lower()):
-                    albums.append(album)
+        target_album = target_album.strip()
+        for album in self.__albums:
+            if album is not None and album.title is not None and target_album.lower() == album.title.lower() or album.title.lower().startswith(
+                    target_album.lower()):
+                albums.append(album)
 
         #get track_ids that has the target album
         track_ids = list()
