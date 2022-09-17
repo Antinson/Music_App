@@ -165,19 +165,22 @@ def test_repository_does_not_get_track_ids_when_no_matching_track_title(in_memor
 
 def test_repository_can_get_tracks_of_certain_date(in_memory_repo):
     target_date = 2001
-    tracks = in_memory_repo.get_track_by_date(target_date)
+    track_ids_of_target_date = in_memory_repo.get_track_ids_by_date(target_date)
+    tracks = in_memory_repo.get_tracks_by_id(track_ids_of_target_date)
+
+    assert len(track_ids_of_target_date) == 25
 
     for track in tracks:
         assert track.album.release_year == 2001
 
-    assert len(tracks) == 25
+
 
 
 def test_repository_does_not_get_tracks_when_no_matching_date(in_memory_repo):
     target_date = 2010
-    tracks = in_memory_repo.get_track_ids_by_date(target_date)
+    track_ids = in_memory_repo.get_track_ids_by_date(target_date)
 
-    assert len(tracks) == 0
+    assert len(track_ids) == 0
 
 
 def test_repository_can_get_previous_date_of_target_date(in_memory_repo):
