@@ -2,11 +2,8 @@ from music.tracks import services as tracks_services
 from music.authentication import services as auth_services
 from music.users import services as user_services
 
-from werkzeug.security import generate_password_hash
-
 from music.domainmodel.user import User
-from music.domainmodel.review import Review
-from music.domainmodel.track import Track
+
 
 import pytest
 from music.tracks.services import NonExistentTrackException
