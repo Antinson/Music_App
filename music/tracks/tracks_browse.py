@@ -101,33 +101,25 @@ def get_track_view(track_id):
         pass
 
     if request.method == 'POST':
-        if request.form.get('liked') != None:
-            try:
+        try:
+            if request.form.get('liked') != None:
                 services.add_track_to_user(user_name, track_id, repo.repo_instance)
                 track_already_liked = True
-            except:
-                return redirect(url_for('auth_bp.login'))
 
-            return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews, logged_in = logged_in, track_already_liked=track_already_liked)
-        elif request.form.get('unliked') != None:
-            try:
+                return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews, logged_in = logged_in, track_already_liked=track_already_liked)
+            elif request.form.get('unliked') != None:
                 services.remove_track_from_user(user_name, track_id, repo.repo_instance)
                 track_already_liked = False
-            except:
-                return redirect(url_for('auth_bp.login'))
 
-            return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews, logged_in = logged_in, track_already_liked=track_already_liked)
+                return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews, logged_in = logged_in, track_already_liked=track_already_liked)
 
-
-        elif form.validate_on_submit():
-        # Storing the new comment
-            try:
+            elif form.validate_on_submit():
+            # Storing the new comment
                 services.add_review(track_id, form.review.data, user_name, int(form.rating.data), repo.repo_instance)
-
                 # Redirect to the track page
                 return redirect(url_for('tracks_bp.get_track_view', track_id=track_id))
-            except:
-                return redirect(url_for('auth_bp.login'))
+        except:
+            return redirect(url_for('auth_bp.login'))
 
     if request.method == 'GET':
         pass
