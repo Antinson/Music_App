@@ -27,7 +27,7 @@ def register():
         except services.NameNotUniqueException:
             user_name_not_unique = "That username is taken, please choose another"
     
-    return render_template('auth/credentials.html', title='Register', form=form, username_error_message=user_name_not_unique, 
+    return render_template('auth/credentials.html', title='Register', form=form, user_name_error_message=user_name_not_unique,
                             handler_url=url_for('auth_bp.register')
                 )
 
@@ -105,7 +105,7 @@ class PasswordValid():
 
 
 class RegistrationForm(FlaskForm):
-    user_name = StringField('Username', [DataRequired(message="Your username is required"), Length(min=3, message= "Your user name is too short!")])
+    user_name = StringField('Username', [DataRequired(message="Your username is required"), Length(min=3, message= "Your username is too short!")])
     password = PasswordField('Password', [DataRequired(message="Your password is required"), PasswordValid()])
     submit = SubmitField('Register')
 

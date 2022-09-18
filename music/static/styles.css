@@ -61,6 +61,11 @@
     width: 500px;
 }
 
+.form-error-msg{
+    color: #990000;
+    font-size: 13px;
+}
+
 /* Individual Track Page w/ Comments */
 /* Order of hierarchy */
 
