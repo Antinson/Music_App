@@ -19,7 +19,9 @@ def create_app(test_config=None):
         app.config.from_mapping(test_config)
         data_path = app.config['TEST_DATA_PATH']
 
+    # memory-based repository
     repo.repo_instance = MemoryRepository()
+    # populate repository with contents of provided csv files
     populate(data_path, repo.repo_instance)
 
 

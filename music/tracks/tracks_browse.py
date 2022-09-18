@@ -113,9 +113,12 @@ def get_track_view(track_id):
 
                 return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews, logged_in = logged_in, track_already_liked=track_already_liked)
 
-            elif form.validate_on_submit():
-            # Storing the new comment
-                services.add_review(track_id, form.review.data, user_name, int(form.rating.data), repo.repo_instance)
+
+        elif form.validate_on_submit():
+        # Storing the new review
+            try:
+                services.add_review(track_id, form.review.data, int(form.rating.data), user_name, repo.repo_instance)
+
                 # Redirect to the track page
                 return redirect(url_for('tracks_bp.get_track_view', track_id=track_id))
         except:

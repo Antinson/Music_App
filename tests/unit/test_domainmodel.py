@@ -445,32 +445,36 @@ class TestTrack:
 class TestReview:
 
     def test_construction(self):
+        user = User(3, 'tim', 'password')
+
         track1 = Track(2, 'Heat Waves')
-        review1 = Review(track1, 'Sample review', 3)
-        review2 = Review(track1, ' Another review ', 2)
+        review1 = Review(track1, 'Sample review', 3, user.user_name)
+        review2 = Review(track1, ' Another review ', 2, user.user_name)
 
         assert review1.track == track1
         assert review1.review_text == 'Sample review'
         assert review1.rating == 3
         assert review2.review_text == 'Another review'
 
-        review2 = Review('Invalid track', 23, 1)
+        review2 = Review('Invalid track', 23, 1, user.user_name)
         assert review2.track is None
         assert review2.review_text == 'N/A'
 
         with pytest.raises(ValueError):
-            Review(track1, 'Text', 'rating')
+            Review(track1, 'Text', 'rating', user.user_name)
 
         # Negative value of comment raises error
         with pytest.raises(ValueError):
-            Review(track1, 'Text', -5)
+            Review(track1, 'Text', -5, user.user_name)
         # Rating value > 5 raises error
         with pytest.raises(ValueError):
-            Review(track1, 'Text', 10)
+            Review(track1, 'Text', 10, user.user_name)
 
     def test_attributes(self):
+        user = User(3, 'tim', 'password')
+
         track1 = Track(2, 'Heat Waves')
-        review1 = Review(track1, 'Sample review', 3)
+        review1 = Review(track1, 'Sample review', 3, user.user_name)
 
         assert review1.track == track1
 
@@ -483,8 +487,10 @@ class TestReview:
         assert review1.rating == 5
 
     def test_attributes_fail(self):
+        user = User(3, 'tim', 'password')
+
         track1 = Track(2, 'Heat Waves')
-        review1 = Review(track1, 'Sweater Weather', 2)
+        review1 = Review(track1, 'Sweater Weather', 2, user.user_name)
 
         review1.review_text = 5
         assert review1.review_text is None
@@ -499,11 +505,13 @@ class TestReview:
             review1.rating = 10
 
     def test_equality(self):
+        user = User(3, 'tim', 'password')
+
         track1 = Track(2, 'Heat Waves')
-        review1 = Review(track1, 'Sweater Weather', 2)
-        review3 = Review(track1, 'Sweater Weather', 5)
-        review4 = Review(track1, 'Sweater Weather 2', 2)
-        review5 = Review(None, 'Sweater Weather', 2)
+        review1 = Review(track1, 'Sweater Weather', 2, user.user_name)
+        review3 = Review(track1, 'Sweater Weather', 5, user.user_name)
+        review4 = Review(track1, 'Sweater Weather 2', 2, user.user_name)
+        review5 = Review(None, 'Sweater Weather', 2, user.user_name)
 
         assert review1 == review1
         assert review1 != review3
@@ -640,9 +648,9 @@ class TestUser:
         """ Test add_review() and remove_review() methods """
         user1 = User(7232, 'gavi', 'gavi9281')
         track1 = Track(2, 'Heat Waves')
-        review1 = Review(track1, 'review 1', 2)
-        review2 = Review(track1, 'review 2', 3)
-        review3 = Review(track1, 'review 3', 5)
+        review1 = Review(track1, 'review 1', 2, user1.user_name)
+        review2 = Review(track1, 'review 2', 3, user1.user_name)
+        review3 = Review(track1, 'review 3', 5, user1.user_name)
 
         assert user1.reviews == []
 
