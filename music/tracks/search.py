@@ -8,6 +8,7 @@ from wtforms.validators import DataRequired, Length, ValidationError
 
 search_blueprint = Blueprint('search_bp', __name__, template_folder='templates')
 
+@search_blueprint.route('/search/<target_genre>', methods=['GET', 'POST'])
 
 @search_blueprint.route('/search', methods=['GET', 'POST'])
 def search():
