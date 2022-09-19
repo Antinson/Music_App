@@ -36,7 +36,6 @@ def get_tracks_table_view():
 
     else:
 
-
         if cursor is None:
             cursor = 0
         else:

@@ -122,6 +122,16 @@ a:hover {
     text-decoration: none;
 }
 
+a.link_for_search {
+    color: black;
+    font-family: sans-serif;
+}
+
+a.link_for_search:hover {
+    color: rgb(5, 97, 235);
+    font-family: sans-serif;
+}
+
 .review-submit {
     float: right;
     padding-bottom: 5px;

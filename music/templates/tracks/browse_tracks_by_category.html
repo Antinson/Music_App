@@ -63,8 +63,8 @@
                 {% if category == "artist" %}
                    <td><a href="/browse/{{track.track_id}}">{{track.track_id}}</a></td>
                    <td class="table__cell">{{track.title}}</td>
-                   <td class="table__cell">{{track.artist.full_name}}</td>
-                   <td class="table__cell">{{track.album.title}}</td>
+                   <td class="table__cell"><a class="link_for_search" href={{url_for('search_bp.search_by_artist', target_artist=track.artist.full_name)}}>{{track.artist.full_name}}</a></td>
+                   <td class="table__cell"><a class="link_for_search" href={{url_for('search_bp.search_by_album', target_album=track.album.title)}}>{{track.album.title}}</a></td>
                     {% if (track.track_duration - ((track.track_duration / 60)|round(0,'floor'))*60 )|int < 10 %}
                         <td class="table__cell__individual">{{(track.track_duration / 60)|round(0, 'floor')|int}}:0{{ (track.track_duration - ((track.track_duration / 60)|round(0,'floor'))*60 )|int }}</td>
                     {% else %}
@@ -74,8 +74,8 @@
                 {% elif category == 'album' %}
                     <td><a href="/browse/{{track.track_id}}">{{track.track_id}}</a></td>
                     <td class="table__cell">{{track.title}}</td>
-                    <td class="table__cell">{{track.artist.full_name}}</td>
-                    <td class="table__cell">{{track.album.title}}</td>
+                    <td class="table__cell"><a class="link_for_search" href={{url_for('search_bp.search_by_artist', target_artist=track.artist.full_name)}}>{{track.artist.full_name}}</a></td>
+                    <td class="table__cell"><a class="link_for_search" href={{url_for('search_bp.search_by_album', target_album=track.album.title)}}>{{track.album.title}}</a></td>
                     {% if (track.track_duration - ((track.track_duration / 60)|round(0,'floor'))*60 )|int < 10 %}
                         <td class="table__cell__individual">{{(track.track_duration / 60)|round(0, 'floor')|int}}:0{{ (track.track_duration - ((track.track_duration / 60)|round(0,'floor'))*60 )|int }}</td>
                     {% else %}
@@ -85,8 +85,8 @@
                 {% elif category == 'track' %}
                     <td><a href="/browse/{{track.track_id}}">{{track.track_id}}</a></td>
                     <td class="table__cell">{{track.title}}</td>
-                    <td class="table__cell">{{track.artist.full_name}}</td>
-                    <td class="table__cell">{{track.album.title}}</td>
+                    <td class="table__cell"><a class="link_for_search" href={{url_for('search_bp.search_by_artist', target_artist=track.artist.full_name)}}>{{track.artist.full_name}}</a></td>
+                    <td class="table__cell"><a class="link_for_search" href={{url_for('search_bp.search_by_album', target_album=track.album.title)}}>{{track.album.title}}</a></td>
                     {% if (track.track_duration - ((track.track_duration / 60)|round(0,'floor'))*60 )|int < 10 %}
                         <td class="table__cell__individual">{{(track.track_duration / 60)|round(0, 'floor')|int}}:0{{ (track.track_duration - ((track.track_duration / 60)|round(0,'floor'))*60 )|int }}</td>
                     {% else %}
@@ -96,8 +96,8 @@
                 {% elif category == 'genre' %}
                     <td><a href="/browse/{{track.track_id}}">{{track.track_id}}</a></td>
                     <td class="table__cell">{{track.title}}</td>
-                    <td class="table__cell">{{track.artist.full_name}}</td>
-                    <td class="table__cell">{{track.album.title}}</td>
+                    <td class="table__cell"><a class="link_for_search" href={{url_for('search_bp.search_by_artist', target_artist=track.artist.full_name)}}>{{track.artist.full_name}}</a></td>
+                    <td class="table__cell"><a class="link_for_search" href={{url_for('search_bp.search_by_album', target_album=track.album.title)}}>{{track.album.title}}</a></td>
                     <td class="table__cell">
                         {% for genre in track.track_genres %}
                             {{genre.name}}<br>
@@ -107,7 +107,8 @@
                 {% elif category == 'date' %}
                     <td><a href="/browse/{{track.track_id}}">{{track.track_id}}</a></td>
                     <td class="table__cell">{{track.title}}</td>
-                    <td class="table__cell">{{track.artist.full_name}}</td>
+                    <td class="table__cell"><a class="link_for_search" href={{url_for('search_bp.search_by_artist', target_artist=track.artist.full_name)}}>{{track.artist.full_name}}</a></td>
+                <td class="table__cell"><a class="link_for_search" href={{url_for('search_bp.search_by_album', target_album=track.album.title)}}>{{track.album.title}}</a></td>
                     {% if (track.track_duration - ((track.track_duration / 60)|round(0,'floor'))*60 )|int < 10 %}
                         <td class="table__cell__individual">{{(track.track_duration / 60)|round(0, 'floor')|int}}:0{{ (track.track_duration - ((track.track_duration / 60)|round(0,'floor'))*60 )|int }}</td>
                     {% else %}

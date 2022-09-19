@@ -40,7 +40,7 @@ def search_by(form):
 
 @search_blueprint.route('/search_by_album', methods=['GET'])
 def search_by_album():
-    header = ["Track Id", "Track Title", "Artist", "Album"]
+    header = ["Track Id", "Track Title", "Artist", "Album", "Length"]
     category = "album"
     tracks_per_page = 15
 
@@ -163,7 +163,7 @@ def search_by_artist():
 
 @search_blueprint.route('/search_by_date', methods=['GET'])
 def search_by_date():
-    header = ["Track Id", "Track Title", "Artist", "Length"]
+    header = ["Track Id", "Track Title", "Artist", "Album", "Length"]
     category = "date"
     tracks_per_page = 15
 
