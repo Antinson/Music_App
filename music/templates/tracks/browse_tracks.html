@@ -44,7 +44,11 @@
                 <td><a href="/browse/{{track.track_id}}">{{track.track_id}}</a></td>
                 <td>{{track.title}}</td>
                 <td>{{track.artist.full_name}}</td>
-                <td>{{track.track_duration}}</td>
+                    {% if (track.track_duration - ((track.track_duration / 60)|round(0,'floor'))*60 )|int < 10 %}
+                        <td class="table__cell__individual">{{(track.track_duration / 60)|round(0, 'floor')|int}}:0{{ (track.track_duration - ((track.track_duration / 60)|round(0,'floor'))*60 )|int }}</td>
+                    {% else %}
+                        <td class="table__cell__individual">{{(track.track_duration / 60)|round(0, 'floor')|int}}:{{ (track.track_duration - ((track.track_duration / 60)|round(0,'floor'))*60 )|int }}</td>
+                    {% endif %}
                 </tr>
             {% endfor %} 
         </tbody>
