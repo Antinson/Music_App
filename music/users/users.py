@@ -13,14 +13,83 @@ def user(user_id):
         # No user to show, so return to the home page.
         return redirect(url_for('home_bp.home'))
 
+    review_cursor = request.args.get('review_cursor')
+    lt_cursor = request.args.get('lt_cursor')
+
+    tracks_per_page = 5
+    reviews_per_page = 2
+
+    if review_cursor is None:
+        review_cursor = 0
+    else:
+        review_cursor = int(float(review_cursor))
+
+    if lt_cursor is None:
+        lt_cursor = 0
+    else:
+        lt_cursor = int(float(lt_cursor))
+
+    # get reviews and liked tracks
     reviews = services.get_user_reviews(user_id, repo.repo_instance)
     liked_tracks = services.get_liked_tracks(user_id, repo.repo_instance)
+
+    reviews_sliced = reviews[review_cursor:review_cursor + reviews_per_page]
+    liked_tracks_sliced = liked_tracks[lt_cursor:lt_cursor + tracks_per_page]
+
+    review_first_page_url = None
+    review_next_page_url = None
+    review_prev_page_url = None
+    review_last_page_url = None
+
+    if review_cursor > 0:
+        # there is a previous page
+        if review_cursor - reviews_per_page > 0:
+            review_prev_page_url = url_for('user_bp.user', user_id=user_id,
+                                           review_cursor=review_cursor - reviews_per_page)
+        else:
+            review_prev_page_url = url_for('user_bp.user', user_id=user_id)
+        review_first_page_url = url_for('user_bp.user', user_id=user_id)
+
+    if review_cursor + reviews_per_page < len(reviews):
+        # there is a following page
+        review_next_page_url = url_for('user_bp.user', user_id=user_id, review_cursor=review_cursor + reviews_per_page)
+        last_cursor = int(float(len(reviews) / reviews_per_page))
+        review_last_page_url = url_for('user_bp.user', user_id=user_id, review_cursor=last_cursor * reviews_per_page)
+
+    # lt for liked tracks
+    lt_first_page_url = None
+    lt_next_page_url = None
+    lt_prev_page_url = None
+    lt_last_page_url = None
+
+    if lt_cursor > 0:
+        # there is a previous page
+        if lt_cursor - tracks_per_page > 0:
+            lt_prev_page_url = url_for('user_bp.user', user_id=user_id,
+                                           lt_cursor=lt_cursor - tracks_per_page)
+        else:
+            lt_prev_page_url = url_for('user_bp.user', user_id=user_id)
+        lt_first_page_url = url_for('user_bp.user', user_id=user_id)
+
+    if lt_cursor + tracks_per_page < len(liked_tracks):
+        # there is a following page
+        lt_next_page_url = url_for('user_bp.user', user_id=user_id, lt_cursor=lt_cursor + tracks_per_page)
+        last_cursor = int(float(len(liked_tracks) / tracks_per_page))
+        lt_last_page_url = url_for('user_bp.user', user_id=user_id, lt_cursor=last_cursor * tracks_per_page)
 
     return render_template(
         'users/user.html',
         user=user,
-        reviews=reviews,
+        reviews=reviews_sliced,
         review_count=str(len(reviews)),
-        liked_tracks=liked_tracks,
-        liked_tracks_count=str(len(liked_tracks))
+        liked_tracks=liked_tracks_sliced,
+        liked_tracks_count=str(len(liked_tracks)),
+        review_prev_page_url=review_prev_page_url,
+        review_first_page_url=review_first_page_url,
+        review_next_page_url=review_next_page_url,
+        review_last_page_url=review_last_page_url,
+        lt_first_page_url=lt_first_page_url,
+        lt_next_page_url=lt_next_page_url,
+        lt_prev_page_url=lt_prev_page_url,
+        lt_last_page_url=lt_last_page_url
     )
