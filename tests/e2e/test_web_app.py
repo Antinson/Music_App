@@ -77,7 +77,7 @@ def test_index(client):
 
 def test_non_logged_in_user_cannot_make_review(client):
     response = client.post('/browse/5')
-    assert response == 400
+    assert response.status_code == 400
 
 
 
