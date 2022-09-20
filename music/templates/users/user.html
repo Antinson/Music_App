@@ -2,34 +2,34 @@
 {% block content %}
 
 <div class="user-details">
-    <h1 class="display-1">{{ user.user_name }}</h1>
+    <h1 class="display-1">{{ user.user_name[0:1].upper() }}{{user.user_name[1:]}}</h1>
 </div>
 
 <div class="liked-tracks">
     <nav class="reviews">
     <div class="page-nav-left">
         {% if lt_first_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{lt_first_page_url}}'">First</button>
+            <button class="btn btn-dark" onclick="location.href='{{lt_first_page_url}}'"><<</button>
         {% else %}
-            <button class="btn btn-dark" disabled>First</button>
+            <button class="btn btn-dark" disabled><<</button>
         {% endif %}
         {% if lt_prev_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{lt_prev_page_url}}'">Previous</button>
+            <button class="btn btn-dark" onclick="location.href='{{lt_prev_page_url}}'"><</button>
         {% else %}
-            <button class="btn btn-dark" disabled>Previous</button>
+            <button class="btn btn-dark" disabled><</button>
         {% endif %}
     </div>
 
     <div class="page-nav-right">
         {% if lt_next_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{lt_next_page_url}}'">Next</button>
+            <button class="btn btn-dark" onclick="location.href='{{lt_next_page_url}}'">></button>
         {% else %}
-            <button class="btn btn-dark" disabled>Next</button>
+            <button class="btn btn-dark" disabled>></button>
         {% endif %}
         {% if lt_last_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{lt_last_page_url}}'">Last</button>
+            <button class="btn btn-dark" onclick="location.href='{{lt_last_page_url}}'">>></button>
         {% else %}
-            <button class="btn btn-dark" disabled>Last</button>
+            <button class="btn btn-dark" disabled>>></button>
         {% endif %}
     </div>
     </nav>
@@ -61,27 +61,27 @@
     <nav>
     <div class="page-nav-left">
         {% if review_first_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{review_first_page_url}}'">First</button>
+            <button class="btn btn-dark" onclick="location.href='{{review_first_page_url}}'"><<</button>
         {% else %}
-            <button class="btn btn-dark" disabled>First</button>
+            <button class="btn btn-dark" disabled><<</button>
         {% endif %}
         {% if review_prev_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{review_prev_page_url}}'">Previous</button>
+            <button class="btn btn-dark" onclick="location.href='{{review_prev_page_url}}'"><</button>
         {% else %}
-            <button class="btn btn-dark" disabled>Previous</button>
+            <button class="btn btn-dark" disabled><</button>
         {% endif %}
     </div>
 
     <div class="page-nav-right">
         {% if review_next_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{review_next_page_url}}'">Next</button>
+            <button class="btn btn-dark" onclick="location.href='{{review_next_page_url}}'">></button>
         {% else %}
-            <button class="btn btn-dark" disabled>Next</button>
+            <button class="btn btn-dark" disabled>></button>
         {% endif %}
         {% if review_last_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{review_last_page_url}}'">Last</button>
+            <button class="btn btn-dark" onclick="location.href='{{review_last_page_url}}'">>></button>
         {% else %}
-            <button class="btn btn-dark" disabled>Last</button>
+            <button class="btn btn-dark" disabled>>></button>
         {% endif %}
     </div>
         </nav>

@@ -1,8 +1,25 @@
 {% extends 'layout.html' %} {% block content %}
 
-<main id="main">
-    <div>
-        add info here jfjkhsjhdjkfdjbkdsb
+<main>
+    <div class="home-container">
+        <div class="welcome">
+            {% if 'user_name' in session %}
+                <p>
+                    Welcome {{session['user_name'][0:1].upper()}}{{session['user_name'][1:]}},
+                </p>
+            {% else %}
+                <p>
+                    Welcome,
+                </p>
+            {% endif %}
+        </div>
+        <div class="home-info">
+            <p>
+                Explore the database for music tracks!
+            </p>
+        </div>
     </div>
+
+
 </main>
 {% endblock %}

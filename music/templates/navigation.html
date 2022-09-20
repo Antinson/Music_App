@@ -8,6 +8,7 @@
       <a class="btn-nav" href="{{ url_for('home_bp.home') }}">Home</a>
       <a class="btn-nav" href="{{ url_for('search_bp.search') }}">Search</a>
       <a class="btn-nav" href="{{ url_for('tracks_bp.get_tracks_table_view') }}">Browse</a>
+      <a class="btn-nav" href="/user/{{session['user_name']}}">{{session['user_name']}}</a>
       <a class="btn-nav" href="{{ url_for('auth_bp.logout') }}">Logout</a>
     {% else %}
       <a class="btn-nav" href="{{ url_for('home_bp.home') }}">Home</a>

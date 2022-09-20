@@ -12,27 +12,27 @@
         {% endif %}
 
         {% if first_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{first_page_url}}'">First</button>
+            <button class="btn btn-dark" onclick="location.href='{{first_page_url}}'"><<</button>
         {% else %}
-            <button class="btn btn-dark" disabled>First</button>
+            <button class="btn btn-dark" disabled><<</button>
         {% endif %}
         {% if prev_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{prev_page_url}}'">Previous</button>
+            <button class="btn btn-dark" onclick="location.href='{{prev_page_url}}'"><</button>
         {% else %}
-            <button class="btn btn-dark" disabled>Previous</button>
+            <button class="btn btn-dark" disabled><</button>
         {% endif %}
     </div>
 
     <div class="page-nav-right">
         {% if next_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{next_page_url}}'">Next</button>
+            <button class="btn btn-dark" onclick="location.href='{{next_page_url}}'">></button>
         {% else %}
-            <button class="btn btn-dark" disabled>Next</button>
+            <button class="btn btn-dark" disabled>></button>
         {% endif %}
         {% if last_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{last_page_url}}'">Last</button>
+            <button class="btn btn-dark" onclick="location.href='{{last_page_url}}'">>></button>
         {% else %}
-            <button class="btn btn-dark" disabled>Last</button>
+            <button class="btn btn-dark" disabled>>></button>
         {% endif %}
 
         {% if category == 'date' %}
