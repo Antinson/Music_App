@@ -4,7 +4,7 @@ This is a repository for the assignment 2 of CompSci 235 in Semester 2, 2022.
 ##### Team members: 
 
 - Amiel Cubid: acub454
-- Anthony : amit279
+- Anthony Mitchinson: amit279
 
 
 ## Description
