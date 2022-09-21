@@ -1,14 +1,15 @@
-# COMPSCI 235 Starter Repository for Assignment 2
-This is a starter repository for the assignment 2 of CompSci 235 in Semester 2, 2022.
+# COMPSCI 235 Repository for Assignment 2
+This is a repository for the assignment 2 of CompSci 235 in Semester 2, 2022.
+
+##### Team members: 
+
+- Amiel Cubid: acub454
+- Anthony : amit279
 
 
 ## Description
 
 This repository contains an implementation of the domain model from Assignment 1. It contains unit tests which can be run through pytest. It also contains a simple Flask application that renders content of a Track object instance from our domain model on a blank html page.
-
-Please note that this sample implementation from Assignment 1 contains a more comprehensive superset of tests compared with what we had as hidden tests on Coderunner. Your domain model implementation may have to be extended to meet all test cases in the sample implementation, but you may also decide to remove or modify test cases as it suits you. 
-
-From here on you can **choose if you want to use the provided domain model or your own implementation from assignment 1**, just make sure your chosen set of test cases always work with your implementation.
 
 ## Installation
 
