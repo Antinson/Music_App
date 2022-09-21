@@ -35,6 +35,9 @@ def get_tracks_by_id(id_list, repo: AbstractRepository):
     return tracks_to_dict(tracks)
 
 # Used in search.py
+def get_all_dates(repo: AbstractRepository):
+    return repo.get_dates()
+
 def get_track_ids_by_track_title(target_track, repo: AbstractRepository):
     if target_track is None or type(target_track) == int:
         raise NonExistentTrackException

@@ -162,8 +162,7 @@ a.link_for_search:hover {
 
 .search-form {
     margin: auto;
-    margin-top: 10%;
-    margin-bottom: 20%;
+    margin-bottom: 10%;
     width: 50%;
 }
 
@@ -254,10 +253,19 @@ a.link_for_search:hover {
 }
 
 /* Search page View Category */
-.view-panel{
 
+.view-nav-container {
+    text-align: center;
+    margin: auto;
+    margin-bottom: 5%;
 }
 
-.category-container {
-
+.p1 {
+    padding-top: 10px;
+    text-align: center;
 }
+.header-text {
+    font: bold;
+    text-align: center;
+}
+

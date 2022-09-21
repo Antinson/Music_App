@@ -8,20 +8,103 @@ from wtforms.validators import DataRequired, Length, ValidationError
 
 search_blueprint = Blueprint('search_bp', __name__, template_folder='templates')
 
-@search_blueprint.route('/search/<target_genre>', methods=['GET', 'POST'])
 
+@search_blueprint.route('/search/<target_genre>', methods=['GET', 'POST'])
 @search_blueprint.route('/search', methods=['GET', 'POST'])
 def search():
     search_form = SearchForm()
     if request.method == 'POST':
         return search_by(search_form)
 
+    terms_per_page = 10
+    cursor = request.args.get('cursor')
+    try:
+        # See if user has put anything in search box and pressed submit
+        if request.method == 'POST':
+            # Get the search term from the form
+            track_id = request.form["nm"]
+            # Redirect user to track
+            return redirect(url_for('tracks_bp.get_track_view', track_id=track_id))
+    except:
+        # If the user has entered an invalid track id or None, redirect to not found
+        return redirect(url_for('tracks_bp.not_found'))
+
+
+    else:
+
+        if cursor is None:
+            cursor = 0
+        else:
+            cursor = int(float(cursor))
+
+        track_ids = services.get_all_track_ids(repo.repo_instance)
+        tracks = services.get_tracks_by_id(track_ids, repo.repo_instance)
+
+        # get what to view
+        view_target = request.args.get('view_target')
+        if view_target is None:
+            # if none set default to release year
+            view_target = 'Release Years'
+
+
+        terms = []
+
+        # get terms according to selected view_target
+        if view_target == 'Artists':
+            for track in tracks:
+                if track['artist'] is not None and track['artist'].full_name not in terms:
+                    terms.append(track['artist'].full_name)
+                    terms.sort()
+        if view_target == 'Albums':
+            for track in tracks:
+                if track['album']is not None and track['album'].title not in terms:
+                    terms.append(track['album'].title)
+                    terms.sort()
+        if view_target == 'Genres':
+            for track in tracks:
+                for genre in track['track_genres']:
+                    if genre.name not in terms:
+                        terms.append(genre.name)
+                        terms.sort()
+        if view_target == 'Release Years':
+            terms = services.get_all_dates(repo.repo_instance)
+
+        # slice the terms accordingly, this limits the amount of terms to show
+        sliced_terms = terms[cursor:cursor + terms_per_page]
+
+
+        # set up nav links
+        first_page_url = None
+        prev_page_url = None
+        next_page_url = None
+        last_page_url = None
+
+        if cursor > 0:
+            # there are previous pages
+            if cursor - terms_per_page < 0:
+                prev_page_url = url_for('search_bp.search', view_target=view_target)
+            else:
+                prev_page_url = url_for('search_bp.search', view_target=view_target, cursor=cursor - terms_per_page)
+            first_page_url = url_for('search_bp.search', view_target=view_target)
+
+        if cursor + terms_per_page < len(terms):
+            # there are more pages
+            next_page_url = url_for('search_bp.search', view_target=view_target, cursor=cursor + terms_per_page)
+            last_page_url = url_for('search_bp.search', view_target=view_target,
+                                    cursor=len(terms) - terms_per_page)
+
     # For a GET request, return the search page.
     return render_template(
         'tracks/search.html',
         title='Search',
         form=search_form,
-        search_target=url_for('search_bp.search')
+        search_target=url_for('search_bp.search'),
+        sliced_terms=sliced_terms,
+        first_page_url=first_page_url,
+        prev_page_url=prev_page_url,
+        next_page_url=next_page_url,
+        last_page_url=last_page_url,
+        target_view=view_target
     )
 
 
@@ -32,7 +115,7 @@ def search_by(form):
         return redirect(url_for('search_bp.search_by_genre', target_genre=form.search.data))
     elif form.search_type.data == 'artist':
         return redirect(url_for('search_bp.search_by_artist', target_artist=form.search.data))
-    elif form.search_type.data == 'date':
+    elif form.search_type.data == 'release year':
         return redirect(url_for('search_bp.search_by_date', target_date=form.search.data))
     elif form.search_type.data == 'album':
         return redirect(url_for('search_bp.search_by_album', target_album=form.search.data))
@@ -367,6 +450,6 @@ def not_found():
 class SearchForm(FlaskForm):
     search = StringField('Search', validators=[DataRequired()])
     search_type = SelectField('Search Type',
-                              choices=[('track', 'Track'), ('genre', 'Genre'), ('artist', 'Artist'), ('date', 'Date'),
+                              choices=[('track', 'Track'), ('genre', 'Genre'), ('artist', 'Artist'), ('release year', 'Release Year'),
                                        ('album', 'Album')])
     submit = SubmitField('Search')
