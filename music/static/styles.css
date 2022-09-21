@@ -143,6 +143,7 @@ a.link_for_search {
 a.link_for_search:hover {
     color: rgb(5, 97, 235);
     font-family: sans-serif;
+    text-decoration: underline;
 }
 
 .review-submit {
