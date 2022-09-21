@@ -226,7 +226,7 @@ def test_repository_can_add_date(in_memory_repo):
     assert date in stored_dates
 
 
-def test_repository_get_get_stored_dates(in_memory_repo):
+def test_repository_get_all_stored_dates(in_memory_repo):
     dates = in_memory_repo.get_dates()
     assert dates == [1981, 1982, 1995, 1996, 1998, 1999, 2000, 2001, 2002, 2003,
                      2004, 2005, 2006, 2007, 2008, 2009]

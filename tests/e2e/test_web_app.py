@@ -67,16 +67,44 @@ def test_logout(client, auth):
         auth.logout()
         assert 'user_id' not in session
 
-
-def test_index(client):
+def test_home_non_logged_in_user(client):
     # Check that we can retrieve the home page.
     response = client.get('/')
     assert response.status_code == 200
-    # todo add info in homepage
+    assert b'Welcome,' in response.data
+
+def test_home_logged_in_user(client, auth):
+    # initialise user
+    auth.register(user_name='thorke', password='Pass1234')
+    auth.login(user_name='thorke', password='Pass1234')
+
+    # Check that we can retrieve the home page.
+
+    with client:
+        response = client.get('/')
+        assert response.status_code == 200
+        assert session['user_name'] == 'thorke'
+        assert b'Welcome Thorke,' in response.data
+
+def test_non_logged_in_cannot_access_user_page(client):
+    response = client.get('/user/thorke')
+    # non-logged in user tries to access a user page, will be redirected
+    assert response.status_code == 302
+
+
+
+def test_logged_in_user_can_access_user_page(client, auth):
+    # initialise user
+    auth.register(user_name='thorke', password='Pass1234')
+    auth.login(user_name='thorke', password='Pass1234')
+
+    response = client.get('/user/thorke')
+    # user page is not found, register page replaces user page
+    assert response.status_code == 200
 
 
 def test_non_logged_in_user_cannot_make_review(client):
-    response = client.post('/browse/5')
+    response = client.post('/browse/4')
     assert response.status_code == 400
 
 
@@ -122,14 +150,39 @@ def test_comment_with_invalid_input(client, auth, review, rating, messages):
         assert message in response.data
 
 
+def test_search_page_can_view_release_years(client):
+    # get search page and view release years
+    response = client.get('/search?view_target=Release+Years')
+    assert response.status_code == 200
+    assert b'1981' in response.data
+
+def test_search_page_can_view_artists(client):
+    # get search page and view artists
+    response = client.get('/search?view_target=Artists')
+    assert response.status_code == 200
+    assert b'??ss' in response.data
+
+def test_search_page_can_view_albums(client):
+    # get search page and view albums
+    response = client.get('/search?view_target=Albums')
+    assert response.status_code == 200
+    assert b'4: All Aboard the Magic Pus' in response.data
+
+def test_search_page_can_view_genres(client):
+    # get search page and view genres
+    response = client.get('/search?view_target=Genres')
+    assert response.status_code == 200
+    assert b'African' in response.data
+
+
 def test_can_get_tracks_by_date(client):
     # get search page
-    status_code = client.get('/search').status_code
-    assert status_code == 200
+    response = client.get('/search')
+    assert response.status_code == 200
 
     response = client.post(
         '/search',
-        data={'search': 2000, 'search_type': 'date'}
+        data={'search': 2000, 'search_type': 'release year'}
     )
     assert response.status_code == 302
     assert response.headers['Location'] == '/search_by_date?target_date=2000'
@@ -137,11 +190,11 @@ def test_can_get_tracks_by_date(client):
 def test_does_not_get_tracks_by_non_existent_date(client):
 
     response = client.get('/search_by_date?target_date=2010')
-    assert response.headers['Location'] == '/not_found?target_search=2010'
+    assert response.headers['Location'] == '/not_found?target_search=2010&term=Release+Year'
 
     # redirects to not found page, check message
-    response = client.get('/not_found?target_search=2010')
-    assert b'No results for \'2010\'' in response.data
+    response = client.get('/not_found?target_search=2010&term=Release+Year')
+    assert b'No Release Year results for \'2010\'' in response.data
 
 def test_can_get_tracks_by_album(client):
     # get search page
@@ -159,11 +212,11 @@ def test_can_get_tracks_by_album(client):
 def test_does_not_get_tracks_by_non_existent_album(client):
 
     response = client.get('/search_by_album?target_album=Non+existent')
-    assert response.headers['Location'] == '/not_found?target_search=Non+existent'
+    assert response.headers['Location'] == '/not_found?target_search=Non+existent&term=Album'
 
     # redirects to not found page, check message
-    response = client.get('/not_found?target_search=Non+existent')
-    assert b'No results for \'Non existent\'' in response.data
+    response = client.get('/not_found?target_search=Non+existent&term=Album')
+    assert b'No Album results for \'Non existent\'' in response.data
 
 def test_can_get_tracks_by_artist(client):
     # get search page
@@ -181,11 +234,11 @@ def test_can_get_tracks_by_artist(client):
 def test_does_not_get_tracks_by_non_existent_artist(client):
 
     response = client.get('/search_by_artist?target_artist=Bruce')
-    assert response.headers['Location'] == '/not_found?target_search=Bruce'
+    assert response.headers['Location'] == '/not_found?target_search=Bruce&term=Artist'
 
     # redirects to not found page, check message
-    response = client.get('/not_found?target_search=Bruce')
-    assert b'No results for \'Bruce\'' in response.data
+    response = client.get('/not_found?target_search=Bruce&term=Artist')
+    assert b'No Artist results for \'Bruce\'' in response.data
 
 
 def test_can_get_tracks_by_genre(client):
@@ -204,11 +257,11 @@ def test_can_get_tracks_by_genre(client):
 def test_does_not_get_tracks_by_non_existent_genre(client):
 
     response = client.get('/search_by_genre?target_genre=Grunge')
-    assert response.headers['Location'] == '/not_found?target_search=Grunge'
+    assert response.headers['Location'] == '/not_found?target_search=Grunge&term=Genre'
 
     # redirects to not found page, check message
-    response = client.get('/not_found?target_search=Grunge')
-    assert b'No results for \'Grunge\'' in response.data
+    response = client.get('/not_found?target_search=Grunge&term=Genre')
+    assert b'No Genre results for \'Grunge\'' in response.data
 
 
 def test_can_get_tracks_by_track_title(client):
@@ -227,8 +280,8 @@ def test_can_get_tracks_by_track_title(client):
 def test_does_not_get_tracks_by_non_existent_track_title(client):
 
     response = client.get('/search_by_track?target_track=Sunscreen')
-    assert response.headers['Location'] == '/not_found?target_search=Sunscreen'
+    assert response.headers['Location'] == '/not_found?target_search=Sunscreen&term=Track+Title'
 
     # redirects to not found page, check message
-    response = client.get('/not_found?target_search=Sunscreen')
-    assert b'No results for \'Sunscreen\'' in response.data
+    response = client.get('/not_found?target_search=Sunscreen&term=Track+Title')
+    assert b'No Track Title results for \'Sunscreen\'' in response.data

@@ -24,7 +24,7 @@
 
 
 <div>
-    {% if target_view is not none %}
+    {% if target_view is not none  and target_view == 'Release Years' or target_view == 'Artists' or target_view == 'Albums' or target_view == 'Genres' %}
     <nav class="reviews">
     <div class="page-nav-left">
         {% if first_page_url is not none %}

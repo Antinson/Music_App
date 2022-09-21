@@ -53,6 +53,10 @@ def test_authentication_with_invalid_credentials(in_memory_repo):
     with pytest.raises(auth_services.AuthenticationException):
         auth_services.authenticate_user(user_name, 'password', in_memory_repo)
 
+def test_can_get_all_dates(in_memory_repo):
+    dates = tracks_services.get_all_dates(in_memory_repo)
+    assert dates == [1981, 1982, 1995, 1996, 1998, 1999, 2000, 2001, 2002, 2003,
+                     2004, 2005, 2006, 2007, 2008, 2009]
 
 def test_can_get_user(in_memory_repo):
     user_name = 'tim'

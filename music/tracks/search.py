@@ -9,7 +9,6 @@ from wtforms.validators import DataRequired, Length, ValidationError
 search_blueprint = Blueprint('search_bp', __name__, template_folder='templates')
 
 
-@search_blueprint.route('/search/<target_genre>', methods=['GET', 'POST'])
 @search_blueprint.route('/search', methods=['GET', 'POST'])
 def search():
     search_form = SearchForm()
@@ -18,7 +17,6 @@ def search():
 
     terms_per_page = 10
     cursor = request.args.get('cursor')
-
 
     if cursor is None:
         cursor = 0
@@ -30,11 +28,6 @@ def search():
 
     # get what to view
     view_target = request.args.get('view_target')
-    if view_target is None:
-        # if none set default to release year
-        view_target = 'Release Years'
-
-
     terms = []
 
     # get terms according to selected view_target
@@ -45,7 +38,7 @@ def search():
                 terms.sort()
     if view_target == 'Albums':
         for track in tracks:
-            if track['album']is not None and track['album'].title not in terms:
+            if track['album'] is not None and track['album'].title not in terms:
                 terms.append(track['album'].title)
                 terms.sort()
     if view_target == 'Genres':
@@ -59,7 +52,6 @@ def search():
 
     # slice the terms accordingly, this limits the amount of terms to show
     sliced_terms = terms[cursor:cursor + terms_per_page]
-
 
     # set up nav links
     first_page_url = None
@@ -439,6 +431,7 @@ def not_found():
 class SearchForm(FlaskForm):
     search = StringField('Search', validators=[DataRequired()])
     search_type = SelectField('Search Type',
-                              choices=[('track', 'Track'), ('genre', 'Genre'), ('artist', 'Artist'), ('release year', 'Release Year'),
+                              choices=[('track', 'Track'), ('genre', 'Genre'), ('artist', 'Artist'),
+                                       ('release year', 'Release Year'),
                                        ('album', 'Album')])
     submit = SubmitField('Search')
