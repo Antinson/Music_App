@@ -18,80 +18,68 @@ def search():
 
     terms_per_page = 10
     cursor = request.args.get('cursor')
-    try:
-        # See if user has put anything in search box and pressed submit
-        if request.method == 'POST':
-            # Get the search term from the form
-            track_id = request.form["nm"]
-            # Redirect user to track
-            return redirect(url_for('tracks_bp.get_track_view', track_id=track_id))
-    except:
-        # If the user has entered an invalid track id or None, redirect to not found
-        return redirect(url_for('tracks_bp.not_found'))
 
 
+    if cursor is None:
+        cursor = 0
     else:
+        cursor = int(float(cursor))
 
-        if cursor is None:
-            cursor = 0
+    track_ids = services.get_all_track_ids(repo.repo_instance)
+    tracks = services.get_tracks_by_id(track_ids, repo.repo_instance)
+
+    # get what to view
+    view_target = request.args.get('view_target')
+    if view_target is None:
+        # if none set default to release year
+        view_target = 'Release Years'
+
+
+    terms = []
+
+    # get terms according to selected view_target
+    if view_target == 'Artists':
+        for track in tracks:
+            if track['artist'] is not None and track['artist'].full_name not in terms:
+                terms.append(track['artist'].full_name)
+                terms.sort()
+    if view_target == 'Albums':
+        for track in tracks:
+            if track['album']is not None and track['album'].title not in terms:
+                terms.append(track['album'].title)
+                terms.sort()
+    if view_target == 'Genres':
+        for track in tracks:
+            for genre in track['track_genres']:
+                if genre.name not in terms:
+                    terms.append(genre.name)
+                    terms.sort()
+    if view_target == 'Release Years':
+        terms = services.get_all_dates(repo.repo_instance)
+
+    # slice the terms accordingly, this limits the amount of terms to show
+    sliced_terms = terms[cursor:cursor + terms_per_page]
+
+
+    # set up nav links
+    first_page_url = None
+    prev_page_url = None
+    next_page_url = None
+    last_page_url = None
+
+    if cursor > 0:
+        # there are previous pages
+        if cursor - terms_per_page < 0:
+            prev_page_url = url_for('search_bp.search', view_target=view_target)
         else:
-            cursor = int(float(cursor))
+            prev_page_url = url_for('search_bp.search', view_target=view_target, cursor=cursor - terms_per_page)
+        first_page_url = url_for('search_bp.search', view_target=view_target)
 
-        track_ids = services.get_all_track_ids(repo.repo_instance)
-        tracks = services.get_tracks_by_id(track_ids, repo.repo_instance)
-
-        # get what to view
-        view_target = request.args.get('view_target')
-        if view_target is None:
-            # if none set default to release year
-            view_target = 'Release Years'
-
-
-        terms = []
-
-        # get terms according to selected view_target
-        if view_target == 'Artists':
-            for track in tracks:
-                if track['artist'] is not None and track['artist'].full_name not in terms:
-                    terms.append(track['artist'].full_name)
-                    terms.sort()
-        if view_target == 'Albums':
-            for track in tracks:
-                if track['album']is not None and track['album'].title not in terms:
-                    terms.append(track['album'].title)
-                    terms.sort()
-        if view_target == 'Genres':
-            for track in tracks:
-                for genre in track['track_genres']:
-                    if genre.name not in terms:
-                        terms.append(genre.name)
-                        terms.sort()
-        if view_target == 'Release Years':
-            terms = services.get_all_dates(repo.repo_instance)
-
-        # slice the terms accordingly, this limits the amount of terms to show
-        sliced_terms = terms[cursor:cursor + terms_per_page]
-
-
-        # set up nav links
-        first_page_url = None
-        prev_page_url = None
-        next_page_url = None
-        last_page_url = None
-
-        if cursor > 0:
-            # there are previous pages
-            if cursor - terms_per_page < 0:
-                prev_page_url = url_for('search_bp.search', view_target=view_target)
-            else:
-                prev_page_url = url_for('search_bp.search', view_target=view_target, cursor=cursor - terms_per_page)
-            first_page_url = url_for('search_bp.search', view_target=view_target)
-
-        if cursor + terms_per_page < len(terms):
-            # there are more pages
-            next_page_url = url_for('search_bp.search', view_target=view_target, cursor=cursor + terms_per_page)
-            last_page_url = url_for('search_bp.search', view_target=view_target,
-                                    cursor=len(terms) - terms_per_page)
+    if cursor + terms_per_page < len(terms):
+        # there are more pages
+        next_page_url = url_for('search_bp.search', view_target=view_target, cursor=cursor + terms_per_page)
+        last_page_url = url_for('search_bp.search', view_target=view_target,
+                                cursor=len(terms) - terms_per_page)
 
     # For a GET request, return the search page.
     return render_template(
@@ -145,7 +133,7 @@ def search_by_album():
         # Limiting tracks to display
         tracks_by_album = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], repo.repo_instance)
     except ValueError:
-        return redirect(url_for('search_bp.not_found', target_search=target_album))
+        return redirect(url_for('search_bp.not_found', target_search=target_album, term='Album'))
 
     first_page_url = None
     prev_page_url = None
@@ -206,7 +194,7 @@ def search_by_artist():
         # Limiting tracks to display
         tracks_by_artist = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], repo.repo_instance)
     except ValueError:
-        return redirect(url_for('search_bp.not_found', target_search=target_artist))
+        return redirect(url_for('search_bp.not_found', target_search=target_artist, term='Artist'))
 
     first_page_url = None
     prev_page_url = None
@@ -269,7 +257,7 @@ def search_by_date():
         tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], repo.repo_instance)
 
     except ValueError:
-        return redirect(url_for('search_bp.not_found', target_search=target_date))
+        return redirect(url_for('search_bp.not_found', target_search=target_date, term='Release Year'))
 
     first_page_url = None
     prev_page_url = None
@@ -340,7 +328,7 @@ def search_by_genre():
             raise ValueError
         tracks_by_genre = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], repo.repo_instance)
     except ValueError:
-        return redirect(url_for('search_bp.not_found', target_search=target_genre))
+        return redirect(url_for('search_bp.not_found', target_search=target_genre, term='Genre'))
 
     first_page_url = None
     prev_page_url = None
@@ -402,7 +390,7 @@ def search_by_track():
         # Limiting tracks to display
         tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], repo.repo_instance)
     except ValueError:
-        return redirect(url_for('search_bp.not_found', target_search=target_track))
+        return redirect(url_for('search_bp.not_found', target_search=target_track, term='Track Title'))
 
     first_page_url = None
     prev_page_url = None
@@ -444,7 +432,8 @@ def search_by_track():
 @search_blueprint.route('/not_found', methods=['GET'])
 def not_found():
     target_search = request.args.get('target_search')
-    return render_template('tracks/not_found.html', target_search=target_search)
+    term = request.args.get('term')
+    return render_template('tracks/not_found.html', target_search=target_search, term=term)
 
 
 class SearchForm(FlaskForm):

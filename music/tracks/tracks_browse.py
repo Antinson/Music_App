@@ -8,8 +8,6 @@ from flask_wtf import FlaskForm
 from wtforms import TextAreaField, HiddenField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, ValidationError
 
-
-
 import music.tracks.services as services
 import music.adapters.repository as repo
 
@@ -22,54 +20,41 @@ def get_tracks_table_view():
     header = ["Track Id", "Track Name", "Artist", "Length"]
     tracks_per_page = 19
     cursor = request.args.get('cursor')
-    try:
-        # See if user has put anything in search box and pressed submit
-        if request.method == 'POST':
-            # Get the search term from the form
-            track_id = request.form["nm"]
-            # Redirect user to track
-            return redirect(url_for('tracks_bp.get_track_view', track_id=track_id))
-    except:
-        # If the user has entered an invalid track id or None, redirect to not found
-        return redirect(url_for('tracks_bp.not_found'))
 
-
+    if cursor is None:
+        cursor = 0
     else:
+        cursor = int(float(cursor))
 
-        if cursor is None:
-            cursor = 0
+    track_ids = services.get_all_track_ids(repo.repo_instance)
+    tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], repo.repo_instance)
+
+    first_page_url = None
+    prev_page_url = None
+    next_page_url = None
+    last_page_url = None
+
+    if cursor > 0:
+        # there are previous pages
+        if cursor - tracks_per_page < 0:
+            prev_page_url = url_for('tracks_bp.get_tracks_table_view')
         else:
-            cursor = int(float(cursor))
+            prev_page_url = url_for('tracks_bp.get_tracks_table_view', cursor=cursor - tracks_per_page)
+        first_page_url = url_for('tracks_bp.get_tracks_table_view')
 
-        track_ids = services.get_all_track_ids(repo.repo_instance)
-        tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], repo.repo_instance)
+    if cursor + tracks_per_page < len(track_ids):
+        # there are more pages
+        next_page_url = url_for('tracks_bp.get_tracks_table_view', cursor=cursor + tracks_per_page)
+        last_page_url = url_for('tracks_bp.get_tracks_table_view', cursor=int(len(track_ids)) - tracks_per_page)
 
-        first_page_url = None
-        prev_page_url = None
-        next_page_url = None
-        last_page_url = None
-
-        if cursor > 0:
-            # there are previous pages
-            if cursor - tracks_per_page < 0:
-                prev_page_url = url_for('tracks_bp.get_tracks_table_view')
-            else:
-                prev_page_url = url_for('tracks_bp.get_tracks_table_view', cursor=cursor - tracks_per_page)
-            first_page_url = url_for('tracks_bp.get_tracks_table_view')
-
-        if cursor + tracks_per_page < len(track_ids):
-            # there are more pages
-            next_page_url = url_for('tracks_bp.get_tracks_table_view', cursor=cursor +tracks_per_page)
-            last_page_url = url_for('tracks_bp.get_tracks_table_view', cursor=int(len(track_ids)) - tracks_per_page)
-
-        return render_template(
-            'tracks/browse_tracks.html',
-            headings=header,
-            tracks=tracks,
-            first_page_url=first_page_url,
-            prev_page_url=prev_page_url,
-            next_page_url=next_page_url,
-            last_page_url=last_page_url)
+    return render_template(
+        'tracks/browse_tracks.html',
+        headings=header,
+        tracks=tracks,
+        first_page_url=first_page_url,
+        prev_page_url=prev_page_url,
+        next_page_url=next_page_url,
+        last_page_url=last_page_url)
 
 
 # Individual track pages
@@ -85,7 +70,7 @@ def get_track_view(track_id):
     try:
         track = services.get_track(track_id, repo.repo_instance)
     except:
-        return redirect(url_for('tracks_bp.not_found', track_id=track_id))
+        return redirect(url_for('tracks_bp.not_found', target_search=track_id, term='Track ID'))
 
     try:
         user_name = session['user_name']
@@ -138,10 +123,9 @@ def get_track_view(track_id):
 
 @tracks_blueprint.route("/browse/not_found")
 def not_found():
-    return render_template('tracks/not_found.html')
-
-
-
+    target_search = request.args.get('target_search')
+    term = request.args.get('term')
+    return render_template('tracks/not_found.html', target_search=target_search, term=term)
 
 
 class ProfanityFree:
@@ -154,9 +138,11 @@ class ProfanityFree:
         if profanity.contains_profanity(field.data):
             raise ValidationError(self.message)
 
+
 class ReviewForm(FlaskForm):
-    review = TextAreaField('Review', [DataRequired(), Length(min=4, message='Comment must be at least 4 characters long.'),
-                                        ProfanityFree(message = 'Your comment must not contain profanity.')])
+    review = TextAreaField('Review',
+                           [DataRequired(), Length(min=4, message='Comment must be at least 4 characters long.'),
+                            ProfanityFree(message='Your comment must not contain profanity.')])
     rating = SelectField('Rating', choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
     submit = SubmitField('Submit')
 

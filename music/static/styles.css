@@ -113,7 +113,7 @@ h2 {
 }
 
 a {
-    color: aliceblue;
+    color: rgb(179, 234, 228);
     text-decoration: none;
 }
 
@@ -226,10 +226,9 @@ a.link_for_search:hover {
 }
 
 /* Not found page */
-.error_msg{
+.error-msg{
     padding-top: 200px;
     text-align: center;
-    font-family: sans-serif;
 }
 
 /* Home page */
