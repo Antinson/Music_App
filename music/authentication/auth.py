@@ -74,22 +74,6 @@ def login_required(view):
 
     return wrapped_view
 
-
-@auth_blueprint.route('/admin')
-def admin():
-    session.clear()
-    try:
-        services.add_user('admin', 'Admin123**', repo.repo_instance)
-    except:
-        user = services.get_user("admin", repo.repo_instance)
-        services.authenticate_user(user['user_name'], "Admin123**", repo.repo_instance)
-        session.clear()
-        session['user_name'] = user['user_name']
-    return redirect(url_for('home_bp.home'))
-
-
-
-
 class PasswordValid():
     def __init__(self, message=None):
         if not message:
