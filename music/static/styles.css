@@ -40,11 +40,15 @@
 /* By hierarchy */
 
 .container-cred {
-    display: row;
+    display: flex;
+    direction: column;
     margin: auto;
-    width: 50%;
+    width: 100%;
     padding: 10px;
+    justify-content: center;
+    position: relative;
 }
+
 
 .login-container {
     margin: auto;
@@ -219,8 +223,6 @@ a.link_for_search:hover {
 
 .liked-tracks {
     padding-bottom: 100px;
-
-
 }
 
 .user-link-track {
