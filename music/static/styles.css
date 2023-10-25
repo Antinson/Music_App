@@ -41,19 +41,24 @@
 
 .container-cred {
     display: flex;
-    direction: column;
+    flex-direction: column;
     margin: auto;
     width: 100%;
     padding: 10px;
     justify-content: center;
+    align-items: center;
     position: relative;
 }
 
 
 .login-container {
+    display: flex;
+    flex-direction: column;
     margin: auto;
-    width: 50%;
+    width: 100%;
     padding: 10px;
+    align-items: center;
+    justify-content: center;
 }
 
 
@@ -73,8 +78,8 @@
 
 .dash {
     width: 500px;
-    margin-top: 15%;
-    margin-bottom: 15%;
+    margin-top: 5%;
+    margin-bottom: 5%;
 }
 
 .redirect-page-msg {
