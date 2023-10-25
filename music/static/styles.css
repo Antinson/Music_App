@@ -91,9 +91,14 @@
 /* Individual Track Page w/ Comments */
 /* Order of hierarchy */
 
+#container {
+    margin-top: 2rem;
+}
+
 .table {
     margin: auto;
-    width: 30%;
+    width: 50%;
+    align-items: left;
 }
 
 .reviews {
@@ -104,29 +109,46 @@
 
 .form-wrapper {
     margin: auto;
-    width: 50%;
+    width: 100%;
     padding-bottom: 20px;
 }
 
 .form-field {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin: auto;
     width: 50%;
 }
+
+.form-control {
+    width: 100%;
+}
+
+.review-actions {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+
 
 h2 {
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
     font-family: sans-serif;
-} 
-
-.card {
-    margin-top: 10px;
 }
 
 .col-sm-6 {
     margin: auto;
-    width: 50%;
+    width: 100%;
+}
+
+.card {
+    margin-top: 10px;
+    width: 100%;
 }
 
 .card-header {
