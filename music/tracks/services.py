@@ -128,15 +128,20 @@ def track_to_dict(track: Track):
     track_dict = {
         'track_id': track.track_id,
         'title': track.title,
-        'artist': track.artist,
-        'album': track.album,
+        'artist': track.artist.to_json(),
+        'album': track.album.to_json(),
         'track_url': track.track_url,
         'track_duration': track.track_duration,
-        'track_genres': track.genres
+        'track_genres': genres_json(track.genres)
     }
 
     return track_dict
 
+def genres_json(genres):
+    genre_list = []
+    for genre in genres:
+        genre_list.append(genre.to_json())
+    return genre_list
 
 def review_to_dict(review: Review):
     review_dict = {

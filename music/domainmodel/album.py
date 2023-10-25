@@ -80,3 +80,12 @@ class Album:
 
     def __hash__(self):
         return hash(self.album_id)
+
+    def to_json(self):
+        return {
+            "id": self.album_id,
+            "name": self.title,
+            "album_url": self.album_url,
+            "album_type": self.album_type,
+            "album_release_year": self.release_year,
+        }

@@ -41,3 +41,9 @@ class Genre:
 
     def __hash__(self):
         return hash(self.genre_id)
+
+    def to_json(self):
+        return {
+            "id": self.genre_id,
+            "name": self.name,
+        }

@@ -42,3 +42,9 @@ class Artist:
 
     def __hash__(self):
         return hash(self.__artist_id)
+    
+    def to_json(self):
+        return {
+            "id": self.artist_id,
+            "full_name": self.full_name,
+        }

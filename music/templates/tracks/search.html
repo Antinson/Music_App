@@ -1,81 +1,33 @@
-{% extends 'layout.html' %}
-
-{% block content %}
-
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Music App</title>
+        <link rel="icon" href="{{ url_for('static', filename='logo.jpg') }}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}"/>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+        <script src="{{url_for('static', filename='search.js')}}" defer></script>
+    </head>
+<body>
 <div class="search-container">
     <p class="p1">Enter Search</p>
     <div class="input-group">
-    <form method="POST" action="{{ handler_url }}" class="search-form">
-        {{ form.csrf_token }}
-        {{form.search(class="form-control", id="search_text_area")}}
-        {{form.search_type(class="form-select", id="search_select_area")}}
-        {{form.submit(id="search_button", class="btn btn-dark")}}
-    </form>
+        <input type="search" class="form-control form-control-lg" id="search-box" name="q" placeholder="Search">
+        <select class="custom-select" id="inputGroupSelect01">
+            <option selected value="id">Id</option>
+            <option value="date">Date</option>
+            <option value="title">Title</option>
+            <option value="album">Album</option>
+            <option value="artist">Artist</option>
+            <option value="genre">Genre</option>
+          </select>
+    </div>
+    <div id="display_area_search">
+        
     </div>
 </div>
-
-
-<nav class="view-nav-container">
-    <a class="link_for_search" href="{{url_for('search_bp.search', view_target='Release Years')}}">View Release Years</a>  |
-    <a class="link_for_search" href="{{url_for('search_bp.search', view_target='Artists')}}">View Artists</a>  |
-    <a class="link_for_search" href="{{url_for('search_bp.search', view_target='Albums')}}">View Albums</a>  |
-    <a class="link_for_search" href="{{url_for('search_bp.search', view_target='Genres')}}">View Genres</a>
-</nav>
-
-
-<div>
-    {% if target_view is not none  and target_view == 'Release Years' or target_view == 'Artists' or target_view == 'Albums' or target_view == 'Genres' %}
-    <nav class="reviews">
-    <div class="page-nav-left">
-        {% if first_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{first_page_url}}'"><<</button>
-        {% else %}
-            <button class="btn btn-dark" disabled><<</button>
-        {% endif %}
-        {% if prev_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{prev_page_url}}'"><</button>
-        {% else %}
-            <button class="btn btn-dark" disabled><</button>
-        {% endif %}
-    </div>
-
-    <div class="page-nav-right">
-        {% if next_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{next_page_url}}'">></button>
-        {% else %}
-            <button class="btn btn-dark" disabled>></button>
-        {% endif %}
-        {% if last_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{last_page_url}}'">>></button>
-        {% else %}
-            <button class="btn btn-dark" disabled>>></button>
-        {% endif %}
-    </div>
-    </nav>
-
-
-        <table class="table">
-            <tr class="table__header">
-                <th class="header-text">
-                    {{target_view}}
-                </th>
-            </tr>
-            {% for term in sliced_terms %}
-            <tr>
-                {% if target_view == 'Artists' %}
-                <td><a class="link_for_search" href={{url_for('search_bp.search_by_artist', target_artist=term)}}>{{term}}</a></td>
-                {% elif target_view == 'Albums' %}
-                <td><a class="link_for_search" href={{url_for('search_bp.search_by_album', target_album=term)}}>{{term}}</a></td>
-                {% elif target_view == 'Genres' %}
-                <td><a class="link_for_search" href={{url_for('search_bp.search_by_genre', target_genre=term)}}>{{term}}</a></td>
-                {% elif target_view == 'Release Years' %}
-                <td><a class="link_for_search" href={{url_for('search_bp.search_by_date', target_date=term)}}>{{term}}</a></td>
-                {% endif %}
-            </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
 </div>
-
-
-{% endblock %}
+</body>
+<html>
