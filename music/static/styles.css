@@ -18,6 +18,48 @@
     width: 50%;
 }
 
+.browse-area {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.title {
+    font-family: sans-serif;
+    font-size: 1.5rem;
+}
+
+.test {
+    background-color: #000000;
+    color: white;
+}
+
+.track-image {
+    width: 20%;
+}
+
+.track-url, .album, .genres {
+    display: none;
+}
+
+.artist-title, .track-duration-title {
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* <div class="title" data-title></div>
+<img class="track-image" src="{{ url_for('static', filename='trackimage.png') }}">
+<div class="album" data-album></div>
+<div class="artist" data-artist></div>
+<div class="track-url" data-track-url></div>
+<div class="track_duration" data-track-duration></div>
+<div class="genres" data-genres></div> */
+
+
+
+
+
 /* Navigation bar styling */
 
 .nav-logo {
@@ -243,7 +285,35 @@ a.link_for_search:hover {
     text-align: center;
 }
 
+.album-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 100%));
+    gap: .25rem;
+    margin-top: 1rem;
+}
 
+.card {
+    background-color: #000000;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .5rem;
+}
+
+.card:hover {
+    background-color: #ffffff;
+    color: black;
+    cursor: pointer;
+}
+
+.hide {
+    display: none;
+}
+
+.hide-keep-area {
+    visibility: hidden;
+}
 
 /* Users page */
 /* By hierarchy */

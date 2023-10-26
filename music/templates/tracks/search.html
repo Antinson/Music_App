@@ -11,21 +11,44 @@
         <script src="{{url_for('static', filename='search.js')}}" defer></script>
     </head>
 <body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{{ url_for('home_bp.home') }}">
+            <img src="{{ url_for('static', filename='title_picture.png') }}" class="nav-logo">
+          </a>
+      
+          {% if 'user_name' in session %}
+            <a class="btn-nav" href="{{ url_for('home_bp.home') }}">Home</a>
+            <a class="btn-nav" href="{{ url_for('search_bp.search') }}">Search</a>
+            <a class="btn-nav" href="{{ url_for('tracks_bp.get_tracks_table_view') }}">Browse</a>
+            <a class="btn-nav" href="/user/{{session['user_name']}}">{{session['user_name']}}</a>
+            <a class="btn-nav" href="{{ url_for('auth_bp.logout') }}">Logout</a>
+          {% else %}
+            <a class="btn-nav" href="{{ url_for('home_bp.home') }}">Home</a>
+            <a class="btn-nav" href="{{ url_for('search_bp.search') }}">Search</a>
+            <a class="btn-nav" href="{{ url_for('tracks_bp.get_tracks_table_view') }}">Browse</a>
+            <a class="btn-nav" href="{{ url_for('auth_bp.register') }}">Register</a>
+            <a class="btn-nav" href="{{ url_for('auth_bp.login') }}">Login</a>
+          {% endif %}
+          </div>
+        </nav>
 <div class="search-container">
     <p class="p1">Enter Search</p>
     <div class="input-group">
-        <input type="search" class="form-control form-control-lg" id="search-box" name="q" placeholder="Search">
-        <select class="custom-select" id="inputGroupSelect01">
-            <option selected value="id">Id</option>
-            <option value="date">Date</option>
-            <option value="title">Title</option>
-            <option value="album">Album</option>
-            <option value="artist">Artist</option>
-            <option value="genre">Genre</option>
-          </select>
+        <input type="search" class="form-control form-control-lg" id="search-box" name="q" placeholder="Search" data-search>
     </div>
-    <div id="display_area_search">
-        
+    <div class="album-cards" album-cards-container>
+        <template data-track-template>
+            <div class="card">
+                <div class="title" data-title></div>
+                <img class="track-image" src="{{ url_for('static', filename='trackimage.png') }}">
+                <div class="album" data-album></div>
+                <div class="artist" data-artist></div>
+                <div class="track-url" data-track-url></div>
+                <div class="track_duration" data-track-duration></div>
+                <div class="genres" data-genres></div>
+            </div>
+        </template>
     </div>
 </div>
 </div>

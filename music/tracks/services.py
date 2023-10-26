@@ -120,20 +120,26 @@ def get_reviews_for_track(track_id, repo: AbstractRepository):
     return reviews_to_dict(reviews_for_track)
 
 
+
+
 # ============================================
 # Functions to convert model entities to dicts
 # ============================================
 
 def track_to_dict(track: Track):
-    track_dict = {
-        'track_id': track.track_id,
-        'title': track.title,
-        'artist': track.artist.to_json(),
-        'album': track.album.to_json(),
-        'track_url': track.track_url,
-        'track_duration': track.track_duration,
-        'track_genres': genres_json(track.genres)
-    }
+    try:
+        track_dict = {
+            'track_id': track.track_id,
+            'title': track.title,
+            'artist': track.artist.to_json(),
+            'album': track.album.to_json(),
+            'track_url': track.track_url,
+            'track_duration': track.track_duration,
+            'track_genres': genres_json(track.genres),
+            'category_set_to_none': False  # Flag to indicate if category is set to None
+        }
+    except Exception as e:
+        return None
 
     return track_dict
 

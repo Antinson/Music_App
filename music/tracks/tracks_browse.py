@@ -1,6 +1,6 @@
 from datetime import date
 
-from flask import Blueprint, render_template, redirect, url_for, flash, request, session
+from flask import Blueprint, render_template, redirect, url_for, flash, request, session, jsonify
 from music.authentication.auth import login_required
 
 from better_profanity import profanity
@@ -14,118 +14,41 @@ import music.adapters.repository as repo
 # Setting up our blueprint
 tracks_blueprint = Blueprint('tracks_bp', __name__, template_folder='templates')
 
-
-@tracks_blueprint.route("/browse", methods=['GET', 'POST'])  # default page: browse all tracks in order of id
+@tracks_blueprint.route("/browse", methods=['GET'])
 def get_tracks_table_view():
-    header = ["Track Id", "Track Name", "Artist", "Length"]
-    tracks_per_page = 19
-    cursor = request.args.get('cursor')
+    return render_template('tracks/browse_tracks.html')
 
-    if cursor is None:
-        cursor = 0
-    else:
-        cursor = int(float(cursor))
 
-    track_ids = services.get_all_track_ids(repo.repo_instance)
-    tracks = services.get_tracks_by_id(track_ids[cursor:cursor + tracks_per_page], repo.repo_instance)
+@tracks_blueprint.route("/browseRequest", methods=['GET', 'POST'])  # default page: browse all tracks in order of id
+def browse_tracks():
+    page = request.args.get('page', type=int)
+    limit = request.args.get('limit', type=int)
 
-    first_page_url = None
-    prev_page_url = None
-    next_page_url = None
-    last_page_url = None
+    start_index = (page - 1) * limit
+    end_index = page * limit
 
-    if cursor > 0:
-        # there are previous pages
-        if cursor - tracks_per_page < 0:
-            prev_page_url = url_for('tracks_bp.get_tracks_table_view')
-        else:
-            prev_page_url = url_for('tracks_bp.get_tracks_table_view', cursor=cursor - tracks_per_page)
-        first_page_url = url_for('tracks_bp.get_tracks_table_view')
+    track_data_temp = services.get_all_track_ids(repo.repo_instance)
+    track_data = track_data_temp[start_index:end_index]
+    track_data_json = jsonify(services.get_tracks_by_id(track_data, repo.repo_instance))
 
-    if cursor + tracks_per_page < len(track_ids):
-        # there are more pages
-        next_page_url = url_for('tracks_bp.get_tracks_table_view', cursor=cursor + tracks_per_page)
-        last_page_url = url_for('tracks_bp.get_tracks_table_view', cursor=int(len(track_ids)) - tracks_per_page)
+    return track_data_json
 
-    return render_template(
-        'tracks/browse_tracks.html',
-        headings=header,
-        tracks=tracks,
-        first_page_url=first_page_url,
-        prev_page_url=prev_page_url,
-        next_page_url=next_page_url,
-        last_page_url=last_page_url)
+
 
 
 # Individual track pages
 @tracks_blueprint.route("/browse/<int:track_id>", methods=['GET', 'POST'])
 def get_track_view(track_id):
-    header = ["Track Id", "Track Name", "Artist", "Length", "URL"]
-    form = ReviewForm()
-    liked = LikedForm()
-    reviews = services.get_reviews_for_track(track_id, repo.repo_instance)
-    logged_in = False
-    track_already_liked = None
-    # Grabbing data from our memory repo through our services layer
-    try:
-        track = services.get_track(track_id, repo.repo_instance)
-    except:
-        return redirect(url_for('tracks_bp.not_found', target_search=track_id, term='Track ID'))
-
-    try:
-        user_name = session['user_name']
-        logged_in = True
-        user_liked_tracks = services.get_user_liked_tracks(user_name.lower(), repo.repo_instance)
-        if track in user_liked_tracks:
-            track_already_liked = True
-        else:
-            track_already_liked = False
-    except:
-        pass
-
-    if request.method == 'POST':
-        if request.form.get('liked') != None:
-            try:
-                services.add_track_to_user(user_name, track_id, repo.repo_instance)
-                track_already_liked = True
-            except:
-                return redirect(url_for('auth_bp.login'))
-
-            return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews,
-                                   logged_in=logged_in, track_already_liked=track_already_liked)
-        elif request.form.get('unliked') != None:
-            try:
-                services.remove_track_from_user(user_name, track_id, repo.repo_instance)
-                track_already_liked = False
-            except:
-                return redirect(url_for('auth_bp.login'))
-
-            return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews,
-                                   logged_in=logged_in, track_already_liked=track_already_liked)
+    return 2
 
 
-        elif form.validate_on_submit():
-            # Storing the new comment
-            try:
-                services.add_review(track_id, form.review.data, int(form.rating.data), user_name, repo.repo_instance)
+@tracks_blueprint.route("/totalTracks", methods=['GET'])  # default page: browse all tracks in order of id
+def get_total_number_tracks():
+    all_ids = services.get_all_track_ids(repo.repo_instance)
+    total = len(all_ids)
+    print("total is %d" % total)
+    return str(total)
 
-                # Redirect to the track page
-                return redirect(url_for('tracks_bp.get_track_view', track_id=track_id))
-            except:
-                return redirect(url_for('auth_bp.login'))
-
-    if request.method == 'GET':
-        pass
-
-    return render_template('tracks/track.html', track=track, headings=header, form=form, reviews=reviews,
-                           logged_in=logged_in, track_already_liked=track_already_liked)
-
-
-@tracks_blueprint.route("/browse/not_found")
-def not_found():
-    target_search = request.args.get('target_search')
-    term = request.args.get('term')
-    return render_template('tracks/not_found.html', target_search=target_search, term=term)
 
 
 class ProfanityFree:

@@ -23,6 +23,17 @@ def search():
     except Exception as e:
         return jsonify({"error": str(e)})
 
+@search_blueprint.route('/getCards', methods=['GET'])
+def searchgets():
+    try:
+        ids = services.get_all_track_ids(repo.repo_instance)
+        print(ids)
+        result = services.get_tracks_by_id([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20], repo.repo_instance)
+        print(result)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": str(e)}) 
+
 # def search():
 #     try:
 #         json_data = request.json
@@ -49,5 +60,4 @@ def search():
 
 
 def get_tracks(ids):
-    print(ids)
     return services.get_tracks_by_id(ids, repo.repo_instance)
