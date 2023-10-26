@@ -3,6 +3,7 @@ let totalTracks = 0;
 let debug = true;
 
 
+
 document.addEventListener("DOMContentLoaded", function() {
     const trackCardTemplate = document.querySelector("[data-track-template]");
     const albumCardContainer = document.querySelector("[data-track-cards-container]");
@@ -95,13 +96,27 @@ document.addEventListener("DOMContentLoaded", function() {
                     localStorage.setItem("selectedTrackId", track.track_id);
                     window.location.href = `/track/${track.track_id}`;
                 });
+
+                card.classList.add('hidden');
                 albumCardContainer.appendChild(card);
                 return {title: track.title, album: track.album.name, artist: track.artist.full_name, duration: track.track_duration
                 ,genres: track.track_genres.name, track_url: track.track_url, element: card};
             })
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('show');
+                    } else {
+                        entry.target.classList.remove('show');
+                    }
+                });
+            });
+            
+            const hiddenElements = document.querySelectorAll('.hidden');
+            hiddenElements.forEach((el) => observer.observe(el));
         })
     }
-
 });
 
 

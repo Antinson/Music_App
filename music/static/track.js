@@ -10,6 +10,19 @@ const trackCardTemplate = document.querySelector("[data-track-template]");
 const albumCardContainer = document.querySelector("[data-track-cards-container]");
 const commentButton = document.querySelector("[data-comment-button]");
 
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+        } else {
+            entry.target.classList.remove('show');
+        }
+    });
+});
+
+const hiddenElements = document.querySelectorAll('.hidden');
+hiddenElements.forEach((el) => observer.observe(el));
+
 
 
 fetch(url, {
@@ -63,14 +76,12 @@ const postComment = () => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         getComments();
     })
 }
 
 const getComments = () => {
     // Fetching comments from the API passing the current tracks ID
-    commentSection.innerHTML = "";
     const track_id = id;
     const url = `/getComments/${track_id}`;
     fetch(url, {

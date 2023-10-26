@@ -309,10 +309,26 @@ a.link_for_search:hover {
 
 .hide {
     display: none;
+    transition: all 2s;
 }
 
 .hide-keep-area {
     visibility: hidden;
+}
+
+.hidden {
+    opacity: 0;
+    filter: blur(1px);
+    /*transform: translateY(20%);*/
+    transition: all 0.3s;
+}
+
+
+
+.show {
+    opacity: 1;
+    filter: blur(0);
+    /* transform: translateY(0); */
 }
 
 /* Users page */
