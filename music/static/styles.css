@@ -380,6 +380,15 @@ a.link_for_search:hover {
     font-size: 20px;
 }
 
+.user-profile-area {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
 /* Search page View Category */
 
 .view-nav-container {
@@ -470,3 +479,8 @@ a.link_for_search:hover {
     float: right;
 }
 
+.user-area-comment:hover {
+    opacity: 0.9;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}

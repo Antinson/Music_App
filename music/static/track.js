@@ -1,6 +1,7 @@
 const id = localStorage.getItem("selectedTrackId");
 let url = `/getTrack/${id}`;
 let comments = [];
+let isLiked = false;
 
 let commentSection = document.querySelector("[comment-section]");
 let commentTemplate = document.querySelector("[comment-template]");
@@ -40,7 +41,21 @@ fetch(url, {
                 const trackUrl = card.querySelector("[data-track-url]");
                 const trackDuration = card.querySelector("[data-track-duration]");
                 const genres = card.querySelector("[data-genres]");
-    
+                const likeButton = card.querySelector("[data-like]");
+
+                
+                likeButton.addEventListener("click", () => {
+                    if (isLiked) {
+                        console.log("Unliked track: " + track.track_id);
+                        likeButton.innerText = "Like";
+                        isLiked = false;
+                    } else {
+                        console.log("Liked track: " + track.track_id);
+                        likeButton.innerText = "Unlike";
+                        isLiked = true;
+                    }
+                });
+
                 try {
                     title.innerText = track.title;
                     album.innerText = track.album.name;
@@ -92,8 +107,9 @@ const getComments = () => {
     })
     .then(response => response.json())
     .then(data => {
-        comments = data.map(comment => {
+        const commentSection = document.querySelector("[comment-section]");
 
+        data.forEach(comment => {
             const commentCard = commentTemplate.content.cloneNode(true).children[0];
             const username = commentCard.querySelector("[user-name]");
             const commentText = commentCard.querySelector("[comment-content]");
@@ -101,13 +117,14 @@ const getComments = () => {
             username.innerText = comment.user;
             commentText.innerText = comment.review_text;
 
-            commentSection.appendChild(commentCard);
-
             commentSection.insertBefore(commentCard, commentSection.firstChild);
-
-
-            return {username: comment.username, comment: comment.comment, element: commentCard};
-        })
+            
+            comments.push({
+                username: comment.user,
+                comment: comment.review_text,
+                element: commentCard,
+            });
+        });
     })
 }
 

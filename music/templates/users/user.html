@@ -1,118 +1,62 @@
-{% extends 'layout.html' %}
-{% block content %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Music App</title>
+        <link rel="icon" href="{{ url_for('static', filename='logo.jpg') }}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}"/>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+        <script src="{{url_for('static', filename='user.js')}}" defer></script>
+    </head>
 
-<div class="user-details">
-    <h1 class="display-1">{{ user.user_name[0:1].upper() }}{{user.user_name[1:]}}</h1>
-</div>
-
-<div class="liked-tracks">
-    <nav class="reviews">
-    <div class="page-nav-left">
-        {% if lt_first_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{lt_first_page_url}}'"><<</button>
-        {% else %}
-            <button class="btn btn-dark" disabled><<</button>
-        {% endif %}
-        {% if lt_prev_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{lt_prev_page_url}}'"><</button>
-        {% else %}
-            <button class="btn btn-dark" disabled><</button>
-        {% endif %}
-    </div>
-
-    <div class="page-nav-right">
-        {% if lt_next_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{lt_next_page_url}}'">></button>
-        {% else %}
-            <button class="btn btn-dark" disabled>></button>
-        {% endif %}
-        {% if lt_last_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{lt_last_page_url}}'">>></button>
-        {% else %}
-            <button class="btn btn-dark" disabled>>></button>
-        {% endif %}
-    </div>
-    </nav>
-
-    <h2>Liked Tracks: {{liked_tracks_count}}</h2>
-    <table class="table">
-        <tr>
-            <th>Track ID</th>
-            <th>Track Title</th>
-            <th>Artist</th>
-            <th>Album</th>
-        </tr>
-        {% for track in liked_tracks %}
-        <tr>
-            <td><a href="/browse/{{ track.track_id }}">{{track.track_id}}</a></td>
-            <td>{{track.title}}</td>
-            <td>{{track.artist.full_name}}</td>
-            <td>{{track.album.title}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-
-
-
-
-
-<div class="reviews">
-    <nav>
-    <div class="page-nav-left">
-        {% if review_first_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{review_first_page_url}}'"><<</button>
-        {% else %}
-            <button class="btn btn-dark" disabled><<</button>
-        {% endif %}
-        {% if review_prev_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{review_prev_page_url}}'"><</button>
-        {% else %}
-            <button class="btn btn-dark" disabled><</button>
-        {% endif %}
-    </div>
-
-    <div class="page-nav-right">
-        {% if review_next_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{review_next_page_url}}'">></button>
-        {% else %}
-            <button class="btn btn-dark" disabled>></button>
-        {% endif %}
-        {% if review_last_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{review_last_page_url}}'">>></button>
-        {% else %}
-            <button class="btn btn-dark" disabled>>></button>
-        {% endif %}
-    </div>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{{ url_for('home_bp.home') }}">
+            <img src="{{ url_for('static', filename='title_picture.png') }}" class="nav-logo">
+          </a>
+      
+          {% if 'user_name' in session %}
+            <a class="btn-nav" href="{{ url_for('home_bp.home') }}">Home</a>
+            <a class="btn-nav" href="{{ url_for('search_bp.search') }}">Search</a>
+            <a class="btn-nav" href="{{ url_for('tracks_bp.get_tracks_table_view') }}">Browse</a>
+            <a class="btn-nav" href="/user/{{session['user_name']}}">{{session['user_name']}}</a>
+            <a class="btn-nav" href="{{ url_for('auth_bp.logout') }}">Logout</a>
+          {% else %}
+            <a class="btn-nav" href="{{ url_for('home_bp.home') }}">Home</a>
+            <a class="btn-nav" href="{{ url_for('search_bp.search') }}">Search</a>
+            <a class="btn-nav" href="{{ url_for('tracks_bp.get_tracks_table_view') }}">Browse</a>
+            <a class="btn-nav" href="{{ url_for('auth_bp.register') }}">Register</a>
+            <a class="btn-nav" href="{{ url_for('auth_bp.login') }}">Login</a>
+          {% endif %}
+          </div>
         </nav>
-
-
-
-
-    <h2>Reviews made: {{ review_count }}</h2>
-    <table>
-
-        {% for review in reviews %}
-        <tr>
-            <div class="col-sm-6">
-                <a class='link_for_search'href="/browse/{{review.track_id}}" class="user-link-track">Go to Track →</a>
-                <div class="card">
-                    <div class="card-header">
-                        {{review.user}}
-                    </div>  
-                    <div class="card-body">
-                    <p class="card-text">{{review.review_text}}</p>
-                    <p class="card-text">Rating: {{review.rating}}/5</p>
-                    <p class="card-text"><small class="text-muted">{{review.timestamp}}</small></p>
-                    </div>
-                </div>
-
+        <div class="user-profile-area" user-profile-area>
+            <h2>User Profile</h2>
+            <div class="users-name" user-name-area>
             </div>
-        <br>
-        </tr>
-        {% endfor %}
-
-    </table>
-</div>
-
-{% endblock %}
+            <h2>Liked Tracks</h2>
+            <div class="liked-tracks" liked-tracks-area>
+            </div>
+            <h2>User Comments</h2>
+            <div class="comment-section" comment-section>
+                <template comment-template>
+                    <div class="a-comment" a-comment>
+                        <div class="profile-name" profile-name>
+                            <img class="profile-image" src="{{ url_for('static', filename='trackimage.png') }}">
+                            <p user-name></p>
+                        </div>
+                        <div class="comment-content" comment-content>
+                            <p></p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+        <script>
+            window.user_name = "{{ user_name }}";
+        </script>
+</body>
+</html>
