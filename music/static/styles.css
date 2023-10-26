@@ -388,3 +388,55 @@ a.link_for_search:hover {
     box-shadow: 10px 10px 8px rgba(0, 0, 0, 0.2);
 }
 
+
+/* Individual track area */
+.individual-track-container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 50%;
+    padding-top: 100px;
+}
+
+.comment-section {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.a-comment {
+    display: flex;
+    direction: row;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    background-color: #000000;
+    color: white;
+    border-radius: 5px;
+    padding: 2rem;
+}
+
+.profile-name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 15%;
+    margin-right: 1rem;
+}
+
+.comment-content {
+    display: flex;
+    width: 80%;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-image {
+    height: 100%;
+    width: 100%;
+}
+
+.comment-area {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+

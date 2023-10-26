@@ -33,7 +33,7 @@
           {% endif %}
           </div>
         </nav>
-    <div class="search-container">
+    <div class="individual-track-container">
     <div class="track-cards" data-track-cards-container>
         <template data-track-template>
             <div class="test card no-hover" >
@@ -55,10 +55,34 @@
                 <div class="genres-single" data-genres></div>
             </div>
         </template>
-        <div class="comment-area">
-            <input type="text" class="form-control form-control-lg" id="comment-box" name="q" placeholder="Comment" data-comment>
-            <button class="btn btn-primary" id="comment-button" data-comment-button>Comment</button>
+    </div>
+    <div class="comment-section">
+        <div class="a-comment">
+            <div class="profile-name">
+                <img class="profile-image" src="{{ url_for('static', filename='trackimage.png') }}">
+                <p>Username</p>
+            </div>
+            <div class="comment-content">
+                <p>Comment goes in here and is around a does well and this is an averrage song not sure why its here</p>
+            </div>
         </div>
+        <div class="a-comment">
+            <div class="profile-name">
+                <div>
+                    <img class="profile-image" src="{{ url_for('static', filename='trackimage.png') }}">
+                </div>
+                <div>
+                    <p>Username</p>
+                </div>
+            </div>
+            <div class="comment-content">
+                <p>Comment goes in here and is around a does well and this is an averrage song not sure why its here</p>
+            </div>
+        </div>
+    </div>
+    <div class="comment-area">
+        <input type="text" class="form-control form-control-lg" id="comment-box" name="q" placeholder="Comment" data-comment>
+        <button class="btn btn-primary" id="comment-button" data-comment-button>Comment</button>
     </div>
     </div>
 </body>
