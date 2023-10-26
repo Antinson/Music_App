@@ -54,18 +54,25 @@
                 <div class="artist-title">Genres</div>
                 <div class="genres-single" data-genres></div>
             </div>
+    </div>
         </template>
     </div>
-    <div class="comment-section">
-        <div class="a-comment">
-            <div class="profile-name">
-                <img class="profile-image" src="{{ url_for('static', filename='trackimage.png') }}">
-                <p>Username</p>
+    <div class="comment-area">
+        <textarea id="comment-box" rows="4" cols="50" placeholder="Comment" data-comment></textarea>
+        <button type="button" id="comment-button" class="btn btn-dark hide" data-comment-button>Comment</button>
+    </div>
+    <div class="comment-section" comment-section>
+        <template comment-template>
+            <div class="a-comment" a-comment>
+                <div class="profile-name" profile-name>
+                    <img class="profile-image" src="{{ url_for('static', filename='trackimage.png') }}">
+                    <p user-name></p>
+                </div>
+                <div class="comment-content" comment-content>
+                    <p>Comment goes in here and is around a does well and this is an averrage song not sure why its here</p>
+                </div>
             </div>
-            <div class="comment-content">
-                <p>Comment goes in here and is around a does well and this is an averrage song not sure why its here</p>
-            </div>
-        </div>
+        </template>
         <div class="a-comment">
             <div class="profile-name">
                 <div>
@@ -79,10 +86,6 @@
                 <p>Comment goes in here and is around a does well and this is an averrage song not sure why its here</p>
             </div>
         </div>
-    </div>
-    <div class="comment-area">
-        <input type="text" class="form-control form-control-lg" id="comment-box" name="q" placeholder="Comment" data-comment>
-        <button class="btn btn-primary" id="comment-button" data-comment-button>Comment</button>
     </div>
     </div>
 </body>

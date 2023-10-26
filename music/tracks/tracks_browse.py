@@ -50,15 +50,38 @@ def get_total_number_tracks():
 
 @tracks_blueprint.route("/track/<int:track_id>", methods=["GET", "POST"])
 def get_individual_track_page(track_id):
-    print(track_id)
     return render_template("tracks/track.html")
 
 @tracks_blueprint.route("/getTrack/<int:track_id>", methods=["GET"])
 def get_track_by_id(track_id):
+    print("get_track_by_id")
     requested_track = services.get_track(track_id, repo.repo_instance)
-    print("Request track is")
-    print(requested_track)
     return jsonify(requested_track)
+
+@tracks_blueprint.route("/postComment", methods=["POST"])
+def post_comment():
+    try:
+        json_data = request.json
+        comment_data = json_data["comment"]
+        track_id = int(json_data["track_id"])
+        user_name = session['user_name']
+
+        print("Track id is: " + str(track_id))
+        print("Username is " + user_name)
+
+        services.add_review(track_id, comment_data, 5, user_name, repo.repo_instance)
+    except Exception as e:
+        print(e)
+
+    return jsonify("good")
+
+@tracks_blueprint.route("/getComments/<int:track_id>", methods=["GET"])
+def getComments(track_id):
+    print("Track id is " + str(track_id))
+    test = services.get_reviews_for_track(int(track_id), repo.repo_instance)
+    print(jsonify(test))
+    return jsonify(test)
+
 
 
 

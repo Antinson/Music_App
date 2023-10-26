@@ -92,6 +92,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     genres.innerText = "N/A";
                 }
                 card.addEventListener("click", () => { 
+                    localStorage.setItem("selectedTrackId", track.track_id);
                     window.location.href = `/track/${track.track_id}`;
                 });
                 albumCardContainer.appendChild(card);
