@@ -381,3 +381,10 @@ a.link_for_search:hover {
     text-align: center;
 }
 
+.no-hover:hover {
+    cursor: default;
+    background-color: #000000;
+    color: white;
+    box-shadow: 10px 10px 8px rgba(0, 0, 0, 0.2);
+}
+

@@ -1,5 +1,6 @@
 let page = 1;
 let totalTracks = 0;
+let debug = true;
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -68,6 +69,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 const trackUrl = card.querySelector("[data-track-url]");
                 const trackDuration = card.querySelector("[data-track-duration]");
                 const genres = card.querySelector("[data-genres]");
+
+                if (debug == true) {
+                    console.log(track);
+                    debug = false;
+                }
     
                 try {
                     title.innerText = track.title;
@@ -85,6 +91,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     trackDuration.innerText = "N/A";
                     genres.innerText = "N/A";
                 }
+                card.addEventListener("click", () => { 
+                    window.location.href = `/track/${track.track_id}`;
+                });
                 albumCardContainer.appendChild(card);
                 return {title: track.title, album: track.album.name, artist: track.artist.full_name, duration: track.track_duration
                 ,genres: track.track_genres.name, track_url: track.track_url, element: card};

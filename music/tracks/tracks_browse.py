@@ -46,8 +46,19 @@ def get_track_view(track_id):
 def get_total_number_tracks():
     all_ids = services.get_all_track_ids(repo.repo_instance)
     total = len(all_ids)
-    print("total is %d" % total)
     return str(total)
+
+@tracks_blueprint.route("/track/<int:track_id>", methods=["GET", "POST"])
+def get_individual_track_page(track_id):
+    print(track_id)
+    return render_template("tracks/track.html")
+
+@tracks_blueprint.route("/getTrack/<int:track_id>", methods=["GET"])
+def get_track_by_id(track_id):
+    requested_track = services.get_track(track_id, repo.repo_instance)
+    print("Request track is")
+    print(requested_track)
+    return jsonify(requested_track)
 
 
 
