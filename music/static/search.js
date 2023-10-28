@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     return null;
                 }
                 try {              
-                    
                     count++;
                     return {
                         title: track.title,
@@ -29,7 +28,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         duration: track.track_duration,
                         genres: track.track_genres.name,
                         track_url: track.track_url,
-                        track_array_index: count
+                        track_array_index: count,
+                        track_id: track.track_id
                     };
                 } catch (error) {
                     return null;
