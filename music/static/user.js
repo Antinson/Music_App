@@ -14,7 +14,7 @@ userProfileArea.appendChild(userNameArea);
 
 
 const getLikedTracks = () => {
-    let url = `/getLikedTracks/${user_name}`;
+    let url = `/getUserLikedTracks/${user_name}`;
     fetch(url, {
         method: 'GET',
         headers: {'Content-Type': 'application/json'}
@@ -25,6 +25,8 @@ const getLikedTracks = () => {
         console.log(data);
     })
 };
+
+getLikedTracks();
 
 const getReviews = () => {
     let url = `/getReviews/${user_name}`;

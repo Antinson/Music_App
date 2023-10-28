@@ -82,7 +82,28 @@ def getComments(track_id):
     print(jsonify(test))
     return jsonify(test)
 
+@tracks_blueprint.route("/likeTrack", methods=["POST"])
+def like_track():
+    user_name = session['user_name']
+    track_id = request.args.get('track_id', type=int)
+    services.add_track_to_user(user_name, track_id, repo.repo_instance)
+    return jsonify("Ok")
 
+@tracks_blueprint.route("/unlikeTrack", methods=["POST"])
+def unlike_track():
+    user_name = session['user_name']
+    track_id = request.args.get('track_id', type=int)
+    services.remove_track_from_user(user_name, track_id, repo.repo_instance)
+    return jsonify("Ok")
+
+
+@tracks_blueprint.route("/getUserLikedTracks/<user>", methods=["GET"])
+def get_user_liked_tracks():
+    print("Hey")
+    user_name = user
+    liked_tracks = services.get_user_liked_tracks(user_name, repo.repo_instance)
+    print(liked_tracks)
+    return jsonify(liked_tracks)
 
 
 class ProfanityFree:

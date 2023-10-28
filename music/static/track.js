@@ -49,10 +49,12 @@ fetch(url, {
                         console.log("Unliked track: " + track.track_id);
                         likeButton.innerText = "Like";
                         isLiked = false;
+                        unlikeTrack();
                     } else {
                         console.log("Liked track: " + track.track_id);
                         likeButton.innerText = "Unlike";
                         isLiked = true;
+                        likeTrack();
                     }
                 });
 
@@ -125,6 +127,40 @@ const getComments = () => {
                 element: commentCard,
             });
         });
+    })
+}
+
+const likeTrack = () => {
+    const track_id = localStorage.getItem("selectedTrackId");
+    const url = "/likeTrack";
+    const data = {track_id: track_id};
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+}
+
+const unlikeTrack = () => {
+    const track_id = localStorage.getItem("selectedTrackId");
+    const url = "/unlikeTrack";
+    const data = {track_id: track_id};
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
     })
 }
 
