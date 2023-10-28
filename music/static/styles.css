@@ -484,3 +484,115 @@ a.link_for_search:hover {
     cursor: pointer;
     transition: all 0.2s ease;
 }
+
+/* Define your variables as custom properties (CSS variables) */
+:root {
+    --green: #008744;
+    --blue: #0057e7;
+    --red: #d62d20;
+    --yellow: #ffa700;
+    --white: #eee;
+    --width: 100px;
+  }
+  
+  /* .loader */
+  .loader {
+    position: relative;
+    margin: 0 auto;
+    width: var(--width);
+  }
+  
+  .loader:before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+  }
+  
+  /* .circular */
+  .circular {
+    animation: rotate 2s linear infinite;
+    height: 100%;
+    transform-origin: center center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+  
+  /* .path */
+  .path {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    stroke-linecap: round;
+  }
+  
+  /* Keyframes */
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -35px;
+    }
+    100% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -124px;
+    }
+  }
+  
+  @keyframes color {
+    0%, 100% {
+      stroke: var(--red);
+    }
+    40% {
+      stroke: var(--blue);
+    }
+    66% {
+      stroke: var(--green);
+    }
+    80%, 90% {
+      stroke: var(--yellow);
+    }
+  }
+  
+  /* Demo-specific styles */
+  body {
+    background-color: var(--white);
+  }
+  
+  .showbox {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 5%;
+    justify-content: center;
+  }
+  
+  #loading-indicator {
+    display: bottom;
+    position: flex;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: transparent; /* Use your desired background color */
+    color: var(--blue); /* Use your desired text color */
+    padding: 10px;
+    margin: 5px;
+    z-index: 999; /* Set a higher z-index value to ensure it's above the tracks */
+
+  }
