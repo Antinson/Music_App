@@ -39,6 +39,17 @@
             </div>
             <h2>Liked Tracks</h2>
             <div class="liked-tracks" liked-tracks-area>
+                <template data-track-template>
+                    <div class="card">
+                        <div class="title" data-title></div>
+                        <img class="track-image" src="{{ url_for('static', filename='trackimage.png') }}">
+                        <div class="album" data-album></div>
+                        <div class="artist" data-artist></div>
+                        <div class="track-url" data-track-url></div>
+                        <div class="track_duration" data-track-duration></div>
+                        <div class="genres" data-genres></div>
+                    </div>
+                </template>
             </div>
             <h2>User Comments</h2>
             <div class="comment-section" comment-section>

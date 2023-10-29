@@ -7,6 +7,9 @@ const likedTracksArea = document.querySelector("[liked-tracks-area]");
 let commentSection = document.querySelector("[comment-section]");
 let commentTemplate = document.querySelector("[comment-template]");
 
+const trackCardTemplate = document.querySelector("[data-track-template]");
+
+
 let comments = [];
 
 userNameArea.innerText = user_name;
@@ -21,12 +24,38 @@ const getLikedTracks = () => {
     })
     .then(response => response.json())
     .then(data => {
-        userProfileArea.appendChild(likedTracksArea);
-        console.log(data);
+
+        data.forEach(track => { 
+            const card = trackCardTemplate.content.cloneNode(true).children[0];
+
+            const title = card.querySelector("[data-title]");
+            const album = card.querySelector("[data-album]");
+            const artist = card.querySelector("[data-artist]");
+            const trackUrl = card.querySelector("[data-track-url]");
+            const trackDuration = card.querySelector("[data-track-duration]");
+
+            try {
+                title.innerText = track.title;
+                album.innerText = track.album.name;
+                artist.innerText = track.artist.full_name;
+                trackUrl.innerText = track.track_url;
+                trackDuration.innerText = track.track_duration;
+            } catch (error) {
+                title.innerText = "ERROR";
+                album.innerText = "ERROR";
+                artist.innerText = "ERROR";
+                trackUrl.innerText = "ERROR";
+                trackDuration.innerText = "ERROR";
+            }
+
+            card.addEventListener("click", () => { 
+                localStorage.setItem("selectedTrackId", track.track_id);
+                window.location.href = `/track/${track.track_id}`;
+        });
+        likedTracksArea.appendChild(card);
+        });
     })
 };
-
-getLikedTracks();
 
 const getReviews = () => {
     let url = `/getReviews/${user_name}`;

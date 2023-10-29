@@ -46,12 +46,10 @@ fetch(url, {
                 
                 likeButton.addEventListener("click", () => {
                     if (isLiked) {
-                        console.log("Unliked track: " + track.track_id);
                         likeButton.innerText = "Like";
                         isLiked = false;
                         unlikeTrack();
                     } else {
-                        console.log("Liked track: " + track.track_id);
                         likeButton.innerText = "Unlike";
                         isLiked = true;
                         likeTrack();
@@ -134,6 +132,7 @@ const likeTrack = () => {
     const track_id = localStorage.getItem("selectedTrackId");
     const url = "/likeTrack";
     const data = {track_id: track_id};
+    console.log("Sending data: " + JSON.stringify(data));
     fetch(url, {
         method: "POST",
         headers: {

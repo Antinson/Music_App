@@ -54,7 +54,6 @@ def get_individual_track_page(track_id):
 
 @tracks_blueprint.route("/getTrack/<int:track_id>", methods=["GET"])
 def get_track_by_id(track_id):
-    print("get_track_by_id")
     requested_track = services.get_track(track_id, repo.repo_instance)
     return jsonify(requested_track)
 
@@ -66,9 +65,6 @@ def post_comment():
         track_id = int(json_data["track_id"])
         user_name = session['user_name']
 
-        print("Track id is: " + str(track_id))
-        print("Username is " + user_name)
-
         services.add_review(track_id, comment_data, 5, user_name, repo.repo_instance)
     except Exception as e:
         print(e)
@@ -77,17 +73,18 @@ def post_comment():
 
 @tracks_blueprint.route("/getComments/<int:track_id>", methods=["GET"])
 def getComments(track_id):
-    print("Track id is " + str(track_id))
     test = services.get_reviews_for_track(int(track_id), repo.repo_instance)
-    print(jsonify(test))
     return jsonify(test)
 
 @tracks_blueprint.route("/likeTrack", methods=["POST"])
 def like_track():
     user_name = session['user_name']
-    track_id = request.args.get('track_id', type=int)
+    json_data = request.json
+    track_id = int(json_data["track_id"])
     services.add_track_to_user(user_name, track_id, repo.repo_instance)
-    return jsonify("Ok")
+
+    user_tracks = services.get_user_liked_tracks(user_name.lower(), repo.repo_instance)
+    return jsonify(user_tracks)
 
 @tracks_blueprint.route("/unlikeTrack", methods=["POST"])
 def unlike_track():
@@ -98,11 +95,9 @@ def unlike_track():
 
 
 @tracks_blueprint.route("/getUserLikedTracks/<user>", methods=["GET"])
-def get_user_liked_tracks():
-    print("Hey")
-    user_name = user
+def get_user_liked_tracks(user):
+    user_name = user.lower()
     liked_tracks = services.get_user_liked_tracks(user_name, repo.repo_instance)
-    print(liked_tracks)
     return jsonify(liked_tracks)
 
 

@@ -158,7 +158,6 @@ class AbstractRepository(abc.ABC):
         if review.user is None:
             raise RepositoryException('Review not correctly attached to a User')
 
-
     @abc.abstractmethod
     def get_reviews(self):
         """
