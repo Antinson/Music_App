@@ -16,6 +16,7 @@ tracks_blueprint = Blueprint('tracks_bp', __name__, template_folder='templates')
 
 @tracks_blueprint.route("/browse", methods=['GET'])
 def get_tracks_table_view():
+    
     return render_template('tracks/browse_tracks.html')
 
 
@@ -33,28 +34,30 @@ def browse_tracks():
 
     return track_data_json
 
-
-
-
 # Individual track pages
 @tracks_blueprint.route("/browse/<int:track_id>", methods=['GET', 'POST'])
 def get_track_view(track_id):
+    
     return 2
 
 
-@tracks_blueprint.route("/totalTracks", methods=['GET'])  # default page: browse all tracks in order of id
+@tracks_blueprint.route("/totalTracks", methods=['GET']) 
 def get_total_number_tracks():
     all_ids = services.get_all_track_ids(repo.repo_instance)
+    
     total = len(all_ids)
+    
     return str(total)
 
 @tracks_blueprint.route("/track/<int:track_id>", methods=["GET", "POST"])
 def get_individual_track_page(track_id):
+    
     return render_template("tracks/track.html")
 
 @tracks_blueprint.route("/getTrack/<int:track_id>", methods=["GET"])
 def get_track_by_id(track_id):
     requested_track = services.get_track(track_id, repo.repo_instance)
+    
     return jsonify(requested_track)
 
 @tracks_blueprint.route("/postComment", methods=["POST"])
@@ -74,6 +77,7 @@ def post_comment():
 @tracks_blueprint.route("/getComments/<int:track_id>", methods=["GET"])
 def getComments(track_id):
     test = services.get_reviews_for_track(int(track_id), repo.repo_instance)
+    
     return jsonify(test)
 
 @tracks_blueprint.route("/likeTrack", methods=["POST"])
@@ -84,20 +88,25 @@ def like_track():
     
     services.add_track_to_user(user_name, track_id, repo.repo_instance)
     user_tracks = services.get_user_liked_tracks(user_name.lower(), repo.repo_instance)
+
     return jsonify(user_tracks)
 
 @tracks_blueprint.route("/unlikeTrack", methods=["POST"])
 def unlike_track():
     user_name = session['user_name']
     track_id = request.args.get('track_id', type=int)
+    
     services.remove_track_from_user(user_name, track_id, repo.repo_instance)
+    
     return jsonify("Ok")
 
 
 @tracks_blueprint.route("/getUserLikedTracks/<user>", methods=["GET"])
 def get_user_liked_tracks(user):
     user_name = user.lower()
+    
     liked_tracks = services.get_user_liked_tracks(user_name, repo.repo_instance)
+    
     return jsonify(liked_tracks)
 
 

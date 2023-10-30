@@ -42,6 +42,7 @@ fetch(url, {
                 const trackDuration = card.querySelector("[data-track-duration]");
                 const genres = card.querySelector("[data-genres]");
                 const likeButton = card.querySelector("[data-like]");
+                //const trackLikes = card.querySelector("[data-track-likes]");
 
                 
                 likeButton.addEventListener("click", () => {
@@ -62,6 +63,7 @@ fetch(url, {
                     artist.innerText = track.artist.full_name;
                     trackDuration.innerText = track.track_duration;
                     genres.innerText = track.track_genres[0].name;
+                    //trackLikes.innerText = track.track_likes;
                 } catch (error) {
                     console.error("Error processing track data:", error);
                     // Set the fields to a blank or default value
@@ -71,6 +73,7 @@ fetch(url, {
                     trackUrl.innerText = "N/A";
                     trackDuration.innerText = "N/A";
                     genres.innerText = "N/A";
+                    //trackLikes.innerText = "N/A";
                 }
                 albumCardContainer.appendChild(card);
 })

@@ -166,7 +166,7 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
     
     @abc.abstractmethod
-    def get_likes(self, id: int):
+    def get_track_likes(self, id: int):
         """
         return likes of a track
         """

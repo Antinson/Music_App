@@ -148,7 +148,8 @@ def track_to_dict(track: Track):
             'track_url': track.track_url,
             'track_duration': track.track_duration,
             'track_genres': genres_json(track.genres),
-            'category_set_to_none': False  # Flag to indicate if category is set to None
+            'category_set_to_none': False,  # Flag to indicate if category is set to None
+            'track_likes': track.likes
         }
     except Exception as e:
         return None
