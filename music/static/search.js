@@ -108,25 +108,3 @@ function loadMore() {
     const trackArray = filteredTracks.length ? filteredTracks : tracks;
     displayTrackElements(trackArray.slice(currentRecordCount, newRecordCount));
 }
-
-window.addEventListener("scroll", () => {
-    const {scrollTop, clientHeight, scrollHeight} = document.documentElement;
-
-    if (scrollTop + clientHeight >= scrollHeight - 10) {
-        showLoadingIndicator();
-        setTimeout(loadMore, 1000);
-    } else {
-        hideLoadingIndicator();
-    }
-});
-
-function showLoadingIndicator() {
-    const loadingIndicator = document.getElementById("loading-indicator");
-    loadingIndicator.style.display = "block";
-}
-
-function hideLoadingIndicator() {
-    const loadingIndicator = document.getElementById("loading-indicator");
-    loadingIndicator.style.display = "none";
-  }
-  
