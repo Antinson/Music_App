@@ -21,6 +21,7 @@ class Track:
         # duration in seconds
         self.__track_duration: int | None = None
         self.__genres: list = []
+        self.__likes = 0
 
     @property
     def track_id(self) -> int:
@@ -89,6 +90,13 @@ class Track:
         if not isinstance(new_genre, Genre) or new_genre in self.__genres:
             return
         self.__genres.append(new_genre)
+
+    @property
+    def likes(self) -> int:
+        return self.__likes
+    
+    def like(self):
+        self.__likes += 1
 
     def __repr__(self):
         return f"<Track {self.title}, track id = {self.track_id}>"

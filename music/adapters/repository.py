@@ -164,3 +164,10 @@ class AbstractRepository(abc.ABC):
          return reviews stored in the repository
         """
         raise NotImplementedError
+    
+    @abc.abstractmethod
+    def get_likes(self, id: int):
+        """
+        return likes of a track
+        """
+        raise NotImplementedError

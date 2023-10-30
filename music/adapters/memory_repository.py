@@ -205,6 +205,14 @@ class MemoryRepository(AbstractRepository):
         if index != len(self.__dates) and self.__dates[index] == date:
             return index
         raise ValueError
+    
+    def like_track(self, track_id: int):
+        track = self.get_track(track_id)
+        track.like()
+    
+    def get_track_likes(self, track_id: int):
+        track = self.get_track(track_id)
+        return track.likes
 
 
 def load_tracks_and_album(data_path: Path, repo: MemoryRepository):
@@ -229,4 +237,6 @@ def load_tracks_and_album(data_path: Path, repo: MemoryRepository):
 def populate(data_path: Path, repo: MemoryRepository):
     # Load csv data into the repository.
     load_tracks_and_album(data_path, repo)
+
+
 
