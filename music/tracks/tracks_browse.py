@@ -81,8 +81,8 @@ def like_track():
     user_name = session['user_name']
     json_data = request.json
     track_id = int(json_data["track_id"])
+    
     services.add_track_to_user(user_name, track_id, repo.repo_instance)
-
     user_tracks = services.get_user_liked_tracks(user_name.lower(), repo.repo_instance)
     return jsonify(user_tracks)
 

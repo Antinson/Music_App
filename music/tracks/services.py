@@ -104,12 +104,15 @@ def add_track_to_user(user_name: str, track_id: int, repo: AbstractRepository):
     user = repo.get_user(user_name.lower())
     track = repo.get_track(track_id)
     user.add_liked_track(track)
+    add_like_to_track(track_id, repo)
+
 
 # Removes track from users liked tracks
 def remove_track_from_user(user_name: str, track_id: int, repo: AbstractRepository):
     user = repo.get_user(user_name.lower())
     track = repo.get_track(track_id)
     user.remove_liked_track(track)
+    remove_like_from_track(track_id, repo)
 
 
 def get_reviews_for_track(track_id, repo: AbstractRepository):
@@ -118,7 +121,17 @@ def get_reviews_for_track(track_id, repo: AbstractRepository):
 
     return reviews_to_dict(reviews_for_track)
 
+def add_like_to_track(track_id, repo: AbstractRepository):
+    track = repo.get_track(track_id)
+    track.like()
 
+def remove_like_from_track(track_id, repo: AbstractRepository):
+    track = repo.get_track(track_id)
+    track.unlike()
+
+def get_track_likes(track_id, repo: AbstractRepository):
+    track = repo.get_track(track_id)
+    return track.likes
 
 
 # ============================================

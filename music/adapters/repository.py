@@ -171,3 +171,17 @@ class AbstractRepository(abc.ABC):
         return likes of a track
         """
         raise NotImplementedError
+    
+    @abc.abstractmethod
+    def like_track(self, track_id: int):
+        """
+        increase likes of a track
+        """
+        raise NotImplementedError
+    
+    @abc.abstractmethod
+    def unlike_track(self, track_id: int):
+        """
+        decrease likes of a track
+        """
+        raise NotImplementedError

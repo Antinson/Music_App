@@ -97,6 +97,9 @@ class Track:
     
     def like(self):
         self.__likes += 1
+    
+    def unlike(self):
+        self.__likes -= 1
 
     def __repr__(self):
         return f"<Track {self.title}, track id = {self.track_id}>"

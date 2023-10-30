@@ -210,6 +210,10 @@ class MemoryRepository(AbstractRepository):
         track = self.get_track(track_id)
         track.like()
     
+    def unlike_track(self, track_id: int):
+        track = self.get_track(track_id)
+        track.unlike()
+    
     def get_track_likes(self, track_id: int):
         track = self.get_track(track_id)
         return track.likes
