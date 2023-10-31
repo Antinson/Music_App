@@ -1,7 +1,6 @@
 const id = localStorage.getItem("selectedTrackId");
 let url = `/getTrack/${id}`;
 let comments = [];
-let isLiked = false;
 
 let commentSection = document.querySelector("[comment-section]");
 let commentTemplate = document.querySelector("[comment-template]");
@@ -34,7 +33,8 @@ fetch(url, {
 })
 .then(response => response.json())
 .then(track => {
-    const card = trackCardTemplate.content.cloneNode(true).children[0];
+
+                const card = trackCardTemplate.content.cloneNode(true).children[0];
                 const title = card.querySelector("[data-title]");
                 const album = card.querySelector("[data-album]");
                 const artist = card.querySelector("[data-artist]");
@@ -44,19 +44,6 @@ fetch(url, {
                 const likeButton = card.querySelector("[data-like]");
                 const trackLikes = card.querySelector("[data-track-likes]");
 
-                
-                likeButton.addEventListener("click", () => {
-                    if (isLiked) {
-                        likeButton.innerText = "Like";
-                        isLiked = false;
-                        unlikeTrack();
-                    } else {
-                        likeButton.innerText = "Unlike";
-                        isLiked = true;
-                        likeTrack();
-                    }
-                });
-
                 try {
                     title.innerText = track.title;
                     album.innerText = track.album.name;
@@ -64,9 +51,26 @@ fetch(url, {
                     trackDuration.innerText = track.track_duration;
                     genres.innerText = track.track_genres[0].name;
                     trackLikes.innerText = track.track_likes;
+                    
+                    if (isLiked == "true") {
+                        likeButton.innerText = 'Unlike';
+                    } else {
+                        likeButton.innerText = 'Like';
+                    }
+
+                    likeButton.addEventListener("click", () => {
+                        if (isLiked == "true") {
+                            likeButton.innerText = "Like";
+                            isLiked = "false";
+                            unlikeTrack();
+                        } else {
+                            likeButton.innerText = "Unlike";
+                            isLiked = "true"
+                            likeTrack();
+                        }
+                    });
                 } catch (error) {
                     console.error("Error processing track data:", error);
-                    // Set the fields to a blank or default value
                     title.innerText = "N/A";
                     album.innerText = "N/A";
                     artist.innerText = "N/A";
@@ -74,6 +78,7 @@ fetch(url, {
                     trackDuration.innerText = "N/A";
                     genres.innerText = "N/A";
                     trackLikes.innerText = "N/A";
+                    likeButton.innerText = 'Like';
                 }
                 albumCardContainer.appendChild(card);
 })
@@ -135,7 +140,6 @@ const likeTrack = () => {
     const track_id = localStorage.getItem("selectedTrackId");
     const url = "/likeTrack";
     const data = {track_id: track_id};
-    console.log("Sending data: " + JSON.stringify(data));
     fetch(url, {
         method: "POST",
         headers: {
@@ -191,3 +195,23 @@ document.body.addEventListener("click", (event) => {
         commentButton.classList.add("hide");
     }
 });
+
+const userLikedTracks = (user) => {
+    const url = `/userLikedTracks/${user}`;
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(track => {
+            if (track.id == id) {
+                isLiked = true;
+                const likeButton = document.querySelector("[data-like]");
+                likeButton.innerText = "Unlike";
+            }
+        });
+    })
+}

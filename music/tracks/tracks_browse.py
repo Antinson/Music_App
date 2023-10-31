@@ -34,13 +34,6 @@ def browse_tracks():
 
     return track_data_json
 
-# Individual track pages
-@tracks_blueprint.route("/browse/<int:track_id>", methods=['GET', 'POST'])
-def get_track_view(track_id):
-    
-    return 2
-
-
 @tracks_blueprint.route("/totalTracks", methods=['GET']) 
 def get_total_number_tracks():
     all_ids = services.get_all_track_ids(repo.repo_instance)
@@ -51,8 +44,29 @@ def get_total_number_tracks():
 
 @tracks_blueprint.route("/track/<int:track_id>", methods=["GET", "POST"])
 def get_individual_track_page(track_id):
+
+    liked = "false"
+
+    try:
+        track = services.get_track(track_id, repo.repo_instance)
+    except services.UnknownTrackException:
+        return redirect(url_for('home_bp.home'))
     
-    return render_template("tracks/track.html")
+    try:
+        user = session['user_name']
+        user_tracks = services.get_user_track_id_as_list(user, repo.repo_instance)
+
+        if track_id in user_tracks:
+            liked = "true"
+        else:
+            liked = "false"
+
+    except Exception as e:
+        print(e)
+        pass
+
+
+    return render_template("tracks/track.html", liked=liked)
 
 @tracks_blueprint.route("/getTrack/<int:track_id>", methods=["GET"])
 def get_track_by_id(track_id):
@@ -94,11 +108,13 @@ def like_track():
 @tracks_blueprint.route("/unlikeTrack", methods=["POST"])
 def unlike_track():
     user_name = session['user_name']
-    track_id = request.args.get('track_id', type=int)
-    
+    json_data = request.json
+    track_id = int(json_data["track_id"])
+
     services.remove_track_from_user(user_name, track_id, repo.repo_instance)
-    
-    return jsonify("Ok")
+    user_tracks = services.get_user_liked_tracks(user_name.lower(), repo.repo_instance)
+
+    return jsonify(user_tracks)
 
 
 @tracks_blueprint.route("/getUserLikedTracks/<user>", methods=["GET"])

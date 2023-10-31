@@ -54,7 +54,7 @@
                 <div class="artist-title">Genres</div>
                 <div class="genres-single" data-genres></div>
                 <hr class="dash">
-                <button class="btn btn-danger" id="data-like-button" data-like>Like</button>
+                <button class="btn btn-danger" id="data-like-button" data-like>{{liked}}</button>
                 <p data-track-likes></p>
             </div>
     </div>
@@ -91,5 +91,8 @@
         </div>
     </div>
     </div>
+    <script>
+        let isLiked = "{{liked}}";
+    </script>
 </body>
 </html>

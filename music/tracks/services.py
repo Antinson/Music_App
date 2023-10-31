@@ -82,6 +82,12 @@ def get_user_liked_tracks(user_name: str, repo: AbstractRepository):
     user = repo.get_user(user_name.lower())
     return tracks_to_dict(user.liked_tracks)
 
+def get_user_track_id_as_list(user_name: str, repo: AbstractRepository):
+    user = repo.get_user(user_name.lower())
+    track_ids = []
+    for track in user.liked_tracks:
+        track_ids.append(track.track_id)
+    return track_ids
 
 def add_review(track_id: int, comment_text: str, rating: int, user_name: str, repo: AbstractRepository):
     # Check that the track exists.
