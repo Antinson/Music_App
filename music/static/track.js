@@ -42,7 +42,7 @@ fetch(url, {
                 const trackDuration = card.querySelector("[data-track-duration]");
                 const genres = card.querySelector("[data-genres]");
                 const likeButton = card.querySelector("[data-like]");
-                //const trackLikes = card.querySelector("[data-track-likes]");
+                const trackLikes = card.querySelector("[data-track-likes]");
 
                 
                 likeButton.addEventListener("click", () => {
@@ -63,7 +63,7 @@ fetch(url, {
                     artist.innerText = track.artist.full_name;
                     trackDuration.innerText = track.track_duration;
                     genres.innerText = track.track_genres[0].name;
-                    //trackLikes.innerText = track.track_likes;
+                    trackLikes.innerText = track.track_likes;
                 } catch (error) {
                     console.error("Error processing track data:", error);
                     // Set the fields to a blank or default value
@@ -73,7 +73,7 @@ fetch(url, {
                     trackUrl.innerText = "N/A";
                     trackDuration.innerText = "N/A";
                     genres.innerText = "N/A";
-                    //trackLikes.innerText = "N/A";
+                    trackLikes.innerText = "N/A";
                 }
                 albumCardContainer.appendChild(card);
 })
@@ -145,7 +145,10 @@ const likeTrack = () => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        const trackLikes = document.querySelector("[data-track-likes]");
+        trackLikes.innerText = parseInt(trackLikes.innerText) + 1;        
+        const likeButton = document.querySelector("[data-like]");
+        likeButton.innerText = "Unlike";
     })
 }
 
@@ -162,7 +165,10 @@ const unlikeTrack = () => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        const trackLikes = document.querySelector("[data-track-likes]");
+        trackLikes.innerText = parseInt(trackLikes.innerText) - 1;
+        const likeButton = document.querySelector("[data-like]");
+        likeButton.innerText = "Like";
     })
 }
 

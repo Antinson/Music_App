@@ -122,16 +122,14 @@ def get_reviews_for_track(track_id, repo: AbstractRepository):
     return reviews_to_dict(reviews_for_track)
 
 def add_like_to_track(track_id, repo: AbstractRepository):
-    track = repo.get_track(track_id)
-    track.like()
+    repo.like_track(track_id)
 
 def remove_like_from_track(track_id, repo: AbstractRepository):
-    track = repo.get_track(track_id)
-    track.unlike()
+    repo.unlike_track(track_id)
 
 def get_track_likes(track_id, repo: AbstractRepository):
-    track = repo.get_track(track_id)
-    return track.likes
+    track_likes = repo.get_track_likes(track_id)
+    return track_likes
 
 
 # ============================================
