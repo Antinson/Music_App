@@ -175,9 +175,10 @@ body {
 .my_image img {
     width: 80px;
     height: 80px;
-    border-radius: 50%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
+    object-fit: cover;
 }
 
 .my_image img:hover {
@@ -189,8 +190,8 @@ body {
     flex-direction: column;
     margin: auto;
     width: 100%;
-    max-width: 450px;
-    padding: 40px;
+    max-width: 550px;
+    padding: 50px;
     align-items: center;
     justify-content: center;
     background: #fff;
@@ -590,7 +591,8 @@ a.link_for_search:hover {
 .input-group {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
+    margin: 0 20px;
 }
 
 #search_text_area {
@@ -640,7 +642,7 @@ a.link_for_search:hover {
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(45, 55, 72, 0.3);
     color: white;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 #search_button:hover {
