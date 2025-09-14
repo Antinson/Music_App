@@ -1,5 +1,16 @@
 
 /* General layout styling */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7fafc;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: #2d3748;
+}
+
+/* General layout styling */
 .center {
     margin-left: auto;
     margin-right: auto;
@@ -15,23 +26,128 @@
 /* By hierarchy */
 
 #browse_table {
-    width: 50%;
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+#browse_table thead th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+    padding: 16px 20px;
+    text-align: left;
+    border: none;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+#browse_table thead th:first-child {
+    border-radius: 12px 0 0 0;
+}
+
+#browse_table thead th:last-child {
+    border-radius: 0 12px 0 0;
+}
+
+#browse_table tbody tr {
+    border-bottom: 1px solid #e8ecf4;
+    transition: all 0.3s ease;
+}
+
+#browse_table tbody tr:hover {
+    background-color: #f8f9ff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+#browse_table tbody tr:last-child {
+    border-bottom: none;
+}
+
+#browse_table tbody td {
+    padding: 16px 20px;
+    color: #4a5568;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+#browse_table tbody td a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+#browse_table tbody td a:hover {
+    color: #5a67d8;
+    text-decoration: underline;
+}
+
+.table-responsive {
+    padding: 20px;
+    background-color: #f7fafc;
+    min-height: calc(100vh - 200px);
 }
 
 /* Navigation bar styling */
 
+.navbar {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%) !important;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+    padding: 12px 20px;
+}
+
 .nav-logo {
-    width: 200px;
+    width: 180px;
+    transition: transform 0.3s ease;
+}
+
+.nav-logo:hover {
+    transform: scale(1.05);
 }
 
 .btn-nav {
-    color: aliceblue;
+    color: #e2e8f0;
     text-decoration: none;
     text-transform: uppercase;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    padding: 8px 16px;
+    margin: 0 4px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-nav:hover::before {
+    left: 100%;
 }
 
 .btn-nav:hover {
-    color: rgb(201, 201, 201);
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
     text-decoration: none;
 }
 
@@ -96,9 +212,42 @@
 }
 
 .table {
-    margin: auto;
-    width: 50%;
-    align-items: left;
+    margin: 20px auto;
+    width: 80%;
+    max-width: 800px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.table tr {
+    border-bottom: 1px solid #e8ecf4;
+}
+
+.table tr:last-child {
+    border-bottom: none;
+}
+
+.table td {
+    padding: 16px 24px;
+    vertical-align: middle;
+    border: none;
+}
+
+.table td:first-child {
+    background-color: #f8f9ff;
+    font-weight: 600;
+    color: #4a5568;
+    width: 30%;
+    border-right: 1px solid #e8ecf4;
+}
+
+.table td:last-child {
+    color: #2d3748;
+    font-weight: 500;
 }
 
 .reviews {
@@ -135,10 +284,14 @@
 
 
 h2 {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 20px 10px;
     text-align: center;
-    font-family: sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2d3748;
+    font-weight: 600;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .col-sm-6 {
@@ -193,8 +346,26 @@ a.link_for_search:hover {
 }
 
 .liked {
-    padding-top: 20px;
+    padding: 30px 20px;
     text-align: center;
+}
+
+.liked .btn {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    border: none;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+}
+
+.liked .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+    background: linear-gradient(135deg, #ed64a6 0%, #e53e3e 100%);
 }
 
 /* Search page */
@@ -225,15 +396,47 @@ a.link_for_search:hover {
 }
 
 .page-nav-right{
-    padding-top: 10px;
-    padding-right: 5px;
+    padding-top: 20px;
+    padding-right: 20px;
     float: right;
 }
 
 .page-nav-left {
-    padding-top: 10px;
-    padding-left: 5px;
+    padding-top: 20px;
+    padding-left: 20px;
     float: left;
+}
+
+.page-nav-right .btn, .page-nav-left .btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin: 0 4px;
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.page-nav-right .btn:hover, .page-nav-left .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
+
+.page-nav-right .btn:disabled, .page-nav-left .btn:disabled {
+    background: #e2e8f0;
+    color: #a0aec0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.page-nav-right .btn:disabled:hover, .page-nav-left .btn:disabled:hover {
+    background: #e2e8f0;
+    transform: none;
+    box-shadow: none;
 }
 
 .result-wrap{
