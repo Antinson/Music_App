@@ -301,6 +301,151 @@ body {
 /* Individual Track Page w/ Comments */
 /* Order of hierarchy */
 
+
+.musical-notes-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.note {
+    position: absolute;
+    font-size: 24px;
+    color: rgba(45, 55, 72, 0.1);
+    animation: float 15s infinite ease-in-out;
+    user-select: none;
+}
+
+.note1 {
+    left: 10%;
+    animation-delay: 0s;
+    font-size: 28px;
+}
+
+.note2 {
+    left: 20%;
+    animation-delay: 2s;
+    font-size: 32px;
+}
+
+.note3 {
+    left: 30%;
+    animation-delay: 4s;
+    font-size: 24px;
+}
+
+.note4 {
+    left: 40%;
+    animation-delay: 6s;
+    font-size: 36px;
+}
+
+.note5 {
+    left: 50%;
+    animation-delay: 8s;
+    font-size: 28px;
+}
+
+.note6 {
+    left: 60%;
+    animation-delay: 10s;
+    font-size: 30px;
+}
+
+.note7 {
+    left: 70%;
+    animation-delay: 12s;
+    font-size: 26px;
+}
+
+.note8 {
+    left: 80%;
+    animation-delay: 14s;
+    font-size: 34px;
+}
+
+.note9 {
+    left: 90%;
+    animation-delay: 16s;
+    font-size: 24px;
+}
+
+.note10 {
+    left: 15%;
+    animation-delay: 18s;
+    font-size: 32px;
+}
+
+.note11 {
+    left: 25%;
+    animation-delay: 3s;
+    font-size: 26px;
+}
+
+.note12 {
+    left: 35%;
+    animation-delay: 7s;
+    font-size: 30px;
+}
+
+.note13 {
+    left: 45%;
+    animation-delay: 11s;
+    font-size: 24px;
+}
+
+.note14 {
+    left: 55%;
+    animation-delay: 1s;
+    font-size: 34px;
+}
+
+.note15 {
+    left: 65%;
+    animation-delay: 5s;
+    font-size: 28px;
+}
+
+.note16 {
+    left: 75%;
+    animation-delay: 9s;
+    font-size: 32px;
+}
+
+.note17 {
+    left: 85%;
+    animation-delay: 13s;
+    font-size: 26px;
+}
+
+.note18 {
+    left: 95%;
+    animation-delay: 17s;
+    font-size: 30px;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
 #container {
     margin-top: 2rem;
 }
