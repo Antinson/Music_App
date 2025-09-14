@@ -6,50 +6,56 @@
 </div>
 
 <div class="liked-tracks">
-    <nav class="reviews">
-    <div class="page-nav-left">
-        {% if lt_first_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{lt_first_page_url}}'"><<</button>
-        {% else %}
-            <button class="btn btn-dark" disabled><<</button>
-        {% endif %}
-        {% if lt_prev_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{lt_prev_page_url}}'"><</button>
-        {% else %}
-            <button class="btn btn-dark" disabled><</button>
-        {% endif %}
-    </div>
+    <div class="reviews">
+        <nav class="reviews">
+        <div class="page-nav-left">
+            {% if lt_first_page_url is not none %}
+                <button class="btn btn-dark" onclick="location.href='{{lt_first_page_url}}'"><<</button>
+            {% else %}
+                <button class="btn btn-dark" disabled><<</button>
+            {% endif %}
+            {% if lt_prev_page_url is not none %}
+                <button class="btn btn-dark" onclick="location.href='{{lt_prev_page_url}}'"><</button>
+            {% else %}
+                <button class="btn btn-dark" disabled><</button>
+            {% endif %}
+        </div>
 
-    <div class="page-nav-right">
-        {% if lt_next_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{lt_next_page_url}}'">></button>
-        {% else %}
-            <button class="btn btn-dark" disabled>></button>
-        {% endif %}
-        {% if lt_last_page_url is not none %}
-            <button class="btn btn-dark" onclick="location.href='{{lt_last_page_url}}'">>></button>
-        {% else %}
-            <button class="btn btn-dark" disabled>>></button>
-        {% endif %}
+        <div class="page-nav-right">
+            {% if lt_next_page_url is not none %}
+                <button class="btn btn-dark" onclick="location.href='{{lt_next_page_url}}'">></button>
+            {% else %}
+                <button class="btn btn-dark" disabled>></button>
+            {% endif %}
+            {% if lt_last_page_url is not none %}
+                <button class="btn btn-dark" onclick="location.href='{{lt_last_page_url}}'">>></button>
+            {% else %}
+                <button class="btn btn-dark" disabled>>></button>
+            {% endif %}
+        </div>
+        </nav>
     </div>
-    </nav>
 
     <h2>Liked Tracks: {{liked_tracks_count}}</h2>
-    <table class="table">
-        <tr>
-            <th>Track ID</th>
-            <th>Track Title</th>
-            <th>Artist</th>
-            <th>Album</th>
-        </tr>
-        {% for track in liked_tracks %}
-        <tr>
-            <td><a href="/browse/{{ track.track_id }}">{{track.track_id}}</a></td>
-            <td>{{track.title}}</td>
-            <td>{{track.artist.full_name}}</td>
-            <td>{{track.album.title}}</td>
-        </tr>
-        {% endfor %}
+    <table class="table" id="browse_table">
+        <thead>
+            <tr>
+                <th>Track ID</th>
+                <th>Track Title</th>
+                <th>Artist</th>
+                <th>Album</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for track in liked_tracks %}
+            <tr>
+                <td><a href="/browse/{{ track.track_id }}">{{track.track_id}}</a></td>
+                <td>{{track.title}}</td>
+                <td><a class="link_for_search" href="{{ url_for('search_bp.search_by_artist', target_artist=track.artist.full_name) }}">{{track.artist.full_name}}</a></td>
+                <td><a class="link_for_search" href="{{ url_for('search_bp.search_by_album', target_album=track.album.title) }}">{{track.album.title}}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 </div>
 
@@ -58,7 +64,7 @@
 
 
 <div class="reviews">
-    <nav>
+    <nav class="reviews">
     <div class="page-nav-left">
         {% if review_first_page_url is not none %}
             <button class="btn btn-dark" onclick="location.href='{{review_first_page_url}}'"><<</button>
@@ -90,29 +96,26 @@
 
 
     <h2>Reviews made: {{ review_count }}</h2>
-    <table>
 
+    <div class="comments-list">
         {% for review in reviews %}
-        <tr>
-            <div class="col-sm-6">
-                <a class='link_for_search'href="/browse/{{review.track_id}}" class="user-link-track">Go to Track →</a>
+            <div class="comment-item">
                 <div class="card">
                     <div class="card-header">
-                        {{review.user}}
-                    </div>  
+                        <div class="header-content">
+                            <span class="username">{{review.user}}</span>
+                            <a href="/browse/{{review.track_id}}" class="go-to-track-btn">Go to Track →</a>
+                        </div>
+                    </div>
                     <div class="card-body">
                     <p class="card-text">{{review.review_text}}</p>
                     <p class="card-text">Rating: {{review.rating}}/5</p>
                     <p class="card-text"><small class="text-muted">{{review.timestamp}}</small></p>
                     </div>
                 </div>
-
             </div>
-        <br>
-        </tr>
         {% endfor %}
-
-    </table>
+    </div>
 </div>
 
 {% endblock %}
